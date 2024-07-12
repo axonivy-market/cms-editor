@@ -117,7 +117,7 @@ public class CmsEditorWebTest {
     var displayItem = $$("[id^='content-form:cms-values:'][id$='_display']").first();
     displayItem.click();
     var contentItem = $(By.id(displayItem.getAttribute("id").replaceAll("_display", "_content")));
-    contentItem.$(By.className("sun-editor-editable")).setValue("Content is updated");
+    contentItem.$(By.className("sun-editor-editable")).setValue("Content is updated at " + System.currentTimeMillis());
     contentItem.$(By.cssSelector("button[data-command='save']")).click();
     Selenide.sleep(1000);
     otherCms.click();
