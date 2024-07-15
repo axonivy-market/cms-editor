@@ -8,9 +8,17 @@
   "elements" : [ {
       "id" : "f0",
       "type" : "HtmlDialogStart",
-      "name" : "start()",
+      "name" : "start(Boolean)",
       "config" : {
         "callSignature" : "start",
+        "input" : {
+          "params" : [
+            { "name" : "showEditorCms", "type" : "Boolean" }
+          ],
+          "map" : {
+            "out.showEditorCms" : "param.showEditorCms"
+          }
+        },
         "guid" : "18DE86F577099249"
       },
       "visual" : {

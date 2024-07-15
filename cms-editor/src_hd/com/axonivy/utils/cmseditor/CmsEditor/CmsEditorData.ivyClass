@@ -1,2 +1,4 @@
 CmsEditorData #class
 com.axonivy.utils.cmseditor.CmsEditor #namespace
+showEditorCms Boolean #field
+showEditorCms PERSISTENT #fieldModifier

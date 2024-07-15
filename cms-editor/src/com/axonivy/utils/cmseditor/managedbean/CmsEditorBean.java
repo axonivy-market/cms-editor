@@ -36,6 +36,7 @@ import com.axonivy.utils.cmseditor.model.PmvCms;
 import com.axonivy.utils.cmseditor.model.SavedCms;
 import com.axonivy.utils.cmseditor.repo.SavedCmsRepo;
 import com.axonivy.utils.cmseditor.utils.CmsFileUtils;
+import com.axonivy.utils.cmseditor.utils.FacesContexts;
 import com.axonivy.utils.cmseditor.utils.Utils;
 
 import ch.ivyteam.ivy.application.ActivityState;
@@ -46,6 +47,7 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
+import ch.ivyteam.ivy.environment.Ivy;
 
 @ViewScoped
 @ManagedBean
@@ -69,9 +71,12 @@ public class CmsEditorBean implements Serializable {
   private String searchKey;
   private boolean isShowOnlyTodo;
   private StreamedContent fileDownload;
+  private boolean isShowEditorCms;
 
   @PostConstruct
   private void init() {
+    isShowEditorCms = FacesContexts.evaluateValueExpression("#{data.showEditorCms}", Boolean.class);
+    Ivy.log().info("isShowEditorCms " + isShowEditorCms);
     savedCmsMap = SavedCmsRepo.findAll();
     appPmvCmsMap = new HashMap<>();
     for (var app : IApplicationRepository.instance().all()) {
@@ -133,7 +138,8 @@ public class CmsEditorBean implements Serializable {
 
   public void getAllChildren(String appName, String pmvName, ContentObject contentObject, List<Locale> locales) {
     // Exclude the CMS of it self
-    if (StringUtils.contains(pmvName, CMS_EDITOR_PMV_NAME)
+    if (!isShowEditorCms 
+        && StringUtils.contains(pmvName, CMS_EDITOR_PMV_NAME)
         && !StringUtils.contains(pmvName, CMS_EDITOR_DEMO_PMV_NAME)) {
       return;
     }
