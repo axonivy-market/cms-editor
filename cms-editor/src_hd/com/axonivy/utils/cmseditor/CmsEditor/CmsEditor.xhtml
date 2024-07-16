@@ -13,13 +13,13 @@
 
 			<h:form id="content-form"
 				onkeypress="if (event.keyCode == 13){return false;}">
-				<h:panelGroup styleClass="p-d-flex p-flex-column">
-					<div class="p-formgrid p-grid ui-fluid p-ai-center">
-						<div class="p-field p-text-left p-col-2">
+				<h:panelGroup styleClass="flex flex-column">
+					<div class="formgrid grid ui-fluid align-items-center">
+						<div class="field p-text-left col-2">
 							<p:outputLabel value="#{ivy.cms.co('/Labels/Application')}"
 								for="@next" />
 						</div>
-						<div class="p-field p-col-3">
+						<div class="field col-3">
 							<p:selectOneMenu id="app"
 								value="#{cmsEditorBean.selectedAppName}">
 								<f:selectItems value="#{cmsEditorBean.appNames}" />
@@ -29,7 +29,7 @@
 									listener="#{cmsEditorBean.onAppChange}" />
 							</p:selectOneMenu>
 						</div>
-						<div class="p-field p-col-7 p-d-flex">
+						<div class="field col-7 flex">
 							<p:inputText id="search-input" value="#{cmsEditorBean.searchKey}"
 								placeholder="#{ivy.cms.co('/Labels/Search')}">
 								<p:ajax event="keyup" listener="#{cmsEditorBean.search}"
@@ -38,7 +38,7 @@
 							</p:inputText>
 
 							<p:menuButton id="option-button"
-								value="#{ivy.cms.co('/Labels/Options')}" styleClass="p-ml-3">
+								value="#{ivy.cms.co('/Labels/Options')}" styleClass="ml-3">
 								<p:menuitem>
 									<p:selectBooleanCheckbox id="show-todo-checkbox"
 										value="#{cmsEditorBean.showOnlyTodo}"
@@ -53,12 +53,12 @@
 						</div>
 					</div>
 
-					<div class="p-formgrid p-grid ui-fluid p-ai-center">
-						<div class="p-field p-text-left p-col-2">
+					<div class="formgrid grid ui-fluid align-items-center">
+						<div class="field p-text-left col-2">
 							<p:outputLabel value="#{ivy.cms.co('/Labels/SelectedCMS')}"
 								for="@next" />
 						</div>
-						<div class="p-field p-col-10">
+						<div class="field col-10">
 							<p:inputText id="selected-url" disabled="true"
 								value="#{cmsEditorBean.selectedCms.uri}" />
 						</div>
@@ -90,7 +90,7 @@
 								activeIndex="#{cmsEditorBean.activeIndex}" var="language">
 								<p:tab id="cms-values-tab"
 									title="#{language.locale.displayLanguage}">
-									<h:panelGroup styleClass="ui-fluid p-mb-0 p-pb-0">
+									<h:panelGroup styleClass="ui-fluid mb-0 pb-0">
 										<ic:com.axonivy.utils.cmseditor.component.Editor
 											content="#{language.content}"
 											languageIndex="#{language.index}"
@@ -102,11 +102,11 @@
 						</h:panelGroup>
 					</div>
 				</h:panelGroup>
-				<div class="command-btns p-pt-2">
+				<div class="command-btns pt-2">
 					<p:commandButton id="cancel-button" widgetVar="cancel-button"
 						value="#{ivy.cms.co('/Labels/Cancel')}"
 						actionListener="#{logic.close}" process="@this" immediate="true"
-						styleClass="p-ml-2 p-mr-2 ui-button-flat" />
+						styleClass="ml-2 mr-2 ui-button-flat" />
 					<p:commandButton id="downloadButton"
 						value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
 						actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
