@@ -1,0 +1,61 @@
+{
+  "format" : "10.0.0",
+  "id" : "18DE86A37D77D574",
+  "config" : {
+    "data" : "com.axonivy.utils.cmseditor.Data"
+  },
+  "elements" : [ {
+      "id" : "f0",
+      "type" : "RequestStart",
+      "name" : "start.ivp",
+      "config" : {
+        "callSignature" : "start",
+        "input" : {
+          "params" : [
+            { "name" : "showEditorCms", "type" : "Boolean" }
+          ],
+          "map" : {
+            "out.showEditorCms" : "param.showEditorCms"
+          }
+        },
+        "startDescription" : "<%=ivy.cms.co(\"/Processes/CMSEditor/description\")%>",
+        "outLink" : "start.ivp",
+        "startName" : "<%=ivy.cms.co(\"/Processes/CMSEditor/name\")%>",
+        "tags" : "demo",
+        "case" : { }
+      },
+      "visual" : {
+        "at" : { "x" : 96, "y" : 64 },
+        "icon" : "res:/webContent/icons/logo.png?small"
+      },
+      "connect" : { "id" : "f4", "to" : "f3" }
+    }, {
+      "id" : "f1",
+      "type" : "TaskEnd",
+      "visual" : {
+        "at" : { "x" : 392, "y" : 64 }
+      }
+    }, {
+      "id" : "f3",
+      "type" : "DialogCall",
+      "name" : "Cms editor",
+      "config" : {
+        "dialogId" : "com.axonivy.utils.cmseditor.CmsEditor",
+        "startMethod" : "start(Boolean)",
+        "call" : {
+          "params" : [
+            { "name" : "showEditorCms", "type" : "Boolean" }
+          ],
+          "map" : {
+            "param.showEditorCms" : "in.showEditorCms"
+          }
+        }
+      },
+      "visual" : {
+        "at" : { "x" : 255, "y" : 64 },
+        "size" : { "width" : 155, "height" : 60 },
+        "icon" : "res:/webContent/icons/logo.png"
+      },
+      "connect" : { "id" : "f2", "to" : "f1" }
+    } ]
+}
