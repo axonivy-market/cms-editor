@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.axonivy.utils.cmseditor</groupId>
 	<artifactId>cms-editor-test</artifactId>
 	<version>11.3.2-SNAPSHOT</version>
 	<packaging>iar-integration-test</packaging>
+	<properties>
+		<ivy.engine.version>11.3.1</ivy.engine.version>
+		<project.build.plugin.version>11.3.0</project.build.plugin.version>
+		<tester.version>11.3.0</tester.version>
+	</properties>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>sonatype</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>sonatype</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>com.axonivy.utils.cmseditor</groupId>
@@ -15,20 +40,16 @@
 		<dependency>
 			<groupId>com.axonivy.ivy.test</groupId>
 			<artifactId>unit-tester</artifactId>
-			<version>11.2.1</version>
+			<version>${tester.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.axonivy.ivy.webtest</groupId>
 			<artifactId>web-tester</artifactId>
-			<version>10.0.16</version>
+			<version>${tester.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<properties>
-		<ivy.engine.version>11.3.1</ivy.engine.version>
-		<build.plugin.version>11.3.0</build.plugin.version>
-	</properties>
 
 	<build>
 		<testSourceDirectory>src_test</testSourceDirectory>
@@ -36,7 +57,7 @@
 			<plugin>
 				<groupId>com.axonivy.ivy.ci</groupId>
 				<artifactId>project-build-plugin</artifactId>
-				<version>${build.plugin.version}</version>
+				<version>${project.build.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
 					<encoding>UTF-8</encoding>
@@ -50,9 +71,9 @@
 				<configuration>
 					<testFailureIgnore>true</testFailureIgnore>
 					<argLine>
-            -Dtest.engine.url=${test.engine.url}
-            -Dtest.engine.app=cmseditortest
-          </argLine>
+						-Dtest.engine.url=${test.engine.url}
+						-Dtest.engine.app=cmseditortest
+					</argLine>
 				</configuration>
 				<executions>
 					<execution>
