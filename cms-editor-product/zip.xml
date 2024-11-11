@@ -19,6 +19,7 @@
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>README.md</include>
+                <include>README_DE.md</include>
       </includes>
     </fileSet>
   </fileSets>
