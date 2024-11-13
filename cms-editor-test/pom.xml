@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.axonivy.utils.cmseditor</groupId>
 	<artifactId>cms-editor-test</artifactId>
-	<version>11.3.3-SNAPSHOT</version>
+	<version>11.3.4-SNAPSHOT</version>
 	<packaging>iar-integration-test</packaging>
 	<properties>
 		<ivy.engine.version>11.3.1</ivy.engine.version>
@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>com.axonivy.utils.cmseditor</groupId>
 			<artifactId>cms-editor</artifactId>
-			<version>11.3.3-SNAPSHOT</version>
+			<version>11.3.4-SNAPSHOT</version>
 			<type>iar</type>
 		</dependency>
 		<dependency>
