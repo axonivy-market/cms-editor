@@ -21,6 +21,10 @@
         "request" : {
           "name" : "<%=ivy.cms.co(\"/Processes/CMSEditor/name\")%>",
           "description" : "<%=ivy.cms.co(\"/Processes/CMSEditor/description\")%>"
+        },
+        "permission" : {
+          "anonymous" : false,
+          "role" : "CMS_ADMIN"
         }
       },
       "tags" : [

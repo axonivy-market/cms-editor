@@ -9,7 +9,7 @@ In AxonIvy werden Sprachen für Benutzeroberflächen, Benachrichtigungen oder E-
 
 ## Demo
 ### 1. CMS-Editor-Prozessstart:
-
+- TODO Users should have the role of "CMS_ADMIN" to start the process.
 ![](./images/1-cms-editor-process.png)
 
 ### 2. Hauptseite des CMS-Editors:
