@@ -8,7 +8,7 @@ In AxonIvy, languages for UIs, notifications, or emails are managed within the C
 
 ## Demo
 ### 1. CMS editor process start:
-
+- Users should have the role of "CMS_ADMIN" to start the process.
 ![](./images/1-cms-editor-process.png)
 
 ### 2. CMS editor main page:
