@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <userConfig>
     <user>
-        <username>testUser1</username>
+        <username>cmsAdmin</username>
         <password>123456</password>
         <role>CMS_ADMIN</role>
     </user>
     <user>
-        <username>testUser2</username>
+        <username>normalUser</username>
         <password>123456</password>
     </user>
 </userConfig>
