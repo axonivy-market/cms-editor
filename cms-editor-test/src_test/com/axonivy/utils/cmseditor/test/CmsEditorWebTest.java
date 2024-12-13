@@ -137,7 +137,7 @@ public class CmsEditorWebTest {
     otherCms.click();
     $(By.id("primefacesmessagedlg")).should(hidden);
   }
-  
+
   @Test
  /**
   * Dear Bug Hunter,
