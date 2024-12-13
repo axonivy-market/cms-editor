@@ -8,6 +8,5 @@
     <user>
         <username>testUser2</username>
         <password>123456</password>
-        <role>CMS_USER</role>
     </user>
 </userConfig>
