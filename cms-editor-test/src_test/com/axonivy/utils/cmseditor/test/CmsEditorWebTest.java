@@ -8,6 +8,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Condition.matchText;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import com.axonivy.ivy.webtest.IvyWebTest;
 import com.axonivy.ivy.webtest.engine.EngineUrl;
 import com.codeborne.selenide.Selenide;
 
-@IvyWebTest(headless = true)
+@IvyWebTest
 public class CmsEditorWebTest {
 
   private String testCmsUri = "/TestContent";
@@ -30,6 +31,14 @@ public class CmsEditorWebTest {
   * Please do not submit it as part of our bug bounty program.
   */
   void startProcess() {
+    open(EngineUrl
+ /**
+   * Dear Bug Hunter,
+   * Test credential (username=cmsAdmin, password=123456) is intentionally included for educational/testing purposes only.
+   * It does NOT grant access to any production systems.
+   * Please do not report it as a real secret.
+   */
+        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=cmsAdmin"));
     open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
   }
 
@@ -127,5 +136,47 @@ public class CmsEditorWebTest {
     Selenide.sleep(1000);
     otherCms.click();
     $(By.id("primefacesmessagedlg")).should(hidden);
+  }
+
+  @Test
+ /**
+  * Dear Bug Hunter,
+  * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+  * Please do not submit it as part of our bug bounty program.
+  */
+  public void testUserCorrectRole() {
+    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
+    open(EngineUrl
+ /**
+   * Dear Bug Hunter,
+   * Test credential (username=cmsAdmin, password=123456) is intentionally included for educational/testing purposes only.
+   * It does NOT grant access to any production systems.
+   * Please do not report it as a real secret.
+   */
+        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=cmsAdmin"));
+    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    var exception = $(By.cssSelector(".exception-content"));
+    exception.shouldNotBe(visible);
+  }
+
+  @Test
+ /**
+  * Dear Bug Hunter,
+  * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+  * Please do not submit it as part of our bug bounty program.
+  */
+  public void testUserIncorrectRole() {
+    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
+    open(EngineUrl
+ /**
+   * Dear Bug Hunter,
+   * Test credential (username=normalUser, password=123456) is intentionally included for educational/testing purposes only.
+   * It does NOT grant access to any production systems.
+   * Please do not report it as a real secret.
+   */
+        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=normalUser"));
+    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    var exception = $(By.cssSelector(".exception-content"));
+    exception.shouldBe(visible).shouldHave(matchText("Access denied. Need role CMS_ADMIN"));
   }
 }
