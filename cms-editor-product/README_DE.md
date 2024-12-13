@@ -9,7 +9,7 @@ In AxonIvy werden Sprachen für Benutzeroberflächen, Benachrichtigungen oder E-
 
 ## Demo
 ### 1. CMS-Editor-Prozessstart:
-- Die Benutzer sollten die Rolle „CMS_ADMIN“ haben, um den Prozess zu starten.
+- Der Benutzer sollte die Roller "CMS_ADMIN" haben, um den Prozess zu starten.
 ![](./images/1-cms-editor-process.png)
 
 ### 2. Hauptseite des CMS-Editors:
