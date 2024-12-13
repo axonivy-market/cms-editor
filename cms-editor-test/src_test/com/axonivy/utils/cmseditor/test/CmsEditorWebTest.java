@@ -18,7 +18,7 @@ import com.axonivy.ivy.webtest.IvyWebTest;
 import com.axonivy.ivy.webtest.engine.EngineUrl;
 import com.codeborne.selenide.Selenide;
 
-@IvyWebTest(headless = true)
+@IvyWebTest
 public class CmsEditorWebTest {
 
   private String testCmsUri = "/TestContent";
