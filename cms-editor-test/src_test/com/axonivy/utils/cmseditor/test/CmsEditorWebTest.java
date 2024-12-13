@@ -126,7 +126,7 @@ public class CmsEditorWebTest {
     otherCms.click();
     $(By.id("primefacesmessagedlg")).should(hidden);
   }
-  
+
   @Test
   public void testUserCorrectRole() {
     $(By.id("content-form:cancel-button")).shouldBe(visible).click();
