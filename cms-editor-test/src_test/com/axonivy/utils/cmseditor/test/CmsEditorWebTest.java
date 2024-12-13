@@ -31,14 +31,14 @@ public class CmsEditorWebTest {
   * Please do not submit it as part of our bug bounty program.
   */
   void startProcess() {
-	open(EngineUrl.createProcessUrl(
+    open(EngineUrl
  /**
    * Dear Bug Hunter,
    * Test credential (username=testUser1, password=123456) is intentionally included for educational/testing purposes only.
    * It does NOT grant access to any production systems.
    * Please do not report it as a real secret.
    */
-				"/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=testUser1"));
+        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=testUser1"));
     open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
   }
 
