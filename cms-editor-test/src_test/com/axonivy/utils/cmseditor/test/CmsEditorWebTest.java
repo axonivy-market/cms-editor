@@ -144,7 +144,7 @@ public class CmsEditorWebTest {
   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
   * Please do not submit it as part of our bug bounty program.
   */
-  public void testUser_correctRole() {
+  public void testUserCorrectRole() {
     $(By.id("content-form:cancel-button")).shouldBe(visible).click();
     open(EngineUrl
  /**
@@ -165,7 +165,7 @@ public class CmsEditorWebTest {
   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
   * Please do not submit it as part of our bug bounty program.
   */
-  public void testUser_IncorrectRole() {
+  public void testUserIncorrectRole() {
     $(By.id("content-form:cancel-button")).shouldBe(visible).click();
     open(EngineUrl
  /**
@@ -177,7 +177,6 @@ public class CmsEditorWebTest {
         .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=testUser2"));
     open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
     var exception = $(By.cssSelector(".exception-content"));
-    Selenide.sleep(5000);
     exception.shouldBe(visible).shouldHave(matchText("Access denied. Need role CMS_ADMIN"));
   }
 }
