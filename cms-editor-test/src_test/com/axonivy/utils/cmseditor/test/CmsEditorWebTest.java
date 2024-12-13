@@ -8,6 +8,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Condition.matchText;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,8 @@ public class CmsEditorWebTest {
 
   @BeforeEach
   void startProcess() {
+	open(EngineUrl.createProcessUrl(
+				"/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=testUser1"));
     open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
   }
 
@@ -122,5 +125,26 @@ public class CmsEditorWebTest {
     Selenide.sleep(1000);
     otherCms.click();
     $(By.id("primefacesmessagedlg")).should(hidden);
+  }
+  
+  @Test
+  public void testUser_correctRole() {
+    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
+    open(EngineUrl
+        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=testUser1"));
+    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    var exception = $(By.cssSelector(".exception-content"));
+    exception.shouldNotBe(visible);
+  }
+
+  @Test
+  public void testUser_IncorrectRole() {
+    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
+    open(EngineUrl
+        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=testUser2"));
+    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    var exception = $(By.cssSelector(".exception-content"));
+    Selenide.sleep(5000);
+    exception.shouldBe(visible).shouldHave(matchText("Access denied. Need role CMS_ADMIN"));
   }
 }
