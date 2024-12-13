@@ -19,6 +19,9 @@
             "out.password" : "param.password",
             "out.username" : "param.username"
           }
+        },
+        "request" : {
+          "isVisibleOnStartList" : false
         }
       },
       "visual" : {
