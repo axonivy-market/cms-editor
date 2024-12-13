@@ -32,7 +32,7 @@ public class CmsEditorWebTest {
   */
   void startProcess() {
     open(EngineUrl
- .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=testUser1"));
+ .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=cmsAdmin"));
     open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
   }
 
