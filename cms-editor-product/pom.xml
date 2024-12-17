@@ -38,7 +38,9 @@
                 <copy todir="${project.build.directory}">
                   <fileset dir="../../" includes="doc/**" />
                 </copy>
-                <copy file="README.md" tofile="${project.build.directory}/README.md" />
+                <copy todir="${project.build.directory}">
+                  <fileset dir="." includes="README*.md" />
+                </copy>
               </target>
             </configuration>
             <goals>
