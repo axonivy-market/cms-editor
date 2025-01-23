@@ -13,9 +13,10 @@
     <module>${project.name}-demo</module>
     <module>${project.name}-product</module>
     <module>${project.name}-demo-app</module>
+    <module>${project.name}-demo-app</module>
   </modules>
   <scm>
-    <developerConnection>scm:git:https://github.com/axonivy-market/${project.name}.git</developerConnection>
+    <developerConnection>scm:git:https://github.com/axonivy-market/cms-editor.git</developerConnection>
   </scm>
   <build>
     <pluginManagement>
