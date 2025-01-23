@@ -9,6 +9,16 @@
   <scm>
     <developerConnection>scm:git:https://github.com/axonivy-market/${project.name}.git</developerConnection>
   </scm>
+	<repositories>
+		<repository>
+			<id>nexus.axonivy.com</id>
+			<url>https://nexus.axonivy.com</url>
+		</repository>
+		<repository>
+			<id>maven.axonivy.com</id>
+			<url>https://maven.axonivy.com</url>
+		</repository>
+	</repositories>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
