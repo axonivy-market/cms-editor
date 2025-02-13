@@ -7,7 +7,7 @@ In AxonIvy werden Sprachen für Benutzeroberflächen, Benachrichtigungen oder E-
 - Einfache Styles verfügbar
 - Keine HTML-Tags im Übersetzungstext erforderlich
 
-** *TODO: In this version, real-time CMS updates have not yet been supported. Users are required to download the modified bundle in a ZIP format after making edits and re-import it into the project using Axon Ivy Designer. The changes will take effect only after the new release package is created and deployed to engine.* **
+** *In dieser Version gibt es noch keine Echtzeit-CMS-Updates. Nutzer müssen die bearbeiteten Dokumente als ZIP-Datei herunterladen und erneut ins Projekt importieren (mit dem Axon Ivy Designer). Die Änderungen wirken erst, wenn ein neues Release-Paket erstellt und auf der Engine bereitgestellt wurde.* **
 
 ## Demo
 ### 1. CMS-Editor-Prozessstart:
