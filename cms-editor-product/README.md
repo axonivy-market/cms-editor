@@ -6,6 +6,8 @@ In AxonIvy, languages for UIs, notifications, or emails are managed within the C
 - Simple styles available
 - No HTML tags needed in the translation text
 
+** *In this version, real-time CMS updates have not yet been supported. Users are required to download the modified bundle in a ZIP format after making edits and re-import it into the project using Axon Ivy Designer. The changes will take effect only after the new release package is created and deployed to engine.* **
+
 ## Demo
 ### 1. CMS editor process start:
 - Users should have the role of "CMS_ADMIN" to start the process.
