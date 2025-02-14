@@ -7,6 +7,8 @@ In AxonIvy werden Sprachen für Benutzeroberflächen, Benachrichtigungen oder E-
 - Einfache Styles verfügbar
 - Keine HTML-Tags im Übersetzungstext erforderlich
 
+** *In dieser Version gibt es noch keine Echtzeit-CMS-Updates. Nutzer müssen die bearbeiteten Dokumente als ZIP-Datei herunterladen und erneut ins Projekt importieren (mit dem Axon Ivy Designer). Die Änderungen wirken erst, wenn ein neues Release-Paket erstellt und auf der Engine bereitgestellt wurde.* **
+
 ## Demo
 ### 1. CMS-Editor-Prozessstart:
 - Der Benutzer sollte die Roller "CMS_ADMIN" haben, um den Prozess zu starten.
