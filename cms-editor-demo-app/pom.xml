@@ -26,7 +26,7 @@
     <dependency>
       <groupId>com.axonivy.utils.cmseditor</groupId>
       <artifactId>cms-editor-demo</artifactId>
-      <version>12.0.4-SNAPSHOT</version>
+      <version>${project.version}</version>
       <type>iar</type>
     </dependency>
   </dependencies>
