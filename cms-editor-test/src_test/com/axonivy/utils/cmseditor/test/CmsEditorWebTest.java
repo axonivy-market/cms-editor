@@ -4,11 +4,11 @@ import static com.codeborne.selenide.CollectionCondition.allMatch;
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThanOrEqual;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.hidden;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.Condition.matchText;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -159,6 +159,6 @@ public class CmsEditorWebTest {
         .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=normalUser"));
     open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
     var exception = $(By.cssSelector(".exception-content"));
-    exception.shouldBe(visible).shouldHave(matchText("Access denied. Need role CMS_ADMIN"));
+    exception.shouldBe(visible).shouldHave(text("Access denied. Need one of these roles [CMS_ADMIN]"));
   }
 }
