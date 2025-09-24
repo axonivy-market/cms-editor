@@ -1,7 +1,7 @@
 Labels:
   Application: Application
   Cancel: Cancel
-  CmsDownloaded: CMS translation downloaded successfully. Check you donwload history
+  CmsDownloaded: CMS bundle download complete. The file is available in your browser’s download folder.
   Download: Download
   EmptyContent: The content is empty. Click here to edit it.
   Message: Message
