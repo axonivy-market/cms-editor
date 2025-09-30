@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.axonivy.utils.cmseditor</groupId>
   <artifactId>cms-editor-modules</artifactId>
-  <version>13.1.2-SNAPSHOT</version>
+  <version>13.1.2</version>
   <packaging>pom</packaging>
   <name>cms-editor</name>
   <modules>
@@ -14,7 +14,7 @@
   </modules>
   <scm>
     <developerConnection>scm:git:https://github.com/axonivy-market/cms-editor.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v13.1.2</tag>
   </scm>
   <build>
     <pluginManagement>
