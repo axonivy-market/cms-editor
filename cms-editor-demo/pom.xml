@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.axonivy.utils.cmseditor</groupId>
   <artifactId>cms-editor-demo</artifactId>
-  <version>13.1.2</version>
+  <version>13.1.3-SNAPSHOT</version>
   <packaging>iar</packaging>
   <dependencies>
     <dependency>
