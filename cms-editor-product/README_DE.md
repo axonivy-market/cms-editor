@@ -1,33 +1,46 @@
-# CMS Editor
+# CMS Chefredakteur
+Herein AxonIvy, Sprachen für UIs, Mitteilungen, oder #Email sind fertiggebracht
+#innerhalb die CMS. Wir sind aufgeregt zu hereinbringen das neues CMS
+Chefredakteur dass bedeutsam vereinfacht Sprache bearbeitend! Die wesentlichen
+Charakterzüge sind:
 
-In AxonIvy werden Sprachen für Benutzeroberflächen, Benachrichtigungen oder E-Mails im CMS verwaltet. Wir freuen uns, den neuen CMS-Editor vorzustellen, der die Bearbeitung von Sprachen erheblich vereinfacht! Die wichtigsten Funktionen sind:
+- Nutzer-freundlicher Chefredakteur für übersetzen neue Sprachen
+- Bearbeite eine grenzenlose Nummer von Sprachen
+- Simple Stile verfügbar
+- Keine #HTML Anhängsel brauchten in den Übersetzung Text
 
-- Benutzerfreundlicher Editor zum Übersetzen neuer Sprachen
-- Bearbeite eine unbegrenzte Anzahl von Sprachen
-- Einfache Styles verfügbar
-- Keine HTML-Tags im Übersetzungstext erforderlich
-
-** *In dieser Version gibt es noch keine Echtzeit-CMS-Updates. Nutzer müssen die bearbeiteten Dokumente als ZIP-Datei herunterladen und erneut ins Projekt importieren (mit dem Axon Ivy Designer). Die Änderungen wirken erst, wenn ein neues Release-Paket erstellt und auf der Engine bereitgestellt wurde.* **
+** In dieser Version, real-misst CMS Updates haben noch nicht gewesen
+unterstützt. Nutzer sind bedürft zu herunterladen die modifiziert Bündel in ein
+REIßVERSCHLUSS Format nach machen Bearbeitungen und re-importieren ihm hinein
+das Projekt benutzend #Axon Efeu Designer. Die Änderungen wollen wirken nur nach
+der neuen Freigabe Päckchen ist geschafft und #aufbieten zu Motor.* **
 
 ## Demo
-### 1. CMS-Editor-Prozessstart:
-- Der Benutzer sollte die Roller "CMS_ADMIN" haben, um den Prozess zu starten.
-![](./images/1-cms-editor-process.png)
+### 1. CMS Chefredakteur Arbeitsgang Start:
+- Nutzer sollten die Rolle haben von "CMS_ADMIN" zu starten den Arbeitsgang.
+  ![](./images/1-cms-editor-process.png)
 
-### 2. Hauptseite des CMS-Editors:
+### 2. CMS Chefredakteur hauptsächlich Seite:
 
-1. **Applikationsauswahl**: Jede Ivy-Engine kann mehrere Anwendungen enthalten. Wähle zuerst die Anwendung aus, an der Du arbeiten möchtest.
-2. **Suchfeld**: Du kannst Text eingeben, um nach URI und Inhalt zu suchen. Die Suche ist nicht auf Groß- und Kleinschreibung beschränkt.
-3. **Ausgewähltes CMS**: Zeigt den Schlüssel des ausgewählten Inhalts an.
-4. **Nur TODO filtern**: Diese Option filtert alle Inhalte mit dem Präfix 'TODO'.
-5. **Ergebnistabelle**: Zeigt alle URIs an. Du kannst zur nächsten Seite navigieren und die Seitengröße ändern.
-6. **Inhalt auswählen**: Durch Klicken auf die URI wird der Inhalt in den Inhaltsbereich geladen.
-7. **Inhaltsbereich**: Zeigt alle Sprachen im Vorschaumodus an.
-8. **Sprachname**: Zeigt den Namen der Sprachen an.
-9. **Inhalt**: Zeigt den Inhalt der Sprache (8) im Vorschaumodus an.
-10. **Editor**: Zeigt den Inhalt im Bearbeitungsmodus an. Du kannst den Inhalt mit dem WYSIWYG-Editor aktualisieren.
-11. **Speichern-Button**: Der Editor speichert nicht automatisch. Klicke auf den Speichern-Button, um den bearbeiteten Inhalt zu speichern.
-12. **Abbrechen-Button**: Schließt die Editor-Seite.
-13. **Download-Button**: Lädt eine ZIP-Datei herunter, die alle übersetzten Inhalte enthält.
+1. Antrag #Wählhebel: Jeder Efeu Motor kann mehrfache Anträge zügeln. Zuerst,
+   wähl aus den Antrag du möchtest arbeiten weiter.
+2. #Suchen #Einlesen: Du kannst Text betreten zu suchen mal URI und
+   #einverstanden. Die Suche ist Fall-empfindungslos.
+3. Exklusiv CMS: Zeigt den Schlüssel von dem exklusiven Inhalt.
+4. Filter Nur TODO: Diese Option filtert alle Inhalt mit der Vorsilbe 'TODOs.
+5. #Resultieren #Tabellieren: Displays alle URIs. Du kannst zu der nächsten
+   Seite befahren und wechseln die Seite Größe.
+6. #Auswählen #Einverstanden: Klickend weiter das URI Ladungen den Inhalt hinein
+   die #einverstanden Gegend.
+7. #Einverstanden Gegend: Zeigt alle Sprachen in Vernissage Verfahren.
+8. Sprache Name: Zeigt den Namen von den Sprachen.
+9. Inhalt: Zeigt den Inhalt von der Sprache (8) in Vernissage Verfahren.
+10. Chefredakteur: Zeigt den Inhalt in Bearbeitung Verfahren. Du kannst den
+    Inhalt verbessern benutzend den WYSIWYG Chefredakteur.
+11. #Speichern #Zuknöpfen: Der Chefredakteur speichert nicht automatisch. Klick
+    das speichern Knopf zu speichern den #bearbeitet Inhalt.
+12. #Streichen #Zuknöpfen: Schließt die Chefredakteur Seite.
+13. #Herunterladen #Zuknöpfen: Lädt herunter/Ladet herunter eine Reißverschluss
+    Datei zügelnd alle #übersetzt Inhalte.
 
 ![](./images/2-cms-editor-main-page.png)
