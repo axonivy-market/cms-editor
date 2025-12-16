@@ -18,7 +18,8 @@
             <div class="col-3">
               <p:selectOneMenu id="app" value="#{cmsEditorBean.selectedAppName}" class="w-full">
                 <f:selectItems value="#{cmsEditorBean.appNames}" />
-                <p:ajax process="@this" update="content-form:table-cms-keys content-form:cms-values content-form:table-cms-keys content-form:cms-valuessss"
+                <p:ajax process="@this"
+                  update="content-form:table-cms-keys content-form:cms-values content-form:table-cms-keys content-form:cms-valuessss"
                   listener="#{cmsEditorBean.onAppChange}" />
               </p:selectOneMenu>
             </div>
@@ -28,7 +29,8 @@
                   value="#{cmsEditorBean.searchKey}" placeholder="#{ivy.cms.co('/Labels/Search')}"
                   styleClass="w-full p-inputtext">
                   <p:ajax event="keyup" listener="#{cmsEditorBean.search}"
-                    update="table-cms-keys content-form:cms-values content-form:cms-valuessss" delay="500" process="@this" />
+                    update="table-cms-keys content-form:cms-values content-form:cms-valuessss" delay="500"
+                    process="@this" />
                 </p:inputText>
               </span>
             </div>
@@ -36,11 +38,12 @@
 
           <div class="grid h-full">
             <div class="col-4">
+              <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/Links')}</div>
               <h:panelGroup styleClass="panel left w-full border-none">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
                   selection="#{cmsEditorBean.selectedCms}" selectionMode="single" rowKey="#{entry.uri}"
                   scrollable="true" scrollHeight="100%" paginator="true" rows="30" paginatorPosition="bottom"
-                  pageLinks="5"
+                  pageLinks="5" 
                   paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                   currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                   rowsPerPageTemplate="20,30,40">
@@ -54,8 +57,9 @@
             </div>
 
             <div class="col-4">
-              <h:panelGroup styleClass="panel right w-full border-none">
-                <p:accordionPanel id="cms-values" multiple="true" widgetVar="multiple"
+              <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/CMS')}</div>
+              <h:panelGroup styleClass="panel right w-full border-none flex flex-column">
+                <p:accordionPanel id="cms-values" multiple="true" widgetVar="multiple" styleClass="flex-grow-1"
                   value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                   var="language">
                   <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
@@ -65,14 +69,21 @@
                         isFormatButtonListVisible="#{language.html}" />
                     </h:panelGroup>
                   </p:tab>
+
                 </p:accordionPanel>
+                <p:commandButton id="downloadButton" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
+                  actionListener="#{cmsEditorBean.handleBeforeDownloadFile}" icon="pi pi-arrow-down"
+                  styleClass="w-full mt-3" onclick="PrimeFaces.monitorDownload(function() {}, stop);">
+                  <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
+                </p:commandButton>
               </h:panelGroup>
             </div>
 
 
             <div class="col-4">
-              <h:panelGroup styleClass="panel right end w-full border-none">
-                <p:accordionPanel id="cms-valuessss" multiple="true" widgetVar="multiple"
+              <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/Edit')}</div>
+              <h:panelGroup styleClass="panel right end w-full border-none flex flex-column">
+                <p:accordionPanel id="cms-valuessss" multiple="true" widgetVar="multiple" styleClass="flex-grow-1"
                   value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                   var="language">
                   <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
@@ -83,6 +94,9 @@
                     </h:panelGroup>
                   </p:tab>
                 </p:accordionPanel>
+                <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" ajax="false" icon="pi pi-pencil"
+                  styleClass="w-full mt-3 ui-button-outlined ui-button-secondary">
+                </p:commandButton>
               </h:panelGroup>
             </div>
 
@@ -91,11 +105,7 @@
         <div class="command-btns pt-2">
           <p:commandButton id="cancel-button" widgetVar="cancel-button" value="#{ivy.cms.co('/Labels/Cancel')}"
             actionListener="#{logic.close}" process="@this" immediate="true" styleClass="ml-2 mr-2 ui-button-flat" />
-          <p:commandButton id="downloadButton" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
-            actionListener="#{cmsEditorBean.handleBeforeDownloadFile}" icon="pi pi-arrow-down" styleClass="mr-2"
-            onclick="PrimeFaces.monitorDownload(function() {}, stop);">
-            <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
-          </p:commandButton>
+
           <p:remoteCommand name="stop" global="false" partialSubmit="true" process="@this" update="content-form"
             actionListener="#{cmsEditorBean.downloadFinished}" />
         </div>

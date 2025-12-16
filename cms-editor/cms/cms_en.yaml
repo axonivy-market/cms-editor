@@ -1,9 +1,12 @@
 Labels:
   Application: Application
+  CMS: CMS
   Cancel: Cancel
   CmsDownloaded: CMS bundle download complete. The file is available in your browser’s download folder.
   Download: Download
+  Edit: Edit
   EmptyContent: The content is empty. Click here to edit it.
+  Links: Links
   Message: Message
   Options: Options
   Search: Search
