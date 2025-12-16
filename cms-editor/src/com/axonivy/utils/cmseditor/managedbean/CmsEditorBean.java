@@ -69,7 +69,6 @@ public class CmsEditorBean implements Serializable {
   private Cms selectedCms;
   private String selectedAppName;
   private String searchKey;
-  private boolean isShowOnlyTodo;
   private StreamedContent fileDownload;
   private boolean isShowEditorCms;
 
@@ -93,11 +92,11 @@ public class CmsEditorBean implements Serializable {
     if (isEditing()) {
       return;
     }
-    filteredCMSList = cmsList.stream().filter(entry -> isCmsMatchSearchKey(entry, searchKey) && isTodoCms(entry))
-        .collect(Collectors.toList());
+    filteredCMSList =
+        cmsList.stream().filter(entry -> isCmsMatchSearchKey(entry, searchKey)).collect(Collectors.toList());
     if (selectedCms != null) {
-      selectedCms = filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny()
-          .orElse(null);
+      selectedCms =
+          filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny().orElse(null);
     }
   }
 
@@ -197,13 +196,6 @@ public class CmsEditorBean implements Serializable {
     return true;
   }
 
-  private boolean isTodoCms(Cms entry) {
-    if (isShowOnlyTodo) {
-      return entry.getContents().stream().anyMatch(value -> StringUtils.containsIgnoreCase(value.getContent(), TODO));
-    }
-    return true;
-  }
-
   private SavedCms findSavedCms(String uri, Locale locale) {
     return savedCmsMap.getOrDefault(uri, new HashMap<>()).getOrDefault(locale.toString(), null);
   }
@@ -271,14 +263,6 @@ public class CmsEditorBean implements Serializable {
   public void setSelectedCms(Cms selectedCms) {
     this.lastSelectedCms = this.selectedCms == null ? selectedCms : this.selectedCms;
     this.selectedCms = selectedCms;
-  }
-
-  public boolean isShowOnlyTodo() {
-    return isShowOnlyTodo;
-  }
-
-  public void setShowOnlyTodo(boolean isShowOnlyTodo) {
-    this.isShowOnlyTodo = isShowOnlyTodo;
   }
 
   public String getSearchKey() {
