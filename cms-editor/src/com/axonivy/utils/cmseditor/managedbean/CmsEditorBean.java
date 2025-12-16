@@ -57,7 +57,6 @@ public class CmsEditorBean implements Serializable {
   private static final String CONTENT_FORM_SELECTED_URL = "content-form:selected-url";
   private static final String CONTENT_FORM_CMS_VALUES = "content-form:cms-values";
   private static final String CONTENT_FORM_TABLE_CMS_KEYS = "content-form:table-cms-keys";
-  private static final String TODO = "TODO";
   private static final String CMS_EDITOR_PMV_NAME = "cms-editor";
   private static final String CMS_EDITOR_DEMO_PMV_NAME = "cms-editor-demo";
 
@@ -110,7 +109,7 @@ public class CmsEditorBean implements Serializable {
     if (isEditing()) {
       selectedCms = lastSelectedCms; // Revert to last valid selection
     } else {
-      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL);
+      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, "content-form:cms-valuessss");
     }
   }
 
@@ -137,14 +136,13 @@ public class CmsEditorBean implements Serializable {
 
   public void getAllChildren(String appName, String pmvName, ContentObject contentObject, List<Locale> locales) {
     // Exclude the CMS of it self
-    if (!isShowEditorCms 
-        && StringUtils.contains(pmvName, CMS_EDITOR_PMV_NAME)
+    if (!isShowEditorCms && StringUtils.contains(pmvName, CMS_EDITOR_PMV_NAME)
         && !StringUtils.contains(pmvName, CMS_EDITOR_DEMO_PMV_NAME)) {
       return;
     }
     if (contentObject.isRoot()) {
-      locales = contentObject.cms().locales().stream().filter(locale -> isNotBlank(locale.getLanguage()))
-          .collect(toList());
+      locales =
+          contentObject.cms().locales().stream().filter(locale -> isNotBlank(locale.getLanguage())).collect(toList());
     }
     var pmvCmsMap = appPmvCmsMap.getOrDefault(appName, new HashMap<>());
     for (ContentObject child : contentObject.children()) {
