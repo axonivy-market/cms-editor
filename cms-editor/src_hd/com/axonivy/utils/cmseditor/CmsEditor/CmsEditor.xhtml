@@ -16,8 +16,9 @@
           </div>
           <div class="grid align-items-center">
             <div class="col-3">
-              <p:selectOneMenu id="app" value="#{cmsEditorBean.selectedAppName}" class="w-full">
-                <f:selectItems value="#{cmsEditorBean.appNames}" />
+              <p:selectOneMenu id="app" value="#{cmsEditorBean.selectedProjectName}" class="w-full">
+                <f:selectItem itemLabel="All" itemValue="null" />
+                <f:selectItems value="#{cmsEditorBean.projectCms}" />
                 <p:ajax process="@this"
                   update="content-form:table-cms-keys content-form:cms-values content-form:table-cms-keys content-form:cms-valuessss"
                   listener="#{cmsEditorBean.onAppChange}" />
@@ -42,13 +43,13 @@
               <h:panelGroup styleClass="panel left w-full border-none">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
                   selection="#{cmsEditorBean.selectedCms}" selectionMode="single" rowKey="#{entry.uri}"
-                  scrollable="true" scrollHeight="100%" paginator="true" rows="30" paginatorPosition="bottom"
-                  pageLinks="5" 
+                  scrollHeight="100%" rows="30" paginatorPosition="bottom"
+                  pageLinks="5"
                   paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                   currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                   rowsPerPageTemplate="20,30,40">
                   <p:column>
-                    <h:outputText id="cms-uri" value="#{entry.uri}" />
+                    <h:outputText id="cms-uri" value="#{entry.pmvName}#{entry.uri}" />
                     <p:tooltip for="@previous" value="#{entry.uri}" position="top" />
                   </p:column>
                   <p:ajax event="rowSelect" process="@this" partialSubmit="true" listener="#{cmsEditorBean.rowSelect}" />
@@ -65,11 +66,10 @@
                   <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
                     <h:panelGroup styleClass="ui-fluid mb-0 pb-0">
                       <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
-                        languageIndex="#{language.index}" managedBean="#{cmsEditorBean}"
+                        languageIndex="#{language.index}" managedBean="#{cmsEditorBean}" isReadOnly="true"
                         isFormatButtonListVisible="#{language.html}" />
                     </h:panelGroup>
                   </p:tab>
-
                 </p:accordionPanel>
                 <p:commandButton id="downloadButton" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
                   actionListener="#{cmsEditorBean.handleBeforeDownloadFile}" icon="pi pi-arrow-down"
@@ -83,19 +83,20 @@
             <div class="col-4">
               <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/Edit')}</div>
               <h:panelGroup styleClass="panel right end w-full border-none flex flex-column">
-                <p:accordionPanel id="cms-valuessss" multiple="true" widgetVar="multiple" styleClass="flex-grow-1"
+                <p:accordionPanel id="cms-valuessss" multiple="true" widgetVar="multipleEdit" styleClass="flex-grow-1"
                   value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                   var="language">
                   <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
                     <h:panelGroup styleClass="ui-fluid mb-0 pb-0">
                       <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
                         languageIndex="#{language.index}" managedBean="#{cmsEditorBean}"
-                        isFormatButtonListVisible="#{language.html}" />
+                        isReadOnly="#{!cmsEditorBean.editableCms}" isFormatButtonListVisible="#{language.html}" />
                     </h:panelGroup>
                   </p:tab>
                 </p:accordionPanel>
                 <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" ajax="false" icon="pi pi-pencil"
-                  styleClass="w-full mt-3 ui-button-outlined ui-button-secondary">
+                  update="cms-valuessss" styleClass="w-full mt-3 ui-button-outlined ui-button-secondary" process="@this"
+                  actionListener="#{cmsEditorBean.onEditableButton()}">
                 </p:commandButton>
               </h:panelGroup>
             </div>

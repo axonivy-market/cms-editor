@@ -12,12 +12,13 @@
 	<cc:attribute name="content" required="true" />
 	<cc:attribute name="languageIndex" required="true" />
 	<cc:attribute name="isFormatButtonListVisible" default="false"/>
+  <cc:attribute name="isReadOnly" default="false" />
 </cc:interface>
 
 <cc:implementation>
 	<h:outputStylesheet name="suneditor/css/suneditor.min.css" />
 	<h:outputScript name="suneditor/suneditor.min.js" target="head" />
-	<p:inplace>
+	<p:inplace disabled="#{cc.attrs.isReadOnly}">
 		<f:facet name="output">
 			<h:outputText rendered="#{not empty cc.attrs.content}"
 				value="#{cc.attrs.content}" escape="false" />
@@ -25,7 +26,7 @@
 				value="#{ivy.cms.co('/Labels/EmptyContent')}" escape="false" />
 		</f:facet>
 		<f:facet name="input">
-			<p:inputTextarea id="content-editor-id" value="#{cc.attrs.content}"
+			<p:inputTextarea id="content-editor-id" value="#{cc.attrs.content}" rendered="#{not cc.attrs.readonly}"
 				styleClass="js-article-content-editor hidden" />
 		</f:facet>
 	</p:inplace>

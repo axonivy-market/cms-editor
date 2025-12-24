@@ -10,6 +10,8 @@ public class Cms implements Serializable {
 
   private String uri;
 
+  private String pmvName;
+
   private List<CmsContent> contents;
 
   public String getUri() {
@@ -18,6 +20,14 @@ public class Cms implements Serializable {
 
   public void setUri(String uri) {
     this.uri = uri;
+  }
+
+  public String getPmvName() {
+    return pmvName;
+  }
+
+  public void setPmvName(String pmvName) {
+    this.pmvName = pmvName;
   }
 
   public List<CmsContent> getContents() {
