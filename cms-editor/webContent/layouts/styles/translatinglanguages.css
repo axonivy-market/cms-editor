@@ -23,3 +23,20 @@
 .ui-datatable table thead tr {
 	display: none;
 }
+
+.ui-accordion .ui-accordion-content {
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+.cms-scroll-wrapper {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow-y: auto;
+  min-height: 0;
+
+}
+.cms-scroll-wrapper {
+  overflow-y: auto;
+  min-height: 0;
+}

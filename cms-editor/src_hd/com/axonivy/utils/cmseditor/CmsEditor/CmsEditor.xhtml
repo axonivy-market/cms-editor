@@ -15,9 +15,9 @@
             <span class="text-xl font-small">Project-CMS</span>
           </div>
           <div class="grid align-items-center">
-            <div class="col-3">
+            <div class="col-4">
               <p:selectOneMenu id="app" value="#{cmsEditorBean.selectedProjectName}" class="w-full">
-                <f:selectItem itemLabel="All" itemValue="null" />
+                <f:selectItem itemLabel="All" itemValue="#{null}" />
                 <f:selectItems value="#{cmsEditorBean.projectCms}" />
                 <p:ajax process="@this"
                   update="content-form:table-cms-keys content-form:cms-values content-form:table-cms-keys content-form:cms-valuessss"
@@ -25,7 +25,7 @@
               </p:selectOneMenu>
             </div>
 
-            <div class="col-9">
+            <div class="col-8">
               <span class="ui-input-icon-left w-full"> <i class="pi pi-search" /> <p:inputText id="search-input"
                   value="#{cmsEditorBean.searchKey}" placeholder="#{ivy.cms.co('/Labels/Search')}"
                   styleClass="w-full p-inputtext">
@@ -43,8 +43,7 @@
               <h:panelGroup styleClass="panel left w-full border-none">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
                   selection="#{cmsEditorBean.selectedCms}" selectionMode="single" rowKey="#{entry.uri}"
-                  scrollHeight="100%" rows="30" paginatorPosition="bottom"
-                  pageLinks="5"
+                  scrollHeight="100%" rows="30" paginatorPosition="bottom" pageLinks="5"
                   paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                   currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                   rowsPerPageTemplate="20,30,40">
@@ -57,47 +56,53 @@
               </h:panelGroup>
             </div>
 
-            <div class="col-4">
+            <div class="col-4 flex flex-column" style="min-height: 0">
               <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/CMS')}</div>
-              <h:panelGroup styleClass="panel right w-full border-none flex flex-column">
-                <p:accordionPanel id="cms-values" multiple="true" widgetVar="multiple" styleClass="flex-grow-1"
-                  value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
-                  var="language">
-                  <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
-                    <h:panelGroup styleClass="ui-fluid mb-0 pb-0">
-                      <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
-                        languageIndex="#{language.index}" managedBean="#{cmsEditorBean}" isReadOnly="true"
-                        isFormatButtonListVisible="#{language.html}" />
-                    </h:panelGroup>
-                  </p:tab>
-                </p:accordionPanel>
+              <h:panelGroup styleClass="panel w-full border-none flex flex-column flex-grow-1" layout="block"
+                style="min-height:0">
+                <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
+                  style="min-height:0">
+                  <p:accordionPanel id="cms-values" multiple="true" widgetVar="multiple"
+                    value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
+                    var="language">
+                    <p:tab title="#{language.locale.displayLanguage}">
+                      <h:panelGroup styleClass="ui-fluid">
+                        <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
+                          languageIndex="#{language.index}" managedBean="#{cmsEditorBean}" isReadOnly="true"
+                          isFormatButtonListVisible="#{language.html}" />
+                      </h:panelGroup>
+                    </p:tab>
+                  </p:accordionPanel>
+                </h:panelGroup>
                 <p:commandButton id="downloadButton" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
-                  actionListener="#{cmsEditorBean.handleBeforeDownloadFile}" icon="pi pi-arrow-down"
+                  icon="pi pi-arrow-down" actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
                   styleClass="w-full mt-3" onclick="PrimeFaces.monitorDownload(function() {}, stop);">
                   <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
                 </p:commandButton>
               </h:panelGroup>
             </div>
 
-
-            <div class="col-4">
+            <div class="col-4 flex flex-column" style="min-height: 0">
               <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/Edit')}</div>
-              <h:panelGroup styleClass="panel right end w-full border-none flex flex-column">
-                <p:accordionPanel id="cms-valuessss" multiple="true" widgetVar="multipleEdit" styleClass="flex-grow-1"
-                  value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
-                  var="language">
-                  <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
-                    <h:panelGroup styleClass="ui-fluid mb-0 pb-0">
-                      <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
-                        languageIndex="#{language.index}" managedBean="#{cmsEditorBean}"
-                        isReadOnly="#{!cmsEditorBean.editableCms}" isFormatButtonListVisible="#{language.html}" />
-                    </h:panelGroup>
-                  </p:tab>
-                </p:accordionPanel>
-                <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" ajax="false" icon="pi pi-pencil"
-                  update="cms-valuessss" styleClass="w-full mt-3 ui-button-outlined ui-button-secondary" process="@this"
-                  actionListener="#{cmsEditorBean.onEditableButton()}">
-                </p:commandButton>
+              <h:panelGroup styleClass="panel end w-full border-none flex flex-column flex-grow-1" layout="block"
+                style="min-height:0">
+                <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
+                  style="min-height:0">
+                  <p:accordionPanel id="cms-valuessss" multiple="true" widgetVar="multipleEdit"
+                    value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
+                    var="language">
+                    <p:tab title="#{language.locale.displayLanguage}">
+                      <h:panelGroup styleClass="ui-fluid">
+                        <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
+                          languageIndex="#{language.index}" managedBean="#{cmsEditorBean}"
+                          isReadOnly="#{!cmsEditorBean.editableCms}" isFormatButtonListVisible="#{language.html}" />
+                      </h:panelGroup>
+                    </p:tab>
+                  </p:accordionPanel>
+                </h:panelGroup>
+                <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil" ajax="false"
+                  process="@this" update="cms-valuessss" styleClass="w-full mt-3 ui-button-outlined ui-button-secondary"
+                  actionListener="#{cmsEditorBean.onEditableButton()}" />
               </h:panelGroup>
             </div>
 

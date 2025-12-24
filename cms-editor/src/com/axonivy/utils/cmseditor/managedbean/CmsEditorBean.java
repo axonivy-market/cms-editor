@@ -122,6 +122,7 @@ public class CmsEditorBean implements Serializable {
   }
 
   public void onAppChange() {
+    Ivy.log().warn(this.selectedProjectName);
     if (StringUtils.isBlank(this.selectedProjectName)) {
       cmsList = this.pmvCmsMap.values().stream().map(PmvCms::getCmsList).flatMap(List::stream).toList();
     } else {
