@@ -100,12 +100,22 @@
                     </p:tab>
                   </p:accordionPanel>
                 </h:panelGroup>
+
                 <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil" ajax="false"
-                  process="@this" update="cms-valuessss" styleClass="w-full mt-3 ui-button-outlined ui-button-secondary"
-                  actionListener="#{cmsEditorBean.onEditableButton()}" />
+                  process="@this" update="cms-valuessss edit-cancel-updating-cms-group"
+                  styleClass="w-full mt-3 ui-button-outlined ui-button-secondary"
+                  actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}" />
+
+                <h:panelGroup id="edit-cancel-updating-cms-group" styleClass="flex gap-2"
+                  rendered="#{cmsEditorBean.editableCms}">
+                  <p:commandButton value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times" process="@this"
+                    styleClass="flex-1 ui-button-outlined ui-button-secondary" />
+                  <p:commandButton value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save" process="@this"
+                    actionListener="#{cmsEditorBean.writeCmsToApplication()}"
+                    styleClass="flex-1 ui-button-raised ui-button-primary" />
+                </h:panelGroup>
               </h:panelGroup>
             </div>
-
           </div>
         </h:panelGroup>
         <div class="command-btns pt-2">

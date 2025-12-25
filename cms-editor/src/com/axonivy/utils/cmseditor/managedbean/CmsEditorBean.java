@@ -25,6 +25,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.PF;
 import org.primefaces.PrimeFaces;
@@ -35,6 +36,7 @@ import com.axonivy.utils.cmseditor.model.CmsContent;
 import com.axonivy.utils.cmseditor.model.PmvCms;
 import com.axonivy.utils.cmseditor.model.SavedCms;
 import com.axonivy.utils.cmseditor.repo.SavedCmsRepo;
+import com.axonivy.utils.cmseditor.service.CmsService;
 import com.axonivy.utils.cmseditor.utils.CmsFileUtils;
 import com.axonivy.utils.cmseditor.utils.FacesContexts;
 import com.axonivy.utils.cmseditor.utils.Utils;
@@ -44,6 +46,7 @@ import ch.ivyteam.ivy.application.IActivity;
 import ch.ivyteam.ivy.application.IApplication;
 import ch.ivyteam.ivy.application.IProcessModel;
 import ch.ivyteam.ivy.application.app.IApplicationRepository;
+import ch.ivyteam.ivy.cm.ContentManagementSystem;
 import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
@@ -105,10 +108,14 @@ public class CmsEditorBean implements Serializable {
     onAppChange();
   }
   
-  public void onEditableButton() {
-    this.isEditableCms = true;
+  public void writeCmsToApplication() {
+    CmsService.getInstance().writeCmsToApplication(savedCmsMap);
   }
 
+  public void onEditableButton() {
+      this.isEditableCms = true;
+  }
+  
   public void search() {
     if (isEditing()) {
       return;
@@ -122,7 +129,6 @@ public class CmsEditorBean implements Serializable {
   }
 
   public void onAppChange() {
-    Ivy.log().warn(this.selectedProjectName);
     if (StringUtils.isBlank(this.selectedProjectName)) {
       cmsList = this.pmvCmsMap.values().stream().map(PmvCms::getCmsList).flatMap(List::stream).toList();
     } else {
@@ -131,13 +137,13 @@ public class CmsEditorBean implements Serializable {
     }
     search();
   }
-
+  
   public void rowSelect() {
     this.isEditableCms = false;
     if (isEditing()) {
       selectedCms = lastSelectedCms; // Revert to last valid selection
     } else {
-      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, "content-form:cms-valuessss");
+      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, "content-form:cms-valuessss", "content-form:edit-cancel-updating-cms-group");
     }
   }
 
