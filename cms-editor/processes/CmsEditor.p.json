@@ -83,7 +83,7 @@
         "output" : {
           "code" : [
             "import com.axonivy.utils.cmseditor.service.CmsService;",
-            "CmsService.getInstance().updateTranslation(\"cms-editor-demo\");"
+            "CmsService.getInstance().updateTranslation();"
           ]
         }
       },

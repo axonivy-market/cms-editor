@@ -13,6 +13,16 @@ public class Cms implements Serializable {
   private String pmvName;
 
   private List<CmsContent> contents;
+  
+  private boolean isDifferentWithApplication;
+  
+  public boolean isDifferentWithApplication() {
+    return isDifferentWithApplication;
+  }
+
+  public void setDifferentWithApplication(boolean isDifferentWithApplication) {
+    this.isDifferentWithApplication = isDifferentWithApplication;
+  }
 
   public String getUri() {
     return uri;

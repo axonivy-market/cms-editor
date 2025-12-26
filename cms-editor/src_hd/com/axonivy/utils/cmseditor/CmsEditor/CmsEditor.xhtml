@@ -20,7 +20,7 @@
                 <f:selectItem itemLabel="All" itemValue="#{null}" />
                 <f:selectItems value="#{cmsEditorBean.projectCms}" />
                 <p:ajax process="@this"
-                  update="content-form:table-cms-keys content-form:cms-values content-form:table-cms-keys content-form:cms-valuessss"
+                  update="content-form:table-cms-keys content-form:cms-values content-form:table-cms-keys content-form:cms-edit-value"
                   listener="#{cmsEditorBean.onAppChange}" />
               </p:selectOneMenu>
             </div>
@@ -30,7 +30,7 @@
                   value="#{cmsEditorBean.searchKey}" placeholder="#{ivy.cms.co('/Labels/Search')}"
                   styleClass="w-full p-inputtext">
                   <p:ajax event="keyup" listener="#{cmsEditorBean.search}"
-                    update="table-cms-keys content-form:cms-values content-form:cms-valuessss" delay="500"
+                    update="table-cms-keys content-form:cms-values content-form:cms-edit-value" delay="500"
                     process="@this" />
                 </p:inputText>
               </span>
@@ -48,8 +48,13 @@
                   currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                   rowsPerPageTemplate="20,30,40">
                   <p:column>
-                    <h:outputText id="cms-uri" value="#{entry.pmvName}#{entry.uri}" />
-                    <p:tooltip for="@previous" value="#{entry.uri}" position="top" />
+                    <div class="link-row">
+                      <h:outputText id="cms-uri" class="cms-uri" value="#{entry.pmvName}#{entry.uri}" />
+                      <h:panelGroup rendered="#{entry.differentWithApplication}">
+                        <span class="orange-dot"></span>
+                      </h:panelGroup>
+                    </div>
+                    <p:tooltip for="cms-uri" value="#{entry.uri}" position="top" />
                   </p:column>
                   <p:ajax event="rowSelect" process="@this" partialSubmit="true" listener="#{cmsEditorBean.rowSelect}" />
                 </p:dataTable>
@@ -82,13 +87,14 @@
               </h:panelGroup>
             </div>
 
-            <div class="col-4 flex flex-column" style="min-height: 0">
+            <h:panelGroup layout="block" styleClass="col-4 flex flex-column editable-column" id="editable-column"
+              style="min-height: 0">
               <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/Edit')}</div>
               <h:panelGroup styleClass="panel end w-full border-none flex flex-column flex-grow-1" layout="block"
                 style="min-height:0">
                 <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
                   style="min-height:0">
-                  <p:accordionPanel id="cms-valuessss" multiple="true" widgetVar="multipleEdit"
+                  <p:accordionPanel id="cms-edit-value" multiple="true" widgetVar="multipleEdit"
                     value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                     var="language">
                     <p:tab title="#{language.locale.displayLanguage}">
@@ -102,20 +108,21 @@
                 </h:panelGroup>
 
                 <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil" ajax="false"
-                  process="@this" update="cms-valuessss edit-cancel-updating-cms-group"
+                  process="@this" update="cms-edit-value"
                   styleClass="w-full mt-3 ui-button-outlined ui-button-secondary"
                   actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}" />
 
                 <h:panelGroup id="edit-cancel-updating-cms-group" styleClass="flex gap-2"
                   rendered="#{cmsEditorBean.editableCms}">
                   <p:commandButton value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times" process="@this"
-                    styleClass="flex-1 ui-button-outlined ui-button-secondary" />
+                    rendered="#{cmsEditorBean.editableCms}" styleClass="flex-1 ui-button-outlined ui-button-secondary"
+                    actionListener="#{cmsEditorBean.onCancelEditableButton()}" update="content-form:editable-column" />
                   <p:commandButton value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save" process="@this"
-                    actionListener="#{cmsEditorBean.writeCmsToApplication()}"
-                    styleClass="flex-1 ui-button-raised ui-button-primary" />
+                    rendered="#{cmsEditorBean.editableCms}" actionListener="#{cmsEditorBean.writeCmsToApplication()}"
+                    update="content-form:editable-column" styleClass="flex-1 ui-button-raised ui-button-primary" />
                 </h:panelGroup>
               </h:panelGroup>
-            </div>
+            </h:panelGroup>
           </div>
         </h:panelGroup>
         <div class="command-btns pt-2">
@@ -127,11 +134,11 @@
         </div>
       </h:form>
       <script type="text/javascript">
-				window.isHideTaskName = false;
-				window.isHideTaskAction = true;
-				window.isHideCaseInfo = true;
-				window.isWorkingOnATask = false;
-			</script>
+        window.isHideTaskName = false;
+        window.isHideTaskAction = true;
+        window.isHideCaseInfo = true;
+        window.isWorkingOnATask = false;
+      </script>
     </ui:define>
   </ui:composition>
 </h:body>
