@@ -25,10 +25,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.primefaces.PF;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.StreamedContent;
 
 import com.axonivy.utils.cmseditor.model.Cms;
@@ -101,6 +103,10 @@ public class CmsEditorBean implements Serializable {
     this.isEditableCms = false;
   }
   
+  public boolean isDisableEditableButton() {
+    return ObjectUtils.isEmpty(this.selectedCms);
+  }
+
   public void search() {
     if (isEditing()) {
       return;

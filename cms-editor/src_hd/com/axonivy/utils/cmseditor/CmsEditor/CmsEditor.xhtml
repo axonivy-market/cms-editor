@@ -110,7 +110,8 @@
                 <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil" ajax="false"
                   process="@this" update="cms-edit-value"
                   styleClass="w-full mt-3 ui-button-outlined ui-button-secondary"
-                  actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}" />
+                  actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}"
+                  disabled="#{cmsEditorBean.disableEditableButton}" />
 
                 <h:panelGroup id="edit-cancel-updating-cms-group" styleClass="flex gap-2"
                   rendered="#{cmsEditorBean.editableCms}">
