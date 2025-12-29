@@ -1,6 +1,7 @@
 Labels:
   Application: Application
   CMS: CMS
+  CMSWarningText: If you want to apply persistent changes to the CMS, you need to download the ZIP file and deploy it on the engine.
   Cancel: Cancel
   CmsDownloaded: CMS bundle download complete. The file is available in your browser’s download folder.
   Download: Download
@@ -14,6 +15,8 @@ Labels:
   SelectedCMS: Selected CMS
   ShowOnlyTODO: Show only TODO
   SomeFieldsHaveNotBeenSaved: Some fields have not been saved yet
+  UndoChanges: Undo changes
+  Warning: Warning
 Processes:
   CMSEditor:
     description: Use this process to translate the current CMS and export it to an Excel file.

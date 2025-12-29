@@ -62,12 +62,10 @@
             </h:panelGroup>
 
             <h:panelGroup layout="block" id="current-cms-column" styleClass="col-4 flex flex-column columns">
-
               <div class="column-header font-semibold text-lg cms-title">
-                <span >#{ivy.cms.co('/Labels/CMS')}</span> 
-                <i class="pi pi-info-circle cms-info-icon" title="CMS information"></i>
+                <span>#{ivy.cms.co('/Labels/CMS')}</span> <i class="pi pi-info-circle cms-info-icon"
+                  title="CMS information"></i>
               </div>
-
               <h:panelGroup styleClass="panel w-full border-none flex flex-column flex-grow-1" layout="block"
                 style="min-height:0">
                 <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
@@ -84,18 +82,29 @@
                     </p:tab>
                   </p:accordionPanel>
                 </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="cms-warning mt-3" id="cms-warning-container">
+                  <div class="cms-warning-title">
+                    <i class="pi pi-exclamation-triangle cms-warning-icon"></i> <span>
+                      #{ivy.cms.co('/Labels/Warning')} </span>
+                  </div>
+                  <div class="cms-warning-content">
+                    <span> #{ivy.cms.co('/Labels/CMSWarningText')}<h:commandLink
+                        value="#{ivy.cms.co('/Labels/UndoChanges')}" styleClass="cms-warning-link" /></span>
+                  </div>
+                </h:panelGroup>
                 <p:commandButton id="downloadButton" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
                   icon="pi pi-arrow-down" actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
-                  styleClass="w-full mt-3" onclick="PrimeFaces.monitorDownload(function() {}, stop);">
+                  styleClass="w-full mt-3 cms-download-btn" onclick="PrimeFaces.monitorDownload(function() {}, stop);">
                   <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
                 </p:commandButton>
               </h:panelGroup>
             </h:panelGroup>
 
-            <h:panelGroup layout="block" id="editable-column" styleClass="col-4 flex flex-column editable-column columns">
+            <h:panelGroup layout="block" id="editable-column"
+              styleClass="col-4 flex flex-column editable-column columns">
               <div class="column-header font-semibold text-lg cms-title">
-                <span >#{ivy.cms.co('/Labels/Edit')}</span> 
-                <i class="pi pi-info-circle cms-info-icon" title="Edit CMS information"></i>
+                <span>#{ivy.cms.co('/Labels/Edit')}</span> <i class="pi pi-info-circle cms-info-icon"
+                  title="Edit CMS information"></i>
               </div>
               <h:panelGroup styleClass="panel end w-full border-none flex flex-column flex-grow-1" layout="block"
                 style="min-height:0">
@@ -148,6 +157,41 @@
         window.isHideCaseInfo = true;
         window.isWorkingOnATask = false;
       </script>
+
+      <!--       <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const hoverElement = document.getElementById("content-form:downloadButton");
+          const targetElement = document.getElementById("content-form:cms-warning-container");
+      
+          hoverElement.addEventListener("mouseenter", function () {
+            targetElement.classList.add("visible");
+          });
+      
+          hoverElement.addEventListener("mouseleave", function () {
+            targetElement.classList.remove("visible");
+          });
+        });
+      </script> -->
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const hoverElement = document.getElementById("content-form:downloadButton");
+          const targetElement = document.getElementById("content-form:cms-warning-container");
+      
+          hoverElement.addEventListener("mouseenter", function () {
+            targetElement.style.opacity = "1";
+            targetElement.style.visibility = "visible";
+            targetElement.style.transitionDelay = "0s";
+          });
+      
+          hoverElement.addEventListener("mouseleave", function () {
+            targetElement.style.opacity = "0";
+            targetElement.style.transitionDelay = "1s";
+            targetElement.style.visibility = "hidden";
+          });
+        });
+      </script>
+
     </ui:define>
   </ui:composition>
 </h:body>
