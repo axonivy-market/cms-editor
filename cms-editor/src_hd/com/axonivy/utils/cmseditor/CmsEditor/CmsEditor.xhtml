@@ -158,40 +158,22 @@
         window.isWorkingOnATask = false;
       </script>
 
-      <!--       <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const hoverElement = document.getElementById("content-form:downloadButton");
-          const targetElement = document.getElementById("content-form:cms-warning-container");
-      
-          hoverElement.addEventListener("mouseenter", function () {
-            targetElement.classList.add("visible");
-          });
-      
-          hoverElement.addEventListener("mouseleave", function () {
-            targetElement.classList.remove("visible");
-          });
-        });
-      </script> -->
-
       <script>
         document.addEventListener("DOMContentLoaded", function () {
           const hoverElement = document.getElementById("content-form:downloadButton");
           const targetElement = document.getElementById("content-form:cms-warning-container");
-      
+        
           hoverElement.addEventListener("mouseenter", function () {
-            targetElement.style.opacity = "1";
-            targetElement.style.visibility = "visible";
-            targetElement.style.transitionDelay = "0s";
+            targetElement.style.display = "block";
           });
-      
+        
           hoverElement.addEventListener("mouseleave", function () {
-            targetElement.style.opacity = "0";
-            targetElement.style.transitionDelay = "1s";
-            targetElement.style.visibility = "hidden";
+            setTimeout(() => {
+              targetElement.style.display = "none";
+            }, 1000);
           });
         });
       </script>
-
     </ui:define>
   </ui:composition>
 </h:body>

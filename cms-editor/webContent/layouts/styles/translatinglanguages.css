@@ -119,33 +119,6 @@
   text-decoration: underline;
 }
 
-/* .cms-warning {
-  display: none;
-}
- */
-/* .cms-download-wrapper:hover .cms-warning {
-  display: block;
-} */
-
 .cms-warning {
-/*   transition: opacity 1s ease;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease; */
-  
-/*   transition: 1s all linear; */
-  /* visibility: hidden; */
   display: none
 }
-
-/* .cms-warning.visible {
-  transition: opacity 1s ease;
-  opacity: 1;
-  visibility: visible;
-}
- */
-/* #cms-warning-container {
-  opacity: 0;
-  visibility: hidden;
-  transition: 5s;
-} */
