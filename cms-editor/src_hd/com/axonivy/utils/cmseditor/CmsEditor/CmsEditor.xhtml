@@ -38,7 +38,7 @@
           </div>
 
           <div class="grid h-full">
-            <div class="col-4">
+            <h:panelGroup layout="block" styleClass="col-4" id="link-column">
               <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/Links')}</div>
               <h:panelGroup styleClass="panel left w-full border-none">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
@@ -59,9 +59,9 @@
                   <p:ajax event="rowSelect" process="@this" partialSubmit="true" listener="#{cmsEditorBean.rowSelect}" />
                 </p:dataTable>
               </h:panelGroup>
-            </div>
+            </h:panelGroup>
 
-            <div class="col-4 flex flex-column" style="min-height: 0">
+            <h:panelGroup layout="block" id="current-cms-column" styleClass="col-4 flex flex-column" style="min-height: 0">
               <div class="font-semibold text-lg mb-2">#{ivy.cms.co('/Labels/CMS')}</div>
               <h:panelGroup styleClass="panel w-full border-none flex flex-column flex-grow-1" layout="block"
                 style="min-height:0">
@@ -85,7 +85,7 @@
                   <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
                 </p:commandButton>
               </h:panelGroup>
-            </div>
+            </h:panelGroup>
 
             <h:panelGroup layout="block" styleClass="col-4 flex flex-column editable-column" id="editable-column"
               style="min-height: 0">
@@ -117,7 +117,8 @@
                   rendered="#{cmsEditorBean.editableCms}">
                   <p:commandButton value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times" process="@this"
                     rendered="#{cmsEditorBean.editableCms}" styleClass="flex-1 ui-button-outlined ui-button-secondary"
-                    actionListener="#{cmsEditorBean.onCancelEditableButton()}" update="content-form:editable-column" />
+                    actionListener="#{cmsEditorBean.onCancelEditableButton()}"
+                    update="content-form:editable-column content-form:link-column" />
                   <p:commandButton value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save" process="@this"
                     rendered="#{cmsEditorBean.editableCms}" actionListener="#{cmsEditorBean.writeCmsToApplication()}"
                     update="content-form:editable-column" styleClass="flex-1 ui-button-raised ui-button-primary" />

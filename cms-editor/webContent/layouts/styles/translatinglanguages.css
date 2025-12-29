@@ -59,3 +59,8 @@
 .cms-uri {
 	word-break: break-all;
 }
+
+.ui-datatable .ui-state-highlight {
+  background-color: var(--Primary-P300, #007095) !important;
+  color: #ffffff !important;
+}
