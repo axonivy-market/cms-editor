@@ -162,16 +162,23 @@
         document.addEventListener("DOMContentLoaded", function () {
           const hoverElement = document.getElementById("content-form:downloadButton");
           const targetElement = document.getElementById("content-form:cms-warning-container");
-        
-          hoverElement.addEventListener("mouseenter", function () {
+          let hideTimeout;
+          function showWarning() {
+            clearTimeout(hideTimeout);
             targetElement.style.display = "block";
+          }
+          function hideWarning() {
+            hideTimeout = setTimeout(() => {
+              targetElement.style.display = "none";
+            }, 500);
+          }
+          hoverElement.addEventListener("mouseenter", showWarning);
+          hoverElement.addEventListener("mouseleave", hideWarning);
+          targetElement.addEventListener("mouseenter", function () {
+            clearTimeout(hideTimeout);
           });
         
-          hoverElement.addEventListener("mouseleave", function () {
-            setTimeout(() => {
-              targetElement.style.display = "none";
-            }, 1000);
-          });
+          targetElement.addEventListener("mouseleave", hideWarning);
         });
       </script>
     </ui:define>
