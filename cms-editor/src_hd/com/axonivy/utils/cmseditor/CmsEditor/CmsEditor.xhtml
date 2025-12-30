@@ -40,7 +40,7 @@
           <div class="grid h-full" id="column-container">
             <h:panelGroup layout="block" id="link-column" styleClass="col-4 columns">
               <div class="column-header link-label font-semibold text-lg">#{ivy.cms.co('/Labels/Links')}</div>
-              <h:panelGroup styleClass="panel left w-full border-none">
+              <h:panelGroup styleClass="panel left w-full">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
                   selection="#{cmsEditorBean.selectedCms}" selectionMode="single" rowKey="#{entry.uri}"
                   scrollHeight="100%" rows="30" paginatorPosition="bottom" pageLinks="5" styleClass="cms-link-table"
@@ -66,8 +66,7 @@
                 <span>#{ivy.cms.co('/Labels/CMS')}</span> <i class="pi pi-info-circle cms-info-icon"
                   title="CMS information"></i>
               </div>
-              <h:panelGroup styleClass="panel w-full border-none flex flex-column flex-grow-1" layout="block"
-                style="min-height:0">
+              <h:panelGroup styleClass="panel w-full flex flex-column flex-grow-1" layout="block" style="min-height:0">
                 <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
                   style="min-height:0">
                   <p:accordionPanel id="cms-values" multiple="true" widgetVar="multiple"
@@ -106,7 +105,7 @@
                 <span>#{ivy.cms.co('/Labels/Edit')}</span> <i class="pi pi-info-circle cms-info-icon"
                   title="Edit CMS information"></i>
               </div>
-              <h:panelGroup styleClass="panel end w-full border-none flex flex-column flex-grow-1" layout="block"
+              <h:panelGroup styleClass="panel end w-full flex flex-column flex-grow-1" layout="block"
                 style="min-height:0">
                 <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
                   style="min-height:0">

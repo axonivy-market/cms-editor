@@ -28,6 +28,7 @@
 .ui-accordion .ui-accordion-content {
   overflow: visible !important;
   max-height: none !important;
+  border: none !important;
 }
 
 .cms-scroll-wrapper {
@@ -79,6 +80,12 @@
 .ui-accordion-header {
   border-top-right-radius: unset !important;
   border-top-left-radius: unset !important;
+}
+
+.ui-accordion .ui-accordion-header {
+  border-top: 1px solid #D4D6D9 !important;
+  border-left: none !important;
+  border-right: none !important;
 }
 
 #column-container {
