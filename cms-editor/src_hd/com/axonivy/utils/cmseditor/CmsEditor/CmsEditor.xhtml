@@ -82,17 +82,17 @@
                     </p:tab>
                   </p:accordionPanel>
                 </h:panelGroup>
-                <h:panelGroup layout="block" styleClass="cms-warning mt-3" id="cms-warning-container">
+                <h:panelGroup layout="block" styleClass="cms-warning" id="cms-warning-container">
                   <div class="cms-warning-title">
                     <i class="pi pi-exclamation-triangle cms-warning-icon"></i> <span>
                       #{ivy.cms.co('/Labels/Warning')} </span>
                   </div>
                   <div class="cms-warning-content">
-                    <span> #{ivy.cms.co('/Labels/CMSWarningText')}<h:commandLink
+                    <span> #{ivy.cms.co('/Labels/CMSWarningTextForDownload')}<h:commandLink
                         value="#{ivy.cms.co('/Labels/UndoChanges')}" styleClass="cms-warning-link" /></span>
                   </div>
                 </h:panelGroup>
-                <p:commandButton id="downloadButton" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
+                <p:commandButton id="download-button" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
                   icon="pi pi-arrow-down" actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
                   styleClass="w-full mt-3 cms-download-btn" onclick="PrimeFaces.monitorDownload(function() {}, stop);">
                   <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
@@ -122,22 +122,31 @@
                     </p:tab>
                   </p:accordionPanel>
                 </h:panelGroup>
-
-                <p:commandButton id="editButton" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil" ajax="false"
+                <h:panelGroup layout="block" styleClass="cms-warning" id="cms-warning-save-container">
+                  <div class="cms-warning-title">
+                    <i class="pi pi-exclamation-triangle cms-warning-icon"></i> <span>
+                      #{ivy.cms.co('/Labels/Warning')} </span>
+                  </div>
+                  <div class="cms-warning-content">
+                    <span> #{ivy.cms.co('/Labels/CMSWarningTextForSave')}</span>
+                  </div>
+                </h:panelGroup>
+                <p:commandButton id="edit-button" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil" ajax="false"
                   process="@this" update="cms-edit-value"
                   styleClass="w-full mt-3 ui-button-outlined ui-button-secondary"
                   actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}"
                   disabled="#{cmsEditorBean.disableEditableButton}" />
-
-                <h:panelGroup id="edit-cancel-updating-cms-group" styleClass="flex gap-2"
+                <h:panelGroup id="edit-cancel-updating-cms-group" styleClass="flex gap-2 mt-3"
                   rendered="#{cmsEditorBean.editableCms}">
-                  <p:commandButton value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times" process="@this"
-                    rendered="#{cmsEditorBean.editableCms}" styleClass="flex-1 ui-button-outlined ui-button-secondary"
+                  <p:commandButton id="cancel-edit-button" value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times"
+                    process="@this" rendered="#{cmsEditorBean.editableCms}"
+                    styleClass="flex-1 ui-button-outlined ui-button-secondary"
                     actionListener="#{cmsEditorBean.onCancelEditableButton()}"
                     update="content-form:editable-column content-form:link-column" />
-                  <p:commandButton value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save" process="@this"
-                    rendered="#{cmsEditorBean.editableCms}" actionListener="#{cmsEditorBean.writeCmsToApplication()}"
-                    update="content-form:editable-column" styleClass="flex-1 ui-button-raised ui-button-primary" />
+                  <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
+                    process="@this" rendered="#{cmsEditorBean.editableCms}"
+                    actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form:editable-column"
+                    styleClass="flex-1 ui-button-raised ui-button-primary" />
                 </h:panelGroup>
               </h:panelGroup>
             </h:panelGroup>
@@ -160,8 +169,33 @@
 
       <script>
         document.addEventListener("DOMContentLoaded", function () {
-          const hoverElement = document.getElementById("content-form:downloadButton");
+          const hoverElement = document.getElementById("content-form:download-button");
           const targetElement = document.getElementById("content-form:cms-warning-container");
+          let hideTimeout;
+          function showWarning() {
+            clearTimeout(hideTimeout);
+            targetElement.style.display = "block";
+          }
+          function hideWarning() {
+            hideTimeout = setTimeout(() => {
+              targetElement.style.display = "none";
+            }, 500);
+          }
+          hoverElement.addEventListener("mouseenter", showWarning);
+          hoverElement.addEventListener("mouseleave", hideWarning);
+          targetElement.addEventListener("mouseenter", function () {
+            clearTimeout(hideTimeout);
+          });
+        
+          targetElement.addEventListener("mouseleave", hideWarning);
+        });
+      </script>
+      
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const hoverElement = document.getElementById("content-form:save-button");
+          const targetElement = document.getElementById("content-form:cms-warning-save-container");
           let hideTimeout;
           function showWarning() {
             clearTimeout(hideTimeout);
