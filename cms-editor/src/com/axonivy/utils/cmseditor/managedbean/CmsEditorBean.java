@@ -30,7 +30,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
 import org.primefaces.PF;
 import org.primefaces.PrimeFaces;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.StreamedContent;
 
 import com.axonivy.utils.cmseditor.model.Cms;
@@ -52,7 +51,6 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
-import ch.ivyteam.ivy.environment.Ivy;
 
 @ViewScoped
 @ManagedBean
