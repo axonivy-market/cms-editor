@@ -72,7 +72,7 @@
                   <p:accordionPanel id="cms-values" multiple="true" widgetVar="multiple"
                     value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                     var="language">
-                    <p:tab title="#{language.locale.displayLanguage}">
+                    <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
                       <h:panelGroup styleClass="ui-fluid">
                         <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
                           languageIndex="#{language.index}" managedBean="#{cmsEditorBean}" isReadOnly="true"
@@ -117,7 +117,7 @@
                   <p:accordionPanel id="cms-edit-value" multiple="true" widgetVar="multipleEdit"
                     value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                     var="language">
-                    <p:tab title="#{language.locale.displayLanguage}">
+                    <p:tab id="cms-values-tab" title="#{language.locale.displayLanguage}">
                       <h:panelGroup styleClass="ui-fluid">
                         <ic:com.axonivy.utils.cmseditor.component.Editor content="#{language.content}"
                           languageIndex="#{language.index}" managedBean="#{cmsEditorBean}"

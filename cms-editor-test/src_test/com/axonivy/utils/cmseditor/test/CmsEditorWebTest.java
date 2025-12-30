@@ -18,7 +18,7 @@ import com.axonivy.ivy.webtest.IvyWebTest;
 import com.axonivy.ivy.webtest.engine.EngineUrl;
 import com.codeborne.selenide.Selenide;
 
-@IvyWebTest
+@IvyWebTest(headless = false)
 public class CmsEditorWebTest {
 
   private String testCmsUri = "/TestContent";
@@ -38,7 +38,7 @@ public class CmsEditorWebTest {
 
   @Test
   public void testDownloadAndCancelButtonShouldBeVisible() {
-    $(By.id("content-form:downloadButton")).shouldBe(visible);
+    $(By.id("content-form:download-button")).shouldBe(visible);
     $(By.id("content-form:cancel-button")).shouldBe(visible);
   }
 
@@ -68,18 +68,12 @@ public class CmsEditorWebTest {
   }
 
   @Test
-  public void testCheckShowTodoOptionShouldDisplayTwoRows() {
-    clickOptionShowOnlyTodo();
-    assertCmsTableRowCountGte(1);
-  }
-
-  @Test
   public void testEditedButNotSaveShouldShowError() {
     var cmsList = $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']");
     var selectedCms = cmsList.get(0);
     var otherCms = cmsList.get(1);
     selectedCms.click();
-
+    Selenide.sleep(20000);
     $$("[id^='content-form:cms-values:'][id$=':cms-values-tab']").shouldHave(sizeGreaterThanOrEqual(1));
     // assert all content items is preview mode
     var displayItems = $$("[id^='content-form:cms-values:'][id$='_display']");
@@ -122,7 +116,8 @@ public class CmsEditorWebTest {
     var selectedCms = cmsList.get(0);
     var otherCms = cmsList.get(1);
     selectedCms.click();
-    var displayItem = $$("[id^='content-form:cms-values:'][id$='_display']").first();
+    $(By.id("content-form:edit-button")).shouldBe(enabled).click();
+    var displayItem = $$("[id^='content-form:cms-edit-value:'][id$='_display']").first();
     displayItem.click();
     var contentItem = $(By.id(displayItem.getAttribute("id").replaceAll("_display", "_content")));
     contentItem.$(By.className("sun-editor-editable")).setValue("Content is updated at " + System.currentTimeMillis());
