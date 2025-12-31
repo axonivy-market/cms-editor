@@ -100,7 +100,6 @@
                   </p:commandButton>
                 </h:panelGroup>
 
-
               </h:panelGroup>
             </h:panelGroup>
 
@@ -126,33 +125,33 @@
                     </p:tab>
                   </p:accordionPanel>
                 </h:panelGroup>
-                <h:panelGroup layout="block" styleClass="cms-warning" id="cms-warning-save-container">
-                  <div class="cms-warning-title">
-                    <i class="pi pi-exclamation-triangle cms-warning-icon"></i> <span>
-                      #{ivy.cms.co('/Labels/Warning')} </span>
-                  </div>
-                  <div class="cms-warning-content">
-                    <span> #{ivy.cms.co('/Labels/CMSWarningTextForSave')}</span>
-                  </div>
-                </h:panelGroup>
 
                 <h:panelGroup layout="block" styleClass="button-group">
+                  <h:panelGroup layout="block" styleClass="cms-warning" id="cms-warning-save-container">
+                    <div class="cms-warning-title">
+                      <i class="pi pi-exclamation-triangle cms-warning-icon"></i> <span>
+                        #{ivy.cms.co('/Labels/Warning')} </span>
+                    </div>
+                    <div class="cms-warning-content">
+                      <span> #{ivy.cms.co('/Labels/CMSWarningTextForSave')}</span>
+                    </div>
+                  </h:panelGroup>
                   <p:commandButton id="edit-button" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil"
                     ajax="false" process="@this" update="cms-edit-value"
-                    styleClass="w-full mt-3 ui-button-outlined ui-button-secondary"
+                    styleClass="w-full mt-3 ui-button-outlined ui-button-secondary cms-edit-button"
                     actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}"
                     disabled="#{cmsEditorBean.disableEditableButton}" />
                   <h:panelGroup id="edit-cancel-updating-cms-group" styleClass="flex gap-2 mt-3"
                     rendered="#{cmsEditorBean.editableCms}">
                     <p:commandButton id="cancel-edit-button" value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
-                      styleClass="flex-1 ui-button-outlined ui-button-secondary"
+                      styleClass="flex-1 ui-button-outlined ui-button-secondary cms-cancel-button"
                       actionListener="#{cmsEditorBean.onCancelEditableButton()}"
                       update="content-form:editable-column content-form:link-column" />
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
                       actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form:editable-column"
-                      styleClass="flex-1 ui-button-raised ui-button-primary" />
+                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" />
                   </h:panelGroup>
                 </h:panelGroup>
 

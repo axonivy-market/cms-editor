@@ -133,3 +133,42 @@
 .button-group {
   padding: 8px;
 }
+
+/* Background colors */
+.cms-download-btn,
+.cms-save-button {
+  background-color: #007095 !important;
+}
+
+.cms-edit-button,
+.cms-cancel-button {
+  background-color: #F3F3F3 !important;
+}
+
+/* Common button layout */
+.cms-download-btn,
+.cms-edit-button,
+.cms-cancel-button,
+.cms-save-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Common icon styling */
+.cms-download-btn span.ui-icon,
+.cms-edit-button span.ui-icon,
+.cms-cancel-button span.ui-icon,
+.cms-save-button span.ui-icon {
+  position: relative !important;
+  top: 0 !important;
+  margin-top: -2px !important;
+}
+
+/* Common text styling */
+.cms-download-btn span.ui-button-text,
+.cms-edit-button span.ui-button-text,
+.cms-cancel-button span.ui-button-text,
+.cms-save-button span.ui-button-text {
+  padding: 0.5rem 1rem !important;
+}
