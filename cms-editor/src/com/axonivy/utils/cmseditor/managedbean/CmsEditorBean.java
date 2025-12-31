@@ -74,7 +74,7 @@ public class CmsEditorBean implements Serializable {
   private boolean isShowEditorCms;
   private Map<String, PmvCms> pmvCmsMap;
   private boolean isEditableCms;
-  
+
   @PostConstruct
   private void init() {
     isShowEditorCms = FacesContexts.evaluateValueExpression("#{data.showEditorCms}", Boolean.class);
@@ -87,20 +87,20 @@ public class CmsEditorBean implements Serializable {
     }
     onAppChange();
   }
-  
+
   public void writeCmsToApplication() {
     this.isEditableCms = false;
     CmsService.getInstance().writeCmsToApplication(this.savedCmsMap);
   }
 
   public void onEditableButton() {
-      this.isEditableCms = true;
+    this.isEditableCms = true;
   }
-  
+
   public void onCancelEditableButton() {
     this.isEditableCms = false;
   }
-  
+
   public boolean isDisableEditableButton() {
     return ObjectUtils.isEmpty(this.selectedCms);
   }
@@ -127,7 +127,7 @@ public class CmsEditorBean implements Serializable {
     }
     search();
   }
-  
+
   public void rowSelect() {
     isEditableCms = false;
     if (isEditing()) {
@@ -214,8 +214,8 @@ public class CmsEditorBean implements Serializable {
 
   private boolean isCmsMatchSearchKey(Cms entry, String searchKey) {
     if (StringUtils.isNotBlank(searchKey)) {
-      return Strings.CI.contains(entry.getUri(), searchKey) || entry.getContents().stream()
-          .anyMatch(value -> Strings.CI.contains(value.getContent(), searchKey));
+      return Strings.CI.contains(entry.getUri(), searchKey)
+          || entry.getContents().stream().anyMatch(value -> Strings.CI.contains(value.getContent(), searchKey));
     }
     return true;
   }
