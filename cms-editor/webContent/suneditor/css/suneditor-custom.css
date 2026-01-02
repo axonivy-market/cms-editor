@@ -1,0 +1,33 @@
+.se-menu-list {
+  border-radius: 5px;
+ background-color: #FAFAFA;
+}
+
+.sun-editor .se-toolbar-separator-vertical {
+  margin-right: 8px;
+}
+
+.sun-editor .se-btn {
+  width: 29px;
+  height: 29px;
+}
+
+.sun-editor .se-toolbar {
+  position: unset;
+  background: transparent !important;
+  outline: unset;
+}
+
+.sun-editor {
+  border: unset;
+}
+
+.sun-editor-editable {
+  border: 1px solid #EBEBEB;
+  border-radius: 5px;
+  background-color: #FAFAFA;
+}
+
+.sun-editor .se-resizing-bar {
+  display: none;
+}

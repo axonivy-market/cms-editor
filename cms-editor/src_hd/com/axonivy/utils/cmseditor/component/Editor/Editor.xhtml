@@ -17,6 +17,7 @@
 
 <cc:implementation>
 	<h:outputStylesheet name="suneditor/css/suneditor.min.css" />
+  <h:outputStylesheet name="suneditor/css/suneditor-custom.css" />
 	<h:outputScript name="suneditor/suneditor.min.js" target="head" />
 	<p:inplace disabled="#{cc.attrs.isReadOnly}">
 		<f:facet name="output">
@@ -59,14 +60,12 @@
 					['save']
 				];
 			}else{
-				buttonList = [
-          ['font', 'fontSize'],
+        buttonList = [
+          ['font'],
           ['bold', 'underline', 'italic'],
-          ['align', 'list', 'lineHeight'],
-					['fullScreen'],
-					['undo', 'redo'],
-					['save']
-				];
+          ['fontColor','align', 'list'],
+          ['fullScreen', 'save']
+        ];
 			}
 			const editor = SUNEDITOR.create(document.getElementById(editorId), {
 				buttonList: buttonList,
