@@ -1,6 +1,6 @@
 .se-menu-list {
   border-radius: 5px;
- background-color: #FAFAFA;
+  background-color: #FAFAFA;
 }
 
 .sun-editor .se-toolbar-separator-vertical {
@@ -13,7 +13,6 @@
 }
 
 .sun-editor .se-toolbar {
-  position: unset;
   background: transparent !important;
   outline: unset;
 }
