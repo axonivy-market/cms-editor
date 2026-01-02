@@ -39,12 +39,6 @@
   min-height: 0;
 }
 
-.columns {
-  height: 100%;
-/*   overflow: auto; */
-}
-
-* /
 .link-row {
   display: flex;
   align-items: center;
