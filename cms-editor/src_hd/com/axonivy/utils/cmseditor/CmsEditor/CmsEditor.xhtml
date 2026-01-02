@@ -43,10 +43,7 @@
               <h:panelGroup styleClass="panel left w-full">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
                   selection="#{cmsEditorBean.selectedCms}" selectionMode="single" rowKey="#{entry.uri}"
-                  scrollHeight="100%" rows="30" paginatorPosition="bottom" pageLinks="5" styleClass="cms-link-table"
-                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                  rowsPerPageTemplate="20,30,40">
+                  scrollHeight="100%" pageLinks="5" styleClass="cms-link-table">
                   <p:column>
                     <div class="link-row">
                       <h:outputText id="cms-uri" class="cms-uri" value="#{entry.pmvName}#{entry.uri}" />
