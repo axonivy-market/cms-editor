@@ -91,6 +91,7 @@ public class CmsEditorBean implements Serializable {
   public void writeCmsToApplication() {
     this.isEditableCms = false;
     CmsService.getInstance().writeCmsToApplication(this.savedCmsMap);
+    onAppChange();
   }
 
   public void onEditableButton() {

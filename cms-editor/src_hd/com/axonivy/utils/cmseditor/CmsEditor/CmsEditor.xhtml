@@ -147,7 +147,7 @@
                       update="content-form:editable-column content-form:link-column" />
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
-                      actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form:editable-column"
+                      actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form"
                       styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" />
                   </h:panelGroup>
                 </h:panelGroup>
@@ -157,9 +157,6 @@
           </div>
         </h:panelGroup>
         <div class="command-btns pt-2">
-          <p:commandButton id="cancel-button" widgetVar="cancel-button" value="#{ivy.cms.co('/Labels/Cancel')}"
-            actionListener="#{logic.close}" process="@this" immediate="true" styleClass="ml-2 mr-2 ui-button-flat" />
-
           <p:remoteCommand name="stop" global="false" partialSubmit="true" process="@this" update="content-form"
             actionListener="#{cmsEditorBean.downloadFinished}" />
         </div>
