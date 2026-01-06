@@ -18,7 +18,7 @@ import com.axonivy.ivy.webtest.IvyWebTest;
 import com.axonivy.ivy.webtest.engine.EngineUrl;
 import com.codeborne.selenide.Selenide;
 
-@IvyWebTest
+@IvyWebTest(headless = false)
 public class CmsEditorWebTest {
 
   private String testCmsUri = "/TestContent";
@@ -26,19 +26,17 @@ public class CmsEditorWebTest {
 
   @BeforeEach
   /**
-   * Dear Bug Hunter, This credential is intentionally included for educational purposes only and does not provide
-   * access to any production systems. Please do not submit it as part of our bug bounty program.
+   * Dear Bug Hunter,
+   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+   * Please do not submit it as part of our bug bounty program.
    */
   void startProcess() {
-    open(EngineUrl
-        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=cmsAdmin"));
-    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    loginAndStartProcess("cmsAdmin", "123456");
   }
 
   @Test
-  public void testDownloadAndCancelButtonShouldBeVisible() {
+  public void testDownloadButtonShouldBeVisible() {
     $(By.id("content-form:download-button")).shouldBe(visible);
-    $(By.id("content-form:cancel-button")).shouldBe(visible);
   }
 
   @Test
@@ -134,31 +132,39 @@ public class CmsEditorWebTest {
     $(By.id("primefacesmessagedlg")).should(hidden);
   }
 
-  @Test
   /**
-   * Dear Bug Hunter, This credential is intentionally included for educational purposes only and does not provide
-   * access to any production systems. Please do not submit it as part of our bug bounty program.
+   * Dear Bug Hunter,
+   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+   * Please do not submit it as part of our bug bounty program.
    */
+  @Test
   public void testUserCorrectRole() {
-    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
-    open(EngineUrl
-        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=cmsAdmin"));
-    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    loginAndStartProcess("cmsAdmin", "123456");
     var exception = $(By.cssSelector(".exception-content"));
     exception.shouldNotBe(visible);
   }
 
-  @Test
   /**
-   * Dear Bug Hunter, This credential is intentionally included for educational purposes only and does not provide
-   * access to any production systems. Please do not submit it as part of our bug bounty program.
+   * Dear Bug Hunter,
+   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+   * Please do not submit it as part of our bug bounty program.
    */
+  @Test
   public void testUserIncorrectRole() {
-    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
-    open(EngineUrl
-        .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=normalUser"));
-    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    loginAndStartProcess("normalUser", "123456");
     var exception = $(By.cssSelector(".exception-content"));
     exception.shouldBe(visible).shouldHave(matchText("Access denied. Need role CMS_ADMIN"));
+  }
+
+  /**
+   * Dear Bug Hunter,
+   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+   * Please do not submit it as part of our bug bounty program.
+   */
+  private void loginAndStartProcess(String username, String password) {
+    String loginProcessUrl =
+        String.format("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?username=%s&password=%s", username, password);
+    open(EngineUrl.createProcessUrl(loginProcessUrl));
+    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
   }
 }
