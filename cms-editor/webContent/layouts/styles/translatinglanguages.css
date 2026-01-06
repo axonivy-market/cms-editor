@@ -72,6 +72,16 @@
   height: 36px;
 }
 
+body.dark .column-header {
+  background: #FAFAFA;
+  border: 1px solid #E5E7EB;
+  padding: 6px 10px;
+  font-weight: 600;
+  font-size: 12px;
+  height: 36px;
+  color: #1B1B1B;
+}
+
 .ui-accordion-header {
   border-top-right-radius: unset !important;
   border-top-left-radius: unset !important;
@@ -97,11 +107,15 @@
   cursor: pointer;
 }
 
-.cms-warning {
+.cms-warning, body.dark .cms-warning {
   border: 1px solid #FFC696;
   background: #fff7ed;
   border-radius: 6px;
   padding: 12px;
+}
+
+body.dark .cms-warning {
+  color: #1B1B1B;
 }
 
 .cms-warning-title {
