@@ -191,7 +191,6 @@ public class CmsEditorBean implements Serializable {
   private Cms convertToCms(ContentObject contentObject, List<Locale> locales, String pmvName) {
     var cms = new Cms();
     cms.setUri(contentObject.uri());
-    cms.setPmvName(pmvName);
     for (var i = 0; i < locales.size(); i++) {
       var locale = locales.get(i);
       var value = contentObject.value().get(locale);
