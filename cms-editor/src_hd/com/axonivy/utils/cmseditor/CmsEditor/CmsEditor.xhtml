@@ -134,7 +134,7 @@
                     </div>
                   </h:panelGroup>
                   <p:commandButton id="edit-button" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil"
-                    ajax="false" process="@this" update="cms-edit-value"
+                    process="@this" update="editable-column"
                     styleClass="w-full mt-3 ui-button-outlined ui-button-secondary cms-edit-button"
                     actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}"
                     disabled="#{cmsEditorBean.disableEditableButton}" />
