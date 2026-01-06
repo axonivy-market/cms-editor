@@ -1,27 +1,11 @@
 function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
   let buttonList;
-  if(isFormatButtonListVisible){
-    buttonList = [
-      ['font', 'fontSize', 'formatBlock'],
-      ['paragraphStyle', 'blockquote'],
-      ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
-      ['fontColor', 'hiliteColor', 'textStyle'],
-      ['removeFormat'],
-      ['outdent', 'indent'],
-      ['align', 'list', 'lineHeight', 'horizontalRule'],
-      ['table', 'link'],
-      ['fullScreen'],
-      ['undo', 'redo'],
-      ['save']
-    ];
-  }else{
-    buttonList = [
-      ['font'],
-      ['bold', 'underline', 'italic'],
-      ['fontColor','align', 'list'],
-      ['fullScreen', 'save']
-    ];
-  }
+  buttonList = [
+    ['font'],
+    ['bold', 'underline', 'italic'],
+    ['fontColor','align', 'list'],
+    ['fullScreen', 'save']
+  ];
   const editor = SUNEDITOR.create(document.getElementById(editorId), {
     buttonList: buttonList,
     attributesWhitelist: {
