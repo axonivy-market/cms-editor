@@ -18,18 +18,18 @@ import com.axonivy.ivy.webtest.IvyWebTest;
 import com.axonivy.ivy.webtest.engine.EngineUrl;
 import com.codeborne.selenide.Selenide;
 
-@IvyWebTest(headless = false)
+@IvyWebTest
 public class CmsEditorWebTest {
 
   private String testCmsUri = "/TestContent";
   private String testCmsValue = "Test Content";
 
-  @BeforeEach
   /**
    * Dear Bug Hunter,
    * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
    * Please do not submit it as part of our bug bounty program.
    */
+  @BeforeEach
   void startProcess() {
     loginAndStartProcess("cmsAdmin", "123456");
   }
@@ -139,7 +139,6 @@ public class CmsEditorWebTest {
    */
   @Test
   public void testUserCorrectRole() {
-    loginAndStartProcess("cmsAdmin", "123456");
     var exception = $(By.cssSelector(".exception-content"));
     exception.shouldNotBe(visible);
   }

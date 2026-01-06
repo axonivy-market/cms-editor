@@ -35,7 +35,6 @@ public class CmsService {
 
 
   public void writeCmsToApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
-    Ivy.log().info("Start to migrate project CMS to application CMS");
     Sudo.run(() -> {
       savedCmsMap.forEach((uri, localeAndContent) -> {
         ContentObject currentContentObject = createOrGetCMSByURI(uri);
@@ -59,16 +58,19 @@ public class CmsService {
 
   public List<Cms> compareWithCmsInApplication(List<Cms> cmsList) {
     for (Cms cms : cmsList) {
-      boolean isDifferent = false;
-      for (CmsContent cmsContent : cms.getContents()) {
-        String valueFromApp = getCmsFromApplication(cms.getUri(), cmsContent.getLocale());
-        if (valueFromApp != null && valueFromApp.equals(cmsContent.getContent())) {
-          isDifferent = true;
-          break;
-        }
-      }
+      boolean isDifferent = isCmsDifferentWithApplication(cms);
       cms.setDifferentWithApplication(isDifferent);
     }
     return cmsList;
+  }
+
+  private boolean isCmsDifferentWithApplication(Cms cms) {
+    for (CmsContent cmsContent : cms.getContents()) {
+      String valueFromApp = getCmsFromApplication(cms.getUri(), cmsContent.getLocale());
+      if (valueFromApp != null && valueFromApp.equals(cmsContent.getContent())) {
+        return true;
+      }
+    }
+    return false;
   }
 }
