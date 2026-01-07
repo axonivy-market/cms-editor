@@ -82,7 +82,8 @@ public class CmsEditorBean implements Serializable {
     pmvCmsMap = new HashMap<>();
     for (var app : IApplicationRepository.instance().all()) {
       app.getProcessModels().stream().filter(processModel -> isActive(processModel))
-          .map(IProcessModel::getReleasedProcessModelVersion).filter(pmv -> isActive(pmv))
+          .map(IProcessModel::getReleasedProcessModelVersion)
+          .filter(pmv -> isActive(pmv))
           .forEach(pmv -> getAllChildren(pmv.getName(), ContentManagement.cms(pmv).root(), new ArrayList<>()));
     }
     onAppChange();
@@ -191,6 +192,7 @@ public class CmsEditorBean implements Serializable {
   private Cms convertToCms(ContentObject contentObject, List<Locale> locales, String pmvName) {
     var cms = new Cms();
     cms.setUri(contentObject.uri());
+    cms.setPmvName(pmvName);
     for (var i = 0; i < locales.size(); i++) {
       var locale = locales.get(i);
       var value = contentObject.value().get(locale);
@@ -331,6 +333,7 @@ public class CmsEditorBean implements Serializable {
         .map(IProcessModel::getReleasedProcessModelVersion)
         .filter(pmv -> isActive(pmv))
         .map(pmv -> pmv.getProjectName())
+        .filter(projectName -> this.pmvCmsMap.keySet().contains(projectName))
         .collect(Collectors.toSet());
   }
 

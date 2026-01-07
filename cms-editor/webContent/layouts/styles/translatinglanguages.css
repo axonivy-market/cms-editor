@@ -56,6 +56,7 @@
 
 .cms-uri {
   word-break: break-all;
+  width: 100%;
 }
 
 .ui-datatable .ui-state-highlight {

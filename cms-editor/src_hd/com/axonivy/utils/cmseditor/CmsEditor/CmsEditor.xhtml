@@ -51,7 +51,7 @@
                         <span class="orange-dot"></span>
                       </h:panelGroup>
                     </div>
-                    <p:tooltip for="cms-uri" value="#{entry.uri}" position="top" />
+                    <p:tooltip for="cms-uri" value="#{entry.uri} (#{entry.pmvName})" position="top" />
                   </p:column>
                   <p:ajax event="rowSelect" process="@this" partialSubmit="true" listener="#{cmsEditorBean.rowSelect}" />
                 </p:dataTable>

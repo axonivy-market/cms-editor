@@ -67,7 +67,7 @@ public class CmsService {
   private boolean isCmsDifferentWithApplication(Cms cms) {
     for (CmsContent cmsContent : cms.getContents()) {
       String valueFromApp = getCmsFromApplication(cms.getUri(), cmsContent.getLocale());
-      if (valueFromApp != null && valueFromApp.equals(cmsContent.getContent())) {
+      if (valueFromApp != null && !valueFromApp.equals(cmsContent.getContent())) {
         return true;
       }
     }
