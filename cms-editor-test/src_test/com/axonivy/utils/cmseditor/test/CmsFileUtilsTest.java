@@ -36,7 +36,7 @@ public class CmsFileUtilsTest {
   private Cms createMockCms() {
     Cms cms = new Cms();
     cms.setUri("testUri");
-    CmsContent content = new CmsContent(0, Locale.ENGLISH, "testContent");
+    CmsContent content = new CmsContent(0, Locale.ENGLISH, "testOriginalContent", "testContent");
     cms.setContents(Collections.singletonList(content));
     return cms;
   }
