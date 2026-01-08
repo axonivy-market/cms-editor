@@ -90,9 +90,9 @@
                           value="#{ivy.cms.co('/Labels/UndoChanges')}" styleClass="cms-warning-link" /></span>
                     </div>
                   </h:panelGroup>
-                  <p:commandButton id="download-button" value="#{ivy.cms.co('/Labels/Download')}" ajax="false"
-                    icon="pi pi-download" actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
-                    styleClass="w-full mt-3 cms-download-btn" onclick="PrimeFaces.monitorDownload(function() {}, stop);">
+                  <p:commandButton id="download-button" value="#{ivy.cms.co('/Labels/Download')}" icon="pi pi-download"
+                    actionListener="#{cmsEditorBean.handleBeforeDownloadFile}" styleClass="w-full mt-3 cms-download-btn"
+                    oncomplete="showDialog('downloadSuccessDlg');">
                     <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
                   </p:commandButton>
                 </h:panelGroup>
@@ -148,7 +148,8 @@
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
                       actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form"
-                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" />
+                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button"
+                      oncomplete="showDialog('SaveSuccessDlg');" />
                   </h:panelGroup>
                 </h:panelGroup>
 
@@ -161,6 +162,27 @@
             actionListener="#{cmsEditorBean.downloadFinished}" />
         </div>
       </h:form>
+
+      <p:dialog id="downloadSuccessDlg" widgetVar="downloadSuccessDlg" modal="true" closable="false" draggable="false"
+        resizable="false" showEffect="fade" hideEffect="fade" showHeader="false" styleClass="success-dialog">
+        <div class="text-center p-4">
+          <i class="pi pi-check icon-checked"></i>
+          <div class="text-lg font-semibold">
+            <h:outputText value="#{ivy.cms.co('/Labels/CmsDownloaded')}" escape="false" />
+          </div>
+        </div>
+      </p:dialog>
+
+      <p:dialog id="SaveSuccessDlg" widgetVar="SaveSuccessDlg" modal="true" closable="false" draggable="false"
+        resizable="false" showEffect="fade" hideEffect="fade" showHeader="false" styleClass="save-dialog">
+        <div class="text-center p-4">
+          <i class="pi pi-check icon-checked"></i>
+          <div class="text-lg font-semibold">
+            <h:outputText value="#{ivy.cms.co('/Labels/CMSSaved')}" escape="false" />
+          </div>
+        </div>
+      </p:dialog>
+
     </ui:define>
   </ui:composition>
 </h:body>

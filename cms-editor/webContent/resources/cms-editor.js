@@ -68,6 +68,14 @@ function initCmsWarnings() {
   bindCmsWarning("content-form:save-button", "content-form:cms-warning-save-container");
 }
 
+
+function showDialog(dialogId) {
+  PF(dialogId).show();
+  setTimeout(function () {
+    PF(dialogId).hide();
+  }, 1500);
+}
+
 window.isHideTaskName = false;
 window.isHideTaskAction = true;
 window.isHideCaseInfo = true;

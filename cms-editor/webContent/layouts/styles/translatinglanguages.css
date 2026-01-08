@@ -175,3 +175,11 @@ body.dark .cms-warning {
   {
   padding: 0.5rem 1rem !important;
 }
+
+.icon-checked {
+  font-size: 48px !important;
+}
+
+.ui-dialog-content {
+  padding: unset !important;
+}
