@@ -51,6 +51,7 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
+import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
 @ManagedBean
@@ -80,7 +81,7 @@ public class CmsEditorBean implements Serializable {
     isShowEditorCms = FacesContexts.evaluateValueExpression("#{data.showEditorCms}", Boolean.class);
     savedCmsMap = SavedCmsRepo.findAll();
     pmvCmsMap = new HashMap<>();
-    for (var app : IApplicationRepository.instance().all()) {
+    for (var app : IApplicationRepository.of(ISecurityContext.current()).all()) {
       app.getProcessModels().stream().filter(processModel -> isActive(processModel))
           .map(IProcessModel::getReleasedProcessModelVersion)
           .filter(pmv -> isActive(pmv))
@@ -100,7 +101,11 @@ public class CmsEditorBean implements Serializable {
   }
 
   public void onCancelEditableButton() {
+    if (isEditing()) {
+      return;
+    }
     this.isEditableCms = false;
+    PF.current().ajax().update("content-form:link-column", "content-form:editable-column");
   }
 
   public boolean isDisableEditableButton() {
@@ -133,6 +138,7 @@ public class CmsEditorBean implements Serializable {
   public void rowSelect() {
     isEditableCms = false;
     if (isEditing()) {
+      isEditableCms = true;
       selectedCms = lastSelectedCms; // Revert to last valid selection
     } else {
       PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, "content-form:cms-edit-value",

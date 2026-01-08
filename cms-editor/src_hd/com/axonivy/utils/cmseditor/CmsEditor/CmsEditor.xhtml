@@ -144,8 +144,7 @@
                     <p:commandButton id="cancel-edit-button" value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
                       styleClass="flex-1 ui-button-outlined ui-button-secondary cms-cancel-button"
-                      actionListener="#{cmsEditorBean.onCancelEditableButton()}"
-                      update="content-form:editable-column content-form:link-column" />
+                      actionListener="#{cmsEditorBean.onCancelEditableButton()}" />
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
                       actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form"
