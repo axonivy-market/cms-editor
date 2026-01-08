@@ -198,14 +198,16 @@ public class CmsEditorBean implements Serializable {
       var value = contentObject.value().get(locale);
       var valueString = ofNullable(value).map(ContentObjectValue::read).map(ContentObjectReader::string).orElse(EMPTY);
       var savedCms = findSavedCms(contentObject.uri(), locale);
+      String originalValue = "";
       if (savedCms != null) {
+        originalValue = savedCms.getOriginalContent();
         if (valueString.equals(savedCms.getOriginalContent())) {
           valueString = savedCms.getNewContent();
         } else {
           SavedCmsRepo.delete(savedCms);
         }
       }
-      cms.addContent(new CmsContent(i, locale, valueString));
+      cms.addContent(new CmsContent(i, locale, originalValue, valueString));
     }
     return cms;
   }

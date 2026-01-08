@@ -21,11 +21,11 @@ public class CmsContent implements Serializable {
 
   private boolean isHtml;
 
-  public CmsContent(int index, Locale locale, String content) {
+  public CmsContent(int index, Locale locale, String originalContent, String content) {
     super();
     this.index = index;
     this.locale = locale;
-    this.originalContent = content;
+    this.originalContent = originalContent;
     this.content = content;
     this.isEditting = false;
     this.isHtml = Utils.containsHtmlTag(originalContent);
