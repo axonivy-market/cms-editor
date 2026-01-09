@@ -7,11 +7,11 @@
   <packaging>pom</packaging>
   <name>cms-editor</name>
   <modules>
-    <module>${project.name}</module>
-    <module>${project.name}-test</module>
-    <module>${project.name}-demo</module>
-    <module>${project.name}-product</module>
-    <module>${project.name}-demo-app</module>
+    <module>cms-editor</module>
+    <module>cms-editor-test</module>
+    <module>cms-editor-demo</module>
+    <module>cms-editor-product</module>
+    <module>cms-editor-demo-app</module>
   </modules>
   <scm>
     <developerConnection>scm:git:https://github.com/axonivy-market/cms-editor.git</developerConnection>
