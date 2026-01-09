@@ -63,6 +63,9 @@ public class CmsEditorBean implements Serializable {
   private static final String CONTENT_FORM_TABLE_CMS_KEYS = "content-form:table-cms-keys";
   private static final String CMS_EDITOR_PMV_NAME = "cms-editor";
   private static final String CMS_EDITOR_DEMO_PMV_NAME = "cms-editor-demo";
+  private static final String CONTENT_FORM_LINK_COLUMN = "content-form:link-column";
+  private static final String CONTENT_FORM_EDITABLE_COLUMN = "content-form:editable-column";
+  private static final String CONTENT_FORM_CMS_EDIT_VALUE = "content-form:cms-edit-value";
 
   private Map<String, Map<String, SavedCms>> savedCmsMap;
   private List<Cms> cmsList;
@@ -105,7 +108,7 @@ public class CmsEditorBean implements Serializable {
       return;
     }
     this.isEditableCms = false;
-    PF.current().ajax().update("content-form:link-column", "content-form:editable-column");
+    PF.current().ajax().update(CONTENT_FORM_LINK_COLUMN, CONTENT_FORM_EDITABLE_COLUMN);
   }
 
   public boolean isDisableEditableButton() {
@@ -141,8 +144,8 @@ public class CmsEditorBean implements Serializable {
       isEditableCms = true;
       selectedCms = lastSelectedCms; // Revert to last valid selection
     } else {
-      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, "content-form:cms-edit-value",
-          "content-form:editable-column");
+      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE,
+          CONTENT_FORM_EDITABLE_COLUMN);
     }
   }
 

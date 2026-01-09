@@ -11,7 +11,6 @@ import com.axonivy.utils.cmseditor.model.SavedCms;
 import ch.ivyteam.ivy.application.IApplication;
 import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
-import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.exec.Sudo;
 
 public class CmsService {
@@ -39,12 +38,10 @@ public class CmsService {
       savedCmsMap.forEach((uri, localeAndContent) -> {
         ContentObject currentContentObject = createOrGetCMSByURI(uri);
         localeAndContent.forEach((locale, savedCms) -> {
-          Ivy.log().info("Migrating value for uri: {0} with locale {1}", uri, locale);
           currentContentObject.value().get(Locale.forLanguageTag(locale)).write().string(savedCms.getNewContent());
         });
       });
     });
-    Ivy.log().info("Finish migration of application CMS");
   }
 
   public String getCmsFromApplication(String uri, Locale locale) {
