@@ -149,7 +149,8 @@
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
                       actionListener="#{cmsEditorBean.writeCmsToApplication()}"
-                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" />
+                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button"
+                      oncomplete="initCmsWarnings();" />
                   </h:panelGroup>
                 </h:panelGroup>
 
