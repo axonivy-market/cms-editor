@@ -92,8 +92,9 @@
                     </div>
                   </h:panelGroup>
                   <p:commandButton id="download-button" value="#{ivy.cms.co('/Labels/Download')}" icon="pi pi-download"
-                    actionListener="#{cmsEditorBean.handleBeforeDownloadFile}" styleClass="w-full mt-3 cms-download-btn"
-                    oncomplete="showDialog('downloadSuccessDlg');">
+                    ajax="false" actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
+                    styleClass="w-full mt-3 cms-download-btn"
+                    onclick="PrimeFaces.monitorDownload(function() {}, showDialog('downloadSuccessDlg'));">
                     <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
                   </p:commandButton>
                 </h:panelGroup>
