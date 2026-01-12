@@ -4,8 +4,6 @@ public class CmsValueDto {
   private int languageIndex;
   private String contents;
 
-
-
   public int getLanguageIndex() {
     return languageIndex;
   }
