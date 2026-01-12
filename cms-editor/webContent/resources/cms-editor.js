@@ -2,7 +2,6 @@ window.cmsEditors = window.cmsEditors || {};
 
 function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
 
-  // ❌ BỎ save khỏi toolbar
   const buttonList = [
     ['font'],
     ['bold', 'underline', 'italic'],
@@ -17,10 +16,8 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
     }
   });
 
-  // lưu editor theo languageIndex
   window.cmsEditors[languageIndex] = editor;
 
-  // đánh dấu content đã thay đổi
   editor.onChange = () => {
     setValueChanged([{
       name: 'languageIndex',
@@ -29,9 +26,6 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
   };
 }
 
-/**
- * ✅ SAVE TẤT CẢ EDITOR 1 LẦN
- */
 function saveAllEditors() {
   const values = [];
 
@@ -41,7 +35,6 @@ function saveAllEditors() {
     const contents = editor.getContents();
     const text = removeNonPrintableChars(editor.getText()).trim();
 
-    // validate rỗng
     if (text.length === 0) {
       editor.noticeOpen("The content must not be empty.");
       return;
@@ -55,14 +48,12 @@ function saveAllEditors() {
   
   console.log(values)
 
-  // gọi remoteCommand saveAllValue
   saveAllValue([{
     name: 'values',
     value: JSON.stringify(values)
   }]);
 }
 
-/* ===================== UTILITIES ===================== */
 
 function removeNonPrintableChars(str) {
   return str.replace(/[\u00A0\u0000\u200B]/g, '');
@@ -105,8 +96,6 @@ function showDialog(dialogId) {
     PF(dialogId).hide();
   }, 1500);
 }
-
-/* ===================== GLOBAL FLAGS ===================== */
 
 window.isHideTaskName = false;
 window.isHideTaskAction = true;

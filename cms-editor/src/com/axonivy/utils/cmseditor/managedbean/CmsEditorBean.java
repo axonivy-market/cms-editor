@@ -32,6 +32,7 @@ import org.primefaces.PF;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.StreamedContent;
 
+import com.axonivy.utils.cmseditor.dto.CmsValueDto;
 import com.axonivy.utils.cmseditor.model.Cms;
 import com.axonivy.utils.cmseditor.model.CmsContent;
 import com.axonivy.utils.cmseditor.model.PmvCms;
@@ -41,6 +42,10 @@ import com.axonivy.utils.cmseditor.service.CmsService;
 import com.axonivy.utils.cmseditor.utils.CmsFileUtils;
 import com.axonivy.utils.cmseditor.utils.FacesContexts;
 import com.axonivy.utils.cmseditor.utils.Utils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.ivyteam.ivy.application.ActivityState;
 import ch.ivyteam.ivy.application.IActivity;
@@ -156,13 +161,17 @@ public class CmsEditorBean implements Serializable {
     }
   }
   
-  public void saveAll() {
-    String json = FacesContext.getCurrentInstance()
-        .getExternalContext()
-        .getRequestParameterMap()
-        .get("values");
+  public void saveAll() throws JsonMappingException, JsonProcessingException {
+    var json = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
 
-   Ivy.log().warn(json);
+    ObjectMapper mapper = new ObjectMapper();
+    List<CmsValueDto> values = mapper.readValue(json, new TypeReference<>() {});
+
+    // for (CmsValueDto v : values) {
+    // saveSingle(v.getLanguageIndex(), v.getContents());
+    // }
+
+    Ivy.log().warn(json);
   }
 
   private boolean isEditing() {
