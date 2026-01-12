@@ -51,6 +51,7 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
+import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
@@ -153,6 +154,15 @@ public class CmsEditorBean implements Serializable {
       PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE,
           CONTENT_FORM_EDITABLE_COLUMN);
     }
+  }
+  
+  public void saveAll() {
+    String json = FacesContext.getCurrentInstance()
+        .getExternalContext()
+        .getRequestParameterMap()
+        .get("values");
+
+   Ivy.log().warn(json);
   }
 
   private boolean isEditing() {

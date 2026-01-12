@@ -150,6 +150,7 @@
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
                       actionListener="#{cmsEditorBean.writeCmsToApplication()}"
                       styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button"
+                      onclick="saveAllEditors()"
                       oncomplete="initCmsWarnings();" />
                   </h:panelGroup>
                 </h:panelGroup>
@@ -161,6 +162,8 @@
         <div class="command-btns pt-2">
           <p:remoteCommand name="stop" global="false" partialSubmit="true" process="@this" update="content-form"
             actionListener="#{cmsEditorBean.downloadFinished}" />
+          <p:remoteCommand name="saveAllValue" global="false" partialSubmit="true" process="@this"
+            actionListener="#{cmsEditorBean.saveAll}" />
         </div>
       </h:form>
 
