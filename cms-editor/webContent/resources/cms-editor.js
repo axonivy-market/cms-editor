@@ -1,13 +1,29 @@
 window.cmsEditors = window.cmsEditors || {};
 
 function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
-
-  const buttonList = [
-    ['font'],
-    ['bold', 'underline', 'italic'],
-    ['fontColor', 'align', 'list'],
-    ['fullScreen']
-  ];
+  let buttonList;
+  if (isFormatButtonListVisible) {
+    buttonList = [
+      ['font', 'fontSize', 'formatBlock'],
+      ['paragraphStyle', 'blockquote'],
+      ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+      ['fontColor', 'hiliteColor', 'textStyle'],
+      ['removeFormat'],
+      ['outdent', 'indent'],
+      ['align', 'list', 'lineHeight', 'horizontalRule'],
+      ['table', 'link'],
+      ['fullScreen'],
+      ['undo', 'redo'],
+      ['save']
+    ];
+  } else {
+    buttonList = [
+      ['font'],
+      ['bold', 'underline', 'italic'],
+      ['fontColor', 'align', 'list'],
+      ['fullScreen']
+    ];
+  }
 
   const editor = SUNEDITOR.create(document.getElementById(editorId), {
     buttonList: buttonList,
@@ -45,7 +61,7 @@ function saveAllEditors() {
       contents: contents
     });
   }
-  
+
   console.log(values)
 
   saveAllValue([{
@@ -72,14 +88,14 @@ function bindCmsWarning(hoverId, warningId) {
   }
 
   function hideWarning() {
-    hideTimeout = setTimeout(function () {
+    hideTimeout = setTimeout(function() {
       targetElement.style.display = "none";
     }, 500);
   }
 
   hoverElement.addEventListener("mouseenter", showWarning);
   hoverElement.addEventListener("mouseleave", hideWarning);
-  targetElement.addEventListener("mouseenter", function () {
+  targetElement.addEventListener("mouseenter", function() {
     clearTimeout(hideTimeout);
   });
   targetElement.addEventListener("mouseleave", hideWarning);
@@ -92,7 +108,7 @@ function initCmsWarnings() {
 
 function showDialog(dialogId) {
   PF(dialogId).show();
-  setTimeout(function () {
+  setTimeout(function() {
     PF(dialogId).hide();
   }, 1500);
 }

@@ -112,10 +112,8 @@ public class CmsEditorBean implements Serializable {
   }
 
   public void onCancelEditableButton() {
-    if (isEditing()) {
-      return;
-    }
     this.isEditableCms = false;
+    this.lastSelectedCms.getContents().forEach(cms -> cms.setEditting(false));
     PF.current().ajax().update(CONTENT_FORM_LINK_COLUMN, CONTENT_FORM_EDITABLE_COLUMN);
   }
 
