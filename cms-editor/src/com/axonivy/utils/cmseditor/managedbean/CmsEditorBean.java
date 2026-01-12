@@ -73,7 +73,8 @@ public class CmsEditorBean implements Serializable {
   private static final String CONTENT_FORM_CMS_EDIT_VALUE = "content-form:cms-edit-value";
   private static final String CONTENT_FORM = "content-form";
   private static final String OPEN_SUCCESS_DIALOG_SCRIPT = "showDialog('SaveSuccessDlg');";
-
+  private static final ObjectMapper mapper = new ObjectMapper();
+  
   private Map<String, Map<String, SavedCms>> savedCmsMap;
   private List<Cms> cmsList;
   private List<Cms> filteredCMSList;
@@ -159,9 +160,9 @@ public class CmsEditorBean implements Serializable {
   }
   
   public void saveAll() throws JsonMappingException, JsonProcessingException {
-    var json = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
-    ObjectMapper mapper = new ObjectMapper();
-    List<CmsValueDto> cmsValues = mapper.readValue(json, new TypeReference<>() {});
+    var languageIndexAndContentJsonString =
+        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
+    List<CmsValueDto> cmsValues = mapper.readValue(languageIndexAndContentJsonString, new TypeReference<>() {});
     for (CmsValueDto currentCmsValue : cmsValues) {
       save(currentCmsValue.getLanguageIndex(), currentCmsValue.getContents());
     }
