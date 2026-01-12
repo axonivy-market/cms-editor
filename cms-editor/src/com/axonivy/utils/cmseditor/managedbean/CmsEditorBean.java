@@ -72,6 +72,7 @@ public class CmsEditorBean implements Serializable {
   private static final String CONTENT_FORM_EDITABLE_COLUMN = "content-form:editable-column";
   private static final String CONTENT_FORM_CMS_EDIT_VALUE = "content-form:cms-edit-value";
   private static final String CONTENT_FORM = "content-form";
+  private static final String OPEN_SUCCESS_DIALOG_SCRIPT = "showDialog('SaveSuccessDlg');";
 
   private Map<String, Map<String, SavedCms>> savedCmsMap;
   private List<Cms> cmsList;
@@ -104,7 +105,7 @@ public class CmsEditorBean implements Serializable {
     CmsService.getInstance().writeCmsToApplication(this.savedCmsMap);
     onAppChange();
     PF.current().ajax().update(CONTENT_FORM);
-    PrimeFaces.current().executeScript("showDialog('SaveSuccessDlg');");
+    PrimeFaces.current().executeScript(OPEN_SUCCESS_DIALOG_SCRIPT);
   }
 
   public void onEditableButton() {

@@ -126,8 +126,9 @@ public class CmsEditorWebTest {
     displayItem.click();
     var contentItem = $(By.id(displayItem.getAttribute("id").replaceAll("_display", "_content")));
     contentItem.$(By.className("sun-editor-editable")).setValue("Content is updated at " + System.currentTimeMillis());
-    contentItem.$(By.cssSelector("button[data-command='save']")).click();
     Selenide.sleep(1000);
+    $(By.id("content-form:save-button")).shouldBe(enabled).click();
+    $(By.id("SaveSuccessDlg")).shouldBe(visible);
     otherCms.click();
     $(By.id("primefacesmessagedlg")).should(hidden);
   }

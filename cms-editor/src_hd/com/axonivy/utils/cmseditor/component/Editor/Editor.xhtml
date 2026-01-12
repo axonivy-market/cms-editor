@@ -28,9 +28,7 @@
   </p:inplace>
   <p:remoteCommand autoRun="true" async="true" rendered="#{not cc.attrs.isReadOnly}"
     onstart="initSunEditor(#{cc.attrs.isFormatButtonListVisible}, #{cc.attrs.languageIndex}, '#{cc.clientId}:content-editor-id');"
-    global="false" partialSubmit="true" immediate="true" process="@none" update="@none" />
-  <p:remoteCommand name="saveValue" global="false" partialSubmit="true" process="@this"
-    actionListener="#{cc.attrs.managedBean.save}" />
+    global="false" partialSubmit="true" immediate="true" process="@none" update="@none" />>
   <p:remoteCommand name="setValueChanged" global="false" partialSubmit="true" process="@this"
     actionListener="#{cc.attrs.managedBean.setValueChanged}" />
 </cc:implementation>
