@@ -126,13 +126,15 @@ public class CmsEditorBean implements Serializable {
     if (isEditing()) {
       return;
     }
-    filteredCMSList =
-        cmsList.stream().filter(entry -> isCmsMatchSearchKey(entry, searchKey)).collect(Collectors.toList());
+    filteredCMSList = cmsList.stream()
+        .filter(entry -> isCmsMatchSearchKey(entry, searchKey))
+        .map(entry -> CmsService.getInstance().compareWithCmsInApplication(entry))
+        .collect(Collectors.toList());
+
     if (selectedCms != null) {
       selectedCms =
           filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny().orElse(null);
     }
-    filteredCMSList = CmsService.getInstance().compareWithCmsInApplication(filteredCMSList);
   }
 
   public void onAppChange() {

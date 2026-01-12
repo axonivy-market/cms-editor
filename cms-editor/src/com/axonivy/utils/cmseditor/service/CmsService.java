@@ -1,6 +1,5 @@
 package com.axonivy.utils.cmseditor.service;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -53,12 +52,10 @@ public class CmsService {
     return null;
   }
 
-  public List<Cms> compareWithCmsInApplication(List<Cms> cmsList) {
-    for (Cms cms : cmsList) {
-      boolean isDifferent = isCmsDifferentWithApplication(cms);
-      cms.setDifferentWithApplication(isDifferent);
-    }
-    return cmsList;
+  public Cms compareWithCmsInApplication(Cms cms) {
+    boolean isDifferent = isCmsDifferentWithApplication(cms);
+    cms.setDifferentWithApplication(isDifferent);
+    return cms;
   }
 
   private boolean isCmsDifferentWithApplication(Cms cms) {
