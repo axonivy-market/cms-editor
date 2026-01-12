@@ -56,7 +56,6 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
-import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
@@ -101,9 +100,6 @@ public class CmsEditorBean implements Serializable {
   }
 
   public void writeCmsToApplication() {
-    if (isEditing()) {
-      return;
-    }
     this.isEditableCms = false;
     CmsService.getInstance().writeCmsToApplication(this.savedCmsMap);
     onAppChange();
@@ -163,15 +159,11 @@ public class CmsEditorBean implements Serializable {
   
   public void saveAll() throws JsonMappingException, JsonProcessingException {
     var json = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
-
     ObjectMapper mapper = new ObjectMapper();
-    List<CmsValueDto> values = mapper.readValue(json, new TypeReference<>() {});
-
-    // for (CmsValueDto v : values) {
-    // saveSingle(v.getLanguageIndex(), v.getContents());
-    // }
-
-    Ivy.log().warn(json);
+    List<CmsValueDto> cmsValues = mapper.readValue(json, new TypeReference<>() {});
+    for (CmsValueDto currentCmsValue : cmsValues) {
+      save(currentCmsValue.getLanguageIndex(), currentCmsValue.getContents());
+    }
   }
 
   private boolean isEditing() {
@@ -268,16 +260,13 @@ public class CmsEditorBean implements Serializable {
     cmsLocaleMap.put(savedCmsResult.getLocale(), savedCmsResult);
   }
 
-  public void save() {
-    var context = FacesContext.getCurrentInstance();
-    var requestParamMap = context.getExternalContext().getRequestParameterMap();
-    var languageIndex = valueOf(requestParamMap.get("languageIndex"));
+  public void save(int languageIndex, String content) {
     selectedCms.getContents().stream().filter(value -> value.getIndex() == languageIndex).findAny()
-        .ifPresent(cmsContent -> handleCmsContentSave(requestParamMap, cmsContent));
+        .ifPresent(cmsContent -> handleCmsContentSave(content, cmsContent));
   }
 
-  private void handleCmsContentSave(Map<String, String> requestParamMap, CmsContent cmsContent) {
-    cmsContent.saveContent(requestParamMap.get("contents"));
+  private void handleCmsContentSave(String newContent, CmsContent cmsContent) {
+    cmsContent.saveContent(newContent);
     var locale = cmsContent.getLocale();
     var savedCms = findSavedCms(selectedCms.getUri(), locale);
     if (savedCms != null) {
