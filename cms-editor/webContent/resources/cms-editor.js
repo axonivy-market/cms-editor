@@ -1,4 +1,5 @@
 window.cmsEditors = window.cmsEditors || {};
+window.cmsDirtyEditors = new Set();
 
 function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
   let buttonList;
@@ -34,6 +35,7 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
   window.cmsEditors[languageIndex] = editor;
 
   editor.onChange = () => {
+    window.cmsDirtyEditors.add(languageIndex);
     setValueChanged([{
       name: 'languageIndex',
       value: languageIndex
@@ -42,9 +44,10 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
 }
 
 function saveAllEditors() {
+  console.log(window.cmsDirtyEditors);
   const values = [];
 
-  for (const languageIndex in window.cmsEditors) {
+  for (const languageIndex of window.cmsDirtyEditors) {
     const editor = window.cmsEditors[languageIndex];
 
     const contents = editor.getContents();
