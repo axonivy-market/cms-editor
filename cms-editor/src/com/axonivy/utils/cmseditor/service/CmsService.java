@@ -31,7 +31,6 @@ public class CmsService {
     return portalCMSEntity.get();
   }
 
-
   public void writeCmsToApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
     Sudo.run(() -> {
       savedCmsMap.forEach((uri, localeAndContent) -> {

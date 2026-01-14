@@ -13,8 +13,7 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
       ['align', 'list', 'lineHeight', 'horizontalRule'],
       ['table', 'link'],
       ['fullScreen'],
-      ['undo', 'redo'],
-      ['save']
+      ['undo', 'redo']
     ];
   } else {
     buttonList = [
