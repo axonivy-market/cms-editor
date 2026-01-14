@@ -30,8 +30,8 @@
 	</dependencies>
 
 	<properties>
-		<ivy.engine.version>12.0.0</ivy.engine.version>
-		<project.build.plugin.version>12.0.0</project.build.plugin.version>
+		<ivy.engine.version>12.0.8</ivy.engine.version>
+		<project.build.plugin.version>12.0.8</project.build.plugin.version>
 	</properties>
 	<pluginRepositories>
 		<pluginRepository>

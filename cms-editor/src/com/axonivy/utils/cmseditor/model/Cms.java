@@ -11,6 +11,18 @@ public class Cms implements Serializable {
   private String uri;
 
   private List<CmsContent> contents;
+  
+  private String pmvName;
+  
+  private boolean isDifferentWithApplication;
+  
+  public boolean isDifferentWithApplication() {
+    return isDifferentWithApplication;
+  }
+
+  public void setDifferentWithApplication(boolean isDifferentWithApplication) {
+    this.isDifferentWithApplication = isDifferentWithApplication;
+  }
 
   public String getUri() {
     return uri;
@@ -37,6 +49,14 @@ public class Cms implements Serializable {
 
   public boolean isEditing() {
     return contents.stream().anyMatch(CmsContent::isEditting);
+  }
+
+  public String getPmvName() {
+    return pmvName;
+  }
+
+  public void setPmvName(String pmvName) {
+    this.pmvName = pmvName;
   }
 
 }
