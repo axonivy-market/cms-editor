@@ -15,7 +15,6 @@
   <h:outputStylesheet name="suneditor/css/suneditor.min.css" />
   <h:outputStylesheet name="suneditor/css/suneditor-custom.css" />
   <h:outputScript name="suneditor/suneditor.min.js" target="head" />
-  <h:outputScript name="resources/cms-editor.js" target="head" />
   <p:inplace disabled="#{cc.attrs.isReadOnly}">
     <f:facet name="output">
       <h:outputText rendered="#{not empty cc.attrs.content}" value="#{cc.attrs.content}" escape="false" />

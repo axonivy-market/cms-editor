@@ -64,8 +64,6 @@ function saveAllEditors() {
     });
   }
 
-  console.log(values)
-
   saveAllValue([{
     name: 'values',
     value: JSON.stringify(values)

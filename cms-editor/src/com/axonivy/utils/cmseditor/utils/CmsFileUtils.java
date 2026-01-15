@@ -35,9 +35,13 @@ public class CmsFileUtils {
   private static final String TIMESTAMP_FORMAT = "yyyyMMdd_HHmmss";
   private static final String EXCEL_FILE_NAME = "%s.xlsx";
   private static final String ZIP_FILE_NAME = "%s_%s.zip";
+  private static final String ALL_PROJECT_NAME = "All";
 
   public static StreamedContent writeCmsToZipStreamedContent(String appName, Map<String, PmvCms> cmsPmvMap)
       throws Exception {
+    if (StringUtils.isEmpty(appName)) {
+      appName = ALL_PROJECT_NAME;
+    }
     var workBooks = new HashMap<String, Workbook>();
     for (var entry : cmsPmvMap.entrySet()) {
       var cmsList = entry.getValue().getCmsList();
