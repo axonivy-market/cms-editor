@@ -70,7 +70,8 @@ public class CmsEditorBean implements Serializable {
   private static final String CONTENT_FORM = "content-form";
   private static final String OPEN_SUCCESS_DIALOG_SCRIPT = "showDialog('SaveSuccessDlg');";
   private static final ObjectMapper mapper = new ObjectMapper();
-  
+  private final CmsService cmsService = CmsService.getInstance();
+
   private Map<String, Map<String, SavedCms>> savedCmsMap;
   private List<Cms> cmsList;
   private List<Cms> filteredCMSList;
@@ -99,7 +100,7 @@ public class CmsEditorBean implements Serializable {
 
   public void writeCmsToApplication() {
     this.isEditableCms = false;
-    CmsService.getInstance().writeCmsToApplication(this.savedCmsMap);
+    cmsService.writeCmsToApplication(this.savedCmsMap);
     onAppChange();
     PF.current().ajax().update(CONTENT_FORM);
     PrimeFaces.current().executeScript(OPEN_SUCCESS_DIALOG_SCRIPT);
@@ -125,7 +126,7 @@ public class CmsEditorBean implements Serializable {
     }
     filteredCMSList = cmsList.stream()
         .filter(entry -> isCmsMatchSearchKey(entry, searchKey))
-        .map(entry -> CmsService.getInstance().compareWithCmsInApplication(entry))
+        .map(cmsService::compareWithCmsInApplication)
         .collect(Collectors.toList());
 
     if (selectedCms != null) {
@@ -143,7 +144,7 @@ public class CmsEditorBean implements Serializable {
     }
     search();
   }
-
+  
   public void rowSelect() {
     isEditableCms = false;
     if (isEditing()) {
@@ -221,7 +222,7 @@ public class CmsEditorBean implements Serializable {
       Locale locale = locales.get(i);
       ContentObjectValue value = contentObject.value().get(locale);
       String projectCmsvalueString = ofNullable(value).map(ContentObjectValue::read).map(ContentObjectReader::string).orElse(EMPTY);
-      String cmsApplicationValue = CmsService.getInstance().getCmsFromApplication(cms.getUri(), locale);
+      String cmsApplicationValue = cmsService.getCmsFromApplication(cms.getUri(), locale);
       if (StringUtils.isBlank(cmsApplicationValue)) {
         cmsApplicationValue = projectCmsvalueString;
       }
@@ -255,11 +256,11 @@ public class CmsEditorBean implements Serializable {
   private void handleCmsContentSave(String newContent, CmsContent cmsContent) {
     cmsContent.saveContent(newContent);
     var locale = cmsContent.getLocale();
-    SavedCms savedCms = new SavedCms(selectedCms.getUri(),
+    SavedCms savedCms = new SavedCms(
+            selectedCms.getUri(),
             locale.toString(),
             cmsContent.getOriginalContent(),
-            cmsContent.getContent()
-    );
+            cmsContent.getContent());
     saveCms(savedCms);
   }
 
