@@ -25,6 +25,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import ch.ivyteam.ivy.application.*;
+import ch.ivyteam.ivy.environment.Ivy;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Strings;
@@ -47,10 +49,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.ivyteam.ivy.application.ActivityState;
-import ch.ivyteam.ivy.application.IActivity;
-import ch.ivyteam.ivy.application.IApplication;
-import ch.ivyteam.ivy.application.IProcessModel;
 import ch.ivyteam.ivy.application.app.IApplicationRepository;
 import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
@@ -93,9 +91,9 @@ public class CmsEditorBean implements Serializable {
     savedCmsMap = SavedCmsRepo.findAll();
     pmvCmsMap = new HashMap<>();
     for (var app : IApplicationRepository.of(ISecurityContext.current()).all()) {
-      app.getProcessModels().stream().filter(processModel -> isActive(processModel))
+      app.getProcessModels().stream().filter(CmsEditorBean::isActive)
           .map(IProcessModel::getReleasedProcessModelVersion)
-          .filter(pmv -> isActive(pmv))
+          .filter(CmsEditorBean::isActive)
           .forEach(pmv -> getAllChildren(pmv.getName(), ContentManagement.cms(pmv).root(), new ArrayList<>()));
     }
     onAppChange();
@@ -357,11 +355,11 @@ public class CmsEditorBean implements Serializable {
 
   public Set<String> getProjectCms() {
     return IApplication.current().getProcessModels().stream()
-        .filter(processModel -> isActive(processModel))
+        .filter(CmsEditorBean::isActive)
         .map(IProcessModel::getReleasedProcessModelVersion)
-        .filter(pmv -> isActive(pmv))
-        .map(pmv -> pmv.getProjectName())
-        .filter(projectName -> this.pmvCmsMap.keySet().contains(projectName))
+        .filter(CmsEditorBean::isActive)
+        .map(IProcessModelVersion::getProjectName)
+        .filter(projectName -> this.pmvCmsMap.containsKey(projectName))
         .collect(Collectors.toSet());
   }
 
