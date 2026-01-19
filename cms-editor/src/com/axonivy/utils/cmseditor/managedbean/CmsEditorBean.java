@@ -112,7 +112,7 @@ public class CmsEditorBean implements Serializable {
 
   public void onCancelEditableButton() {
     this.isEditableCms = false;
-    this.lastSelectedCms.getContents().forEach(cms -> cms.setEditting(false));
+    this.lastSelectedCms.getContents().forEach(cms -> cms.setEditing(false));
     PF.current().ajax().update(CONTENT_FORM_LINK_COLUMN, CONTENT_FORM_EDITABLE_COLUMN);
   }
 
@@ -130,8 +130,10 @@ public class CmsEditorBean implements Serializable {
         .collect(Collectors.toList());
 
     if (selectedCms != null) {
-      selectedCms =
-          filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny().orElse(null);
+      selectedCms = filteredCMSList.stream()
+              .filter(entry -> entry.getUri().equals(selectedCms.getUri()))
+              .findAny()
+              .orElse(null);
     }
   }
 
@@ -175,7 +177,7 @@ public class CmsEditorBean implements Serializable {
   }
 
   private void showHaveNotBeenSavedDialog() {
-    var editingCmsList = lastSelectedCms.getContents().stream().filter(CmsContent::isEditting)
+    var editingCmsList = lastSelectedCms.getContents().stream().filter(CmsContent::isEditing)
         .map(CmsContent::getLocale).map(Locale::getDisplayLanguage).collect(Collectors.toList());
     var detail = Utils.convertListToHTMLList(editingCmsList);
     showDialog(cms().co("/Labels/SomeFieldsHaveNotBeenSaved"), detail);
@@ -268,7 +270,7 @@ public class CmsEditorBean implements Serializable {
     var context = FacesContext.getCurrentInstance();
     var requestParamMap = context.getExternalContext().getRequestParameterMap();
     var languageIndex = Integer.parseInt(requestParamMap.get("languageIndex"));
-    selectedCms.getContents().get(languageIndex).setEditting(true);
+    selectedCms.getContents().get(languageIndex).setEditing(true);
   }
 
   public void handleBeforeDownloadFile() throws Exception {

@@ -1,11 +1,13 @@
 package com.axonivy.utils.cmseditor.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cms implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = -88931664585615316L;
 
   private String uri;
@@ -48,7 +50,7 @@ public class Cms implements Serializable {
   }
 
   public boolean isEditing() {
-    return contents.stream().anyMatch(CmsContent::isEditting);
+    return contents.stream().anyMatch(CmsContent::isEditing);
   }
 
   public String getPmvName() {
