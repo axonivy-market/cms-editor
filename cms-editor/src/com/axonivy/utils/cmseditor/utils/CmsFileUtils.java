@@ -1,7 +1,5 @@
 package com.axonivy.utils.cmseditor.utils;
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,6 +14,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.model.DefaultStreamedContent;
@@ -80,13 +79,13 @@ public class CmsFileUtils {
   }
 
   private static String getContentValue(Cms cms, String language) {
-    return cms.getContents().stream().filter(content -> StringUtils.equals(content.getLocale().getLanguage(), language))
+    return cms.getContents().stream().filter(content -> Strings.CS.equals(content.getLocale().getLanguage(), language))
         .findFirst().map(CmsContent::getContent).orElse(StringUtils.EMPTY);
   }
 
   public static StreamedContent convertToZip(String appName, Map<String, Workbook> workbooks) throws Exception {
     var timestamp = new SimpleDateFormat(TIMESTAMP_FORMAT).format(new Date());
-    try (var baos = new ByteArrayOutputStream(); var zipOut = new ZipOutputStream(baos);) {
+    try (var baos = new ByteArrayOutputStream(); var zipOut = new ZipOutputStream(baos)) {
 
       for (Entry<String, Workbook> entry : workbooks.entrySet()) {
         var fileName = String.format(EXCEL_FILE_NAME, entry.getKey());
