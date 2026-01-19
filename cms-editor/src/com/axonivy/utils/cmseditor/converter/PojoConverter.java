@@ -49,13 +49,13 @@ public class PojoConverter implements Converter {
   /**
    * {@inheritDoc}<br />
    * <b>This implementation:</b><br />
-   * Returns the item that corresponds the the given selected value.
+   * Returns the item that corresponds the given selected value.
    */
   @Override
-  public Object getAsObject(FacesContext context, UIComponent component, String selectedvalue) {
-    if (selectedvalue != null && selectedvalue.length() > 0) {
+  public Object getAsObject(FacesContext context, UIComponent component, String selectedValue) {
+    if (selectedValue != null && !selectedValue.isEmpty()) {
 
-      var mapKey = String.format(MAP_KEY_TEMPLATE, component.getId(), selectedvalue);
+      var mapKey = String.format(MAP_KEY_TEMPLATE, component.getId(), selectedValue);
       var viewMap = getViewMap(context);
 
       return viewMap.get(mapKey);

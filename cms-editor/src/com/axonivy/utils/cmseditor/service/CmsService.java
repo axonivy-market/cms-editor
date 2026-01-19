@@ -25,30 +25,22 @@ public class CmsService {
   private ContentObject createOrGetCMSByURI(String uri) {
     IApplication currentApplication = IApplication.current();
     var portalCMSEntity = ContentManagement.cms(currentApplication).get(uri);
-    if (portalCMSEntity.isEmpty()) {
-      return ContentManagement.cms(currentApplication).root().child().string(uri);
-    }
-    return portalCMSEntity.get();
+    return portalCMSEntity.orElseGet(() -> ContentManagement.cms(currentApplication).root().child().string(uri));
   }
 
   public void writeCmsToApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
-    Sudo.run(() -> {
-      savedCmsMap.forEach((uri, localeAndContent) -> {
-        ContentObject currentContentObject = createOrGetCMSByURI(uri);
-        localeAndContent.forEach((locale, savedCms) -> {
-          currentContentObject.value().get(Locale.forLanguageTag(locale)).write().string(savedCms.getNewContent());
-        });
+    Sudo.run(() -> savedCmsMap.forEach((uri, localeAndContent) -> {
+      ContentObject currentContentObject = createOrGetCMSByURI(uri);
+      localeAndContent.forEach((locale, savedCms) -> {
+        currentContentObject.value().get(Locale.forLanguageTag(locale)).write().string(savedCms.getNewContent());
       });
-    });
+    }));
   }
 
   public String getCmsFromApplication(String uri, Locale locale) {
     IApplication currentApplication = IApplication.current();
     var cmsEntity = ContentManagement.cms(currentApplication).get(uri);
-    if (!cmsEntity.isEmpty()) {
-      return cmsEntity.get().value().get(locale).read().string();
-    }
-    return null;
+    return cmsEntity.map(contentObject -> contentObject.value().get(locale).read().string()).orElse(null);
   }
 
   public Cms compareWithCmsInApplication(Cms cms) {

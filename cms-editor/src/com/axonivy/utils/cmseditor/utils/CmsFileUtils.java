@@ -48,7 +48,7 @@ public class CmsFileUtils {
       var headers = new ArrayList<String>();
       headers.add(URI_HEADER);
       headers.addAll(entry.getValue().getLocales().stream().map(Locale::getLanguage).filter(StringUtils::isNotBlank)
-          .collect(toList()));
+          .toList());
       var workbook = new XSSFWorkbook();
       var worksheet = workbook.createSheet(SHEET_NAME);
 
