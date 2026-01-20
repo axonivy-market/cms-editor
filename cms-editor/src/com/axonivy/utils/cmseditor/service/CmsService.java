@@ -45,6 +45,7 @@ public class CmsService {
 
   public Cms compareWithCmsInApplication(Cms cms) {
     boolean isDifferent = isCmsDifferentWithApplication(cms);
+    cms.getContents().forEach(content -> content.setEditing(false));
     cms.setDifferentWithApplication(isDifferent);
     return cms;
   }

@@ -51,7 +51,7 @@
                     </div>
                     <p:tooltip for="cms-uri" value="#{entry.uri} (#{entry.pmvName})" position="top" />
                   </p:column>
-                  <p:ajax event="rowSelect" process="@this" partialSubmit="true" listener="#{cmsEditorBean.rowSelect}" />
+                  <p:ajax event="rowSelect" process="@this" partialSubmit="true" update="table-cms-keys" listener="#{cmsEditorBean.rowSelect}" />
                 </p:dataTable>
               </h:panelGroup>
             </h:panelGroup>
@@ -145,10 +145,10 @@
                       styleClass="flex-1 ui-button-outlined ui-button-secondary cms-cancel-button"
                       actionListener="#{cmsEditorBean.onCancelEditableButton()}" />
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
-                      process="@this" rendered="#{cmsEditorBean.editableCms}"
-                      actionListener="#{cmsEditorBean.writeCmsToApplication()}"
+                      process="@this table-cms-keys" rendered="#{cmsEditorBean.editableCms}"
+                      actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="table-cms-keys"
                       styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" onclick="saveAllEditors()"
-                      oncomplete="initCmsWarnings();" />
+                      oncomplete="initCmsWarnings();" partialSubmit="true"/>
                   </h:panelGroup>
                 </h:panelGroup>
 
