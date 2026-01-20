@@ -11,8 +11,11 @@ public class CmsConstants {
   public static final String CONTENT_FORM_CMS_EDIT_VALUE = "content-form:cms-edit-value";
   public static final String CONTENT_FORM = "content-form";
 
+  public static final String TABLE_CMS_KEY_ID = "table-cms-keys";
   public static final String EDIT_BUTTON_ID = "content-form:edit-button";
   public static final String SAVE_BUTTON_ID = "content-form:save-button";
+  public static final String DOWNLOAD_BUTTON_ID = "content-form:download-button";
   public static final String CMS_WARNING_CONTAINER_ID = "content-form:cms-warning-container";
   public static final String CMS_WARNING_SAVE_CONTAINER_ID = "content-form:cms-warning-save-container";
+  public static final String SEARCH_INPUT_ID = "content-form:search-input";
 }

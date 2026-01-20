@@ -12,6 +12,8 @@ import static com.codeborne.selenide.Condition.matchText;
 
 import static com.axonivy.utils.cmseditor.constants.CmsConstants.EDIT_BUTTON_ID;
 import static com.axonivy.utils.cmseditor.constants.CmsConstants.SAVE_BUTTON_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.DOWNLOAD_BUTTON_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.SEARCH_INPUT_ID;
 import static com.axonivy.utils.cmseditor.constants.CmsConstants.CMS_WARNING_CONTAINER_ID;
 import static com.axonivy.utils.cmseditor.constants.CmsConstants.CMS_WARNING_SAVE_CONTAINER_ID;
 
@@ -46,7 +48,7 @@ public class CmsEditorWebTest {
 
   @Test
   public void testDownloadButtonShouldBeVisible() {
-    $(By.id("content-form:download-button")).shouldBe(visible);
+    $(By.id(DOWNLOAD_BUTTON_ID)).shouldBe(visible);
   }
 
   @Test
@@ -66,7 +68,7 @@ public class CmsEditorWebTest {
   }
 
   private void sendKeysToSearchInput(String keysToSend) {
-    $(By.id("content-form:search-input")).sendKeys(keysToSend);
+    $(By.id(SEARCH_INPUT_ID)).sendKeys(keysToSend);
   }
 
   @Test
@@ -105,7 +107,7 @@ public class CmsEditorWebTest {
 
   @Test
   public void testHoverDownloadButtonToShowWarningMessage() {
-    $(By.id("content-form:download-button")).shouldBe(enabled).hover();
+    $(By.id(DOWNLOAD_BUTTON_ID)).shouldBe(enabled).hover();
     $(By.id(CMS_WARNING_CONTAINER_ID)).shouldBe(visible);
     $("body").hover();
     Selenide.sleep(1000);

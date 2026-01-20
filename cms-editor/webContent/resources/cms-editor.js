@@ -3,6 +3,7 @@ window.cmsDirtyEditors = new Set();
 
 function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
   let buttonList;
+
   if (isFormatButtonListVisible) {
     buttonList = [
       ['font', 'fontSize', 'formatBlock'],
@@ -28,18 +29,35 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
   const editor = SUNEDITOR.create(document.getElementById(editorId), {
     buttonList: buttonList,
     attributesWhitelist: {
-      'all': 'style|width|height|role|border|cellspacing|cellpadding|src|alt|href|target'
+      all: 'style|width|height|role|border|cellspacing|cellpadding|src|alt|href|target'
     }
   });
 
   window.cmsEditors[languageIndex] = editor;
 
-  editor.onChange = () => {
+  function markDirty() {
     window.cmsDirtyEditors.add(languageIndex);
-    setValueChanged([{
-      name: 'languageIndex',
-      value: languageIndex
-    }]);
+    setValueChanged([
+      { name: 'languageIndex', value: languageIndex }
+    ]);
+  }
+
+  function debounce(fn, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+
+  // Handle fast typing
+  editor.onChange = debounce(() => {
+    markDirty();
+  }, 200);
+
+  // Handle quick CMS switching (click outside editor)
+  editor.onBlur = () => {
+    markDirty();
   };
 }
 

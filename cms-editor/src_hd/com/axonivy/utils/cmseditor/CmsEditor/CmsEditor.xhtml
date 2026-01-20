@@ -29,9 +29,7 @@
               <span class="ui-input-icon-left w-full"> <i class="pi pi-search" /> <p:inputText id="search-input"
                   value="#{cmsEditorBean.searchKey}" placeholder="#{ivy.cms.co('/Labels/Search')}"
                   styleClass="w-full p-inputtext">
-                  <p:ajax event="keyup" listener="#{cmsEditorBean.search}"
-                    update="table-cms-keys content-form:cms-values content-form:cms-edit-value" delay="500"
-                    process="@this" />
+                  <p:ajax event="keyup" listener="#{cmsEditorBean.search}" delay="500" process="@this" />
                 </p:inputText>
               </span>
             </div>
@@ -149,8 +147,7 @@
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
                       process="@this" rendered="#{cmsEditorBean.editableCms}"
                       actionListener="#{cmsEditorBean.writeCmsToApplication()}"
-                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button"
-                      onclick="saveAllEditors()"
+                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" onclick="saveAllEditors()"
                       oncomplete="initCmsWarnings();" />
                   </h:panelGroup>
                 </h:panelGroup>
