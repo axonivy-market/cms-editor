@@ -53,11 +53,9 @@ public class PojoConverter implements Converter {
    */
   @Override
   public Object getAsObject(FacesContext context, UIComponent component, String selectedValue) {
-    if (selectedValue != null && !selectedValue.isEmpty()) {
-
+    if (StringUtils.isNotBlank(selectedValue)) {
       var mapKey = String.format(MAP_KEY_TEMPLATE, component.getId(), selectedValue);
       var viewMap = getViewMap(context);
-
       return viewMap.get(mapKey);
     }
     return null;

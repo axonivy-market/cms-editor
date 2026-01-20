@@ -1,6 +1,7 @@
 package com.axonivy.utils.cmseditor.managedbean;
 
 import static ch.ivyteam.ivy.environment.Ivy.cms;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.*;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
@@ -59,15 +60,6 @@ public class CmsEditorBean implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
-  private static final String CONTENT_FORM_SELECTED_URL = "content-form:selected-url";
-  private static final String CONTENT_FORM_CMS_VALUES = "content-form:cms-values";
-  private static final String CONTENT_FORM_TABLE_CMS_KEYS = "content-form:table-cms-keys";
-  private static final String CMS_EDITOR_PMV_NAME = "cms-editor";
-  private static final String CMS_EDITOR_DEMO_PMV_NAME = "cms-editor-demo";
-  private static final String CONTENT_FORM_LINK_COLUMN = "content-form:link-column";
-  private static final String CONTENT_FORM_EDITABLE_COLUMN = "content-form:editable-column";
-  private static final String CONTENT_FORM_CMS_EDIT_VALUE = "content-form:cms-edit-value";
-  private static final String CONTENT_FORM = "content-form";
   private static final String OPEN_SUCCESS_DIALOG_SCRIPT = "showDialog('SaveSuccessDlg');";
   private static final ObjectMapper mapper = new ObjectMapper();
   private final CmsService cmsService = CmsService.getInstance();
@@ -146,7 +138,7 @@ public class CmsEditorBean implements Serializable {
     }
     search();
   }
-  
+
   public void rowSelect() {
     isEditableCms = false;
     if (isEditing()) {
@@ -157,7 +149,7 @@ public class CmsEditorBean implements Serializable {
           CONTENT_FORM_EDITABLE_COLUMN);
     }
   }
-  
+
   public void saveAll() throws JsonProcessingException {
     var languageIndexAndContentJsonString =
         FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");

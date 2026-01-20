@@ -44,7 +44,6 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
 }
 
 function saveAllEditors() {
-  console.log(window.cmsDirtyEditors);
   const values = [];
 
   for (const languageIndex of window.cmsDirtyEditors) {
@@ -112,10 +111,5 @@ function showDialog(dialogId) {
     PF(dialogId).hide();
   }, 1500);
 }
-
-window.isHideTaskName = false;
-window.isHideTaskAction = true;
-window.isHideCaseInfo = true;
-window.isWorkingOnATask = false;
 
 document.addEventListener("DOMContentLoaded", initCmsWarnings);
