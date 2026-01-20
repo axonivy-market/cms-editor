@@ -10,19 +10,29 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Condition.matchText;
 
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.EDIT_BUTTON_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.SAVE_BUTTON_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.CMS_WARNING_CONTAINER_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.CMS_WARNING_SAVE_CONTAINER_ID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-
 import com.axonivy.ivy.webtest.IvyWebTest;
 import com.axonivy.ivy.webtest.engine.EngineUrl;
 import com.codeborne.selenide.Selenide;
+import org.openqa.selenium.WebElement;
+import java.util.Objects;
 
 @IvyWebTest
 public class CmsEditorWebTest {
 
   private String testCmsUri = "/TestContent";
   private String testCmsValue = "Test Content";
+
+  private static final String CMS_LINK_URI = "[id^='content-form:table-cms-keys:'][id$=':cms-uri']";
+  private static final String CMS_VALUE_TAB_SELECTOR = "[id^='content-form:cms-values:'][id$=':cms-values-tab']";
+  private static final String CMS_EDIT_VALUE_DISPLAY_SELECTOR = "[id^='content-form:cms-edit-value:'][id$='_display']";
 
   /**
    * Dear Bug Hunter,
@@ -52,7 +62,7 @@ public class CmsEditorWebTest {
   }
 
   private void assertCmsTableRowCountGte(int size) {
-    $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']").shouldHave(sizeGreaterThanOrEqual(size));
+    $$(CMS_LINK_URI).shouldHave(sizeGreaterThanOrEqual(size));
   }
 
   private void sendKeysToSearchInput(String keysToSend) {
@@ -61,19 +71,20 @@ public class CmsEditorWebTest {
 
   @Test
   public void testEditedButNotSaveShouldShowError() {
-    var cmsList = $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']");
+    var cmsList = $$(CMS_LINK_URI);
     var selectedCms = cmsList.get(0);
     var otherCms = cmsList.get(1);
     selectedCms.click();
-    $$("[id^='content-form:cms-values:'][id$=':cms-values-tab']").shouldHave(sizeGreaterThanOrEqual(1));
+    $$(CMS_VALUE_TAB_SELECTOR).shouldHave(sizeGreaterThanOrEqual(1));
     // assert all content items is preview mode
-    var displayItems = $$("[id^='content-form:cms-edit-value:'][id$='_display']");
-    displayItems.shouldBe(allMatch("All elements should be visible", element -> element.isDisplayed()));
-    var displayItem = $$("[id^='content-form:cms-edit-value:'][id$='_display']").first();
-    $(By.id("content-form:edit-button")).shouldBe(enabled).click();
+    var displayItems = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR);
+    displayItems.shouldBe(allMatch("All elements should be visible", WebElement::isDisplayed));
+    var displayItem = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR).first();
+    $(By.id(EDIT_BUTTON_ID)).shouldBe(enabled).click();
     displayItem.click();
 
-    var contentItem = $(By.id(displayItem.getAttribute("id").replaceAll("_display", "_content")));
+    var contentItem =
+        $(By.id(Objects.requireNonNull(displayItem.getAttribute("id")).replaceAll("_display", "_content")));
     contentItem.$(By.className("sun-editor-editable"))
         .setValue("Content is updated at 2 " + System.currentTimeMillis());
     contentItem.$(".se-btn.se-resizing-enabled.se-tooltip").should(enabled);
@@ -95,39 +106,39 @@ public class CmsEditorWebTest {
   @Test
   public void testHoverDownloadButtonToShowWarningMessage() {
     $(By.id("content-form:download-button")).shouldBe(enabled).hover();
-    $(By.id("content-form:cms-warning-container")).shouldBe(visible);
+    $(By.id(CMS_WARNING_CONTAINER_ID)).shouldBe(visible);
     $("body").hover();
     Selenide.sleep(1000);
-    $(By.id("content-form:cms-warning-container")).shouldNotBe(visible);
+    $(By.id(CMS_WARNING_CONTAINER_ID)).shouldNotBe(visible);
   }
 
   @Test
   public void testHoverEditButtonToShowWarningMessage() {
-    var cmsList = $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']");
-    var displayItems = $$("[id^='content-form:cms-edit-value:'][id$='_display']");
+    var cmsList = $$(CMS_LINK_URI);
+    var displayItems = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR);
     var selectedCms = cmsList.get(0);
     selectedCms.click();
-    displayItems.shouldBe(allMatch("All elements should be visible", element -> element.isDisplayed()));
-    $(By.id("content-form:edit-button")).shouldBe(enabled).click();
-    var displayItem = $$("[id^='content-form:cms-edit-value:'][id$='_display']").first();
+    displayItems.shouldBe(allMatch("All elements should be visible", WebElement::isDisplayed));
+    $(By.id(EDIT_BUTTON_ID)).shouldBe(enabled).click();
+    var displayItem = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR).first();
     displayItem.click();
-    $(By.id("content-form:save-button")).shouldBe(enabled).hover();
-    $(By.id("content-form:cms-warning-save-container")).shouldBe(visible);
+    $(By.id(SAVE_BUTTON_ID)).shouldBe(enabled).hover();
+    $(By.id(CMS_WARNING_SAVE_CONTAINER_ID)).shouldBe(visible);
   }
 
   @Test
   public void testEditedAndSavedShouldNotShowError() {
-    var cmsList = $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']");
+    var cmsList = $$(CMS_LINK_URI);
     var selectedCms = cmsList.get(0);
     var otherCms = cmsList.get(1);
     selectedCms.click();
-    $(By.id("content-form:edit-button")).shouldBe(enabled).click();
-    var displayItem = $$("[id^='content-form:cms-edit-value:'][id$='_display']").first();
+    $(By.id(EDIT_BUTTON_ID)).shouldBe(enabled).click();
+    var displayItem = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR).first();
     displayItem.click();
     var contentItem = $(By.id(displayItem.getAttribute("id").replaceAll("_display", "_content")));
     contentItem.$(By.className("sun-editor-editable")).setValue("Content is updated at " + System.currentTimeMillis());
     Selenide.sleep(1000);
-    $(By.id("content-form:save-button")).shouldBe(enabled).click();
+    $(By.id(SAVE_BUTTON_ID)).shouldBe(enabled).click();
     $(By.id("SaveSuccessDlg")).shouldBe(visible);
     otherCms.click();
     $(By.id("primefacesmessagedlg")).should(hidden);
