@@ -140,6 +140,10 @@ body.dark .cms-warning {
   display: none;
 }
 
+.ui-accordion .ui-accordion-content {
+  word-break: break-all;
+}
+
 .button-group {
   padding: 8px;
 }
