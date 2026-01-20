@@ -93,7 +93,6 @@ public class CmsEditorBean implements Serializable {
   public void writeCmsToApplication() {
     this.isEditableCms = false;
     cmsService.writeCmsToApplication(this.savedCmsMap);
-    this.selectedCms.getContents().forEach(s -> s.setEditing(false));
     onAppChange();
     PF.current().ajax().update(CONTENT_FORM);
     PrimeFaces.current().executeScript(OPEN_SUCCESS_DIALOG_SCRIPT);
