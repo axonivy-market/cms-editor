@@ -52,7 +52,6 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
-import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
@@ -159,7 +158,7 @@ public class CmsEditorBean implements Serializable {
     }
   }
   
-  public void checkAndShow() {
+  public void checkisEditingAndShowMessage() {
     isEditing();
   }
 

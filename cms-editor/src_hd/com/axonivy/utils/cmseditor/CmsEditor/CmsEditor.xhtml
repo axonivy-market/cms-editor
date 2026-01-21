@@ -9,8 +9,10 @@
       <h:outputStylesheet name="layouts/styles/translatinglanguages.css" />
       <h:outputScript name="resources/cms-editor.js" target="head" />
       <h:form id="content-form" onkeypress="if (event.keyCode == 13){return false;}">
-        <p:remoteCommand id="check-and-show" name="showWarningDailog" global="false" process="@this" update="@this" partialSubmit="true" actionListener="#{cmsEditorBean.checkAndShow()}" />
-        <p:remoteCommand id="set-value" name="setRowChange" global="false" process="@this" update="@this" partialSubmit="true" actionListener="#{cmsEditorBean.rowSelect}" />
+        <p:remoteCommand id="check-and-show" name="showWarningDailog" global="false" process="@this" update="@this"
+          partialSubmit="true" actionListener="#{cmsEditorBean.checkisEditingAndShowMessage()}" />
+        <p:remoteCommand id="set-value" name="setRowChange" global="false" process="@this" update="@this"
+          partialSubmit="true" actionListener="#{cmsEditorBean.rowSelect}" />
         <h:panelGroup styleClass="flex flex-column">
           <!-- Title -->
           <div class="mb-2">
@@ -54,7 +56,8 @@
                     </div>
                     <p:tooltip for="cms-uri" value="#{entry.uri} (#{entry.pmvName})" position="top" />
                   </p:column>
-                  <p:ajax event="rowSelect" process="@this" update="@this" partialSubmit="true" oncomplete="setRowChange()" />
+                  <p:ajax event="rowSelect" process="@this" update="@this" partialSubmit="true"
+                    oncomplete="setRowChange()" />
                 </p:dataTable>
               </h:panelGroup>
             </h:panelGroup>
@@ -140,7 +143,7 @@
                     process="@this" update="editable-column" oncomplete="initCmsWarnings();"
                     styleClass="w-full mt-3 ui-button-outlined ui-button-secondary cms-edit-button"
                     actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}"
-                    disabled="#{cmsEditorBean.disableEditableButton}" partialSubmit="true"/>
+                    disabled="#{cmsEditorBean.disableEditableButton}" partialSubmit="true" />
                   <h:panelGroup id="edit-cancel-updating-cms-group" styleClass="flex gap-2 mt-3"
                     rendered="#{cmsEditorBean.editableCms}">
                     <p:commandButton id="cancel-edit-button" value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times"
@@ -151,7 +154,7 @@
                       process="@this table-cms-keys" rendered="#{cmsEditorBean.editableCms}"
                       actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form"
                       styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" onclick="saveAllEditors()"
-                      oncomplete="initCmsWarnings();" partialSubmit="true"/>
+                      oncomplete="initCmsWarnings();" partialSubmit="true" />
                   </h:panelGroup>
                 </h:panelGroup>
 
