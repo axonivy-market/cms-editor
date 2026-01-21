@@ -52,6 +52,7 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
+import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
@@ -96,15 +97,17 @@ public class CmsEditorBean implements Serializable {
     onAppChange();
     PF.current().ajax().update(CONTENT_FORM);
     PrimeFaces.current().executeScript(OPEN_SUCCESS_DIALOG_SCRIPT);
+    lastSelectedCms = null;
   }
 
   public void onEditableButton() {
+    lastSelectedCms = selectedCms;
     this.isEditableCms = true;
   }
 
   public void onCancelEditableButton() {
     this.isEditableCms = false;
-    this.lastSelectedCms.getContents().forEach(cms -> cms.setEditing(false));
+    this.lastSelectedCms = null;
     PF.current().ajax().update(CONTENT_FORM_LINK_COLUMN, CONTENT_FORM_EDITABLE_COLUMN);
   }
 
@@ -155,8 +158,15 @@ public class CmsEditorBean implements Serializable {
       save(currentCmsValue.getLanguageIndex(), currentCmsValue.getContents());
     }
   }
+  
+  public void checkAndShow() {
+    isEditing();
+  }
 
   private boolean isEditing() {
+    if (lastSelectedCms == null) {
+      return false;
+    }
     var isEditing = lastSelectedCms != null && lastSelectedCms.isEditing();
     if (isEditing) {
       showHaveNotBeenSavedDialog();
@@ -260,6 +270,9 @@ public class CmsEditorBean implements Serializable {
     var requestParamMap = context.getExternalContext().getRequestParameterMap();
     var languageIndex = Integer.parseInt(requestParamMap.get("languageIndex"));
     selectedCms.getContents().get(languageIndex).setEditing(true);
+    if (lastSelectedCms != null) {
+      lastSelectedCms.getContents().get(languageIndex).setEditing(true);
+    }
   }
 
   public void handleBeforeDownloadFile() throws Exception {
@@ -289,7 +302,6 @@ public class CmsEditorBean implements Serializable {
   }
 
   public void setSelectedCms(Cms selectedCms) {
-    this.lastSelectedCms = this.selectedCms == null ? selectedCms : this.selectedCms;
     this.selectedCms = selectedCms;
   }
 
