@@ -21,6 +21,9 @@ import com.axonivy.utils.cmseditor.model.CmsContent;
 import com.axonivy.utils.cmseditor.model.PmvCms;
 import com.axonivy.utils.cmseditor.utils.CmsFileUtils;
 
+import ch.ivyteam.ivy.environment.IvyTest;
+
+@IvyTest
 public class CmsFileUtilsTest {
 
   private Map<String, PmvCms> cmsPmvMap;

@@ -34,20 +34,19 @@ public class CmsFileUtils {
   private static final String TIMESTAMP_FORMAT = "yyyyMMdd_HHmmss";
   private static final String EXCEL_FILE_NAME = "%s.xlsx";
   private static final String ZIP_FILE_NAME = "%s_%s.zip";
-  private static final String ALL_PROJECT_NAME = Ivy.cms().co("/Labels/AllProjectName");
 
   public static StreamedContent writeCmsToZipStreamedContent(String appName, Map<String, PmvCms> cmsPmvMap)
       throws Exception {
     if (StringUtils.isEmpty(appName)) {
-      appName = ALL_PROJECT_NAME;
+      appName = Ivy.cms().co("/Labels/AllProjectName");
     }
     var workBooks = new HashMap<String, Workbook>();
     for (var entry : cmsPmvMap.entrySet()) {
       var cmsList = entry.getValue().getCmsList();
       var headers = new ArrayList<String>();
       headers.add(URI_HEADER);
-      headers.addAll(entry.getValue().getLocales().stream().map(Locale::getLanguage).filter(StringUtils::isNotBlank)
-          .toList());
+      headers.addAll(
+          entry.getValue().getLocales().stream().map(Locale::getLanguage).filter(StringUtils::isNotBlank).toList());
       var workbook = new XSSFWorkbook();
       var worksheet = workbook.createSheet(SHEET_NAME);
 
