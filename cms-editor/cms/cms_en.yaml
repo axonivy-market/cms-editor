@@ -1,4 +1,5 @@
 Labels:
+  AllProjectName: All
   Application: Application
   CMS: CMS
   CMSSaved: Saved application <br /> CMS to Engine
@@ -12,6 +13,7 @@ Labels:
   Links: Links
   Message: Message
   Options: Options
+  ProjectCmsTitle: Project-CMS
   Save: Save
   Search: Search for links or CMS content
   SelectedCMS: Selected CMS

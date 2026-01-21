@@ -16,7 +16,7 @@
         <h:panelGroup styleClass="flex flex-column">
           <!-- Title -->
           <div class="mb-2">
-            <span class="text-xl font-small">Project-CMS</span>
+            <span class="text-xl font-small">#{ivy.cms.co("/Labels/ProjectCmsTitle")}</span>
           </div>
           <div class="grid align-items-center">
             <div class="col-4 project-column">
@@ -33,7 +33,9 @@
               <span class="ui-input-icon-left w-full"> <i class="pi pi-search" /> <p:inputText id="search-input"
                   value="#{cmsEditorBean.searchKey}" placeholder="#{ivy.cms.co('/Labels/Search')}"
                   styleClass="w-full p-inputtext">
-                  <p:ajax event="keyup" listener="#{cmsEditorBean.search}" delay="500" process="@this" />
+                  <p:ajax event="keyup" listener="#{cmsEditorBean.search}"
+                    update="table-cms-keys content-form:cms-values content-form:cms-edit-value" delay="500"
+                    process="@this" />
                 </p:inputText>
               </span>
             </div>
@@ -67,9 +69,8 @@
                 <span>#{ivy.cms.co('/Labels/CMS')}</span> <i class="pi pi-info-circle cms-info-icon"
                   title="CMS information"></i>
               </div>
-              <h:panelGroup styleClass="panel w-full flex flex-column flex-grow-1" layout="block" style="min-height:0">
-                <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
-                  style="min-height:0">
+              <h:panelGroup styleClass="panel w-full flex flex-column flex-grow-1" layout="block">
+                <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block">
                   <p:accordionPanel id="cms-values" multiple="true" widgetVar="multiple"
                     value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                     var="language">
@@ -112,10 +113,8 @@
                 <span>#{ivy.cms.co('/Labels/Edit')}</span> <i class="pi pi-info-circle cms-info-icon"
                   title="Edit CMS information"></i>
               </div>
-              <h:panelGroup styleClass="panel end w-full flex flex-column flex-grow-1" layout="block"
-                style="min-height:0">
-                <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block"
-                  style="min-height:0">
+              <h:panelGroup styleClass="panel end w-full flex flex-column flex-grow-1" layout="block">
+                <h:panelGroup styleClass="flex-grow-1 overflow-auto cms-scroll-wrapper" layout="block">
                   <p:accordionPanel id="cms-edit-value" multiple="true" widgetVar="multipleEdit"
                     value="#{cmsEditorBean.selectedCms.contents}" activeIndex="#{cmsEditorBean.activeIndex}"
                     var="language">

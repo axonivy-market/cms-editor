@@ -22,7 +22,7 @@ public class CmsService {
     return instance;
   }
 
-  private ContentObject createOrGetCMSByURI(String uri) {
+  private ContentObject createOrGetCmsByUri(String uri) {
     IApplication currentApplication = IApplication.current();
     var portalCMSEntity = ContentManagement.cms(currentApplication).get(uri);
     return portalCMSEntity.orElseGet(() -> ContentManagement.cms(currentApplication).root().child().string(uri));
@@ -30,7 +30,7 @@ public class CmsService {
 
   public void writeCmsToApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
     Sudo.run(() -> savedCmsMap.forEach((uri, localeAndContent) -> {
-      ContentObject currentContentObject = createOrGetCMSByURI(uri);
+      ContentObject currentContentObject = createOrGetCmsByUri(uri);
       localeAndContent.forEach((locale, savedCms) -> {
         currentContentObject.value().get(Locale.forLanguageTag(locale)).write().string(savedCms.getNewContent());
       });
