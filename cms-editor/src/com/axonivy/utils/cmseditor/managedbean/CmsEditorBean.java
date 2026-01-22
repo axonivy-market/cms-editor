@@ -126,10 +126,16 @@ public class CmsEditorBean implements Serializable {
       selectedCms =
           filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny().orElse(null);
     }
-    PF.current().ajax().update(TABLE_CMS_KEY_ID, CONTENT_FORM_CMS_VALUES, CONTENT_FORM_CMS_EDIT_VALUE);
+    PF.current().ajax().update(CONTENT_FORM);
   }
 
   public void onAppChange() {
+    if (isEditing()) {
+      isEditableCms = true;
+      selectedCms = lastSelectedCms; // Revert to last valid selection
+      return;
+    }
+
     if (StringUtils.isBlank(this.selectedProjectName)) {
       cmsList = this.pmvCmsMap.values().stream().map(PmvCms::getCmsList).flatMap(List::stream).toList();
     } else {
@@ -148,6 +154,7 @@ public class CmsEditorBean implements Serializable {
       PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE,
           CONTENT_FORM_EDITABLE_COLUMN);
     }
+    
   }
 
   public void saveAll() throws JsonProcessingException {
