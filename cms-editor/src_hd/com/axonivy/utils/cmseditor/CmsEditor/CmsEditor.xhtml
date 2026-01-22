@@ -23,8 +23,7 @@
               <p:selectOneMenu id="app" value="#{cmsEditorBean.selectedProjectName}" class="w-full">
                 <f:selectItem itemLabel="All" itemValue="#{null}" />
                 <f:selectItems value="#{cmsEditorBean.projectCms}" />
-                <p:ajax process="@this"
-                  update="content-form:table-cms-keys content-form:cms-values content-form:table-cms-keys content-form:cms-edit-value"
+                <p:ajax process="@this" update="table-cms-keys cms-values cms-edit-value editable-column"
                   listener="#{cmsEditorBean.onAppChange}" />
               </p:selectOneMenu>
             </div>
@@ -59,7 +58,7 @@
                     <p:tooltip for="cms-uri" value="#{entry.uri} (#{entry.pmvName})" position="top" />
                   </p:column>
                   <p:ajax event="rowSelect" process="@this" update="@this" partialSubmit="true"
-                    oncomplete="setRowChange()" />
+                    oncomplete="setRowChange()" onstart="destroyEditors()"/>
                 </p:dataTable>
               </h:panelGroup>
             </h:panelGroup>
@@ -151,9 +150,10 @@
                       actionListener="#{cmsEditorBean.onCancelEditableButton()}" />
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
                       process="@this table-cms-keys" rendered="#{cmsEditorBean.editableCms}"
-                      actionListener="#{cmsEditorBean.writeCmsToApplication()}" update="content-form"
+                      actionListener="#{cmsEditorBean.writeCmsToApplication()}"
+                      update="table-cms-keys cms-values cms-edit-value editable-column"
                       styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" onclick="saveAllEditors()"
-                      oncomplete="initCmsWarnings();" partialSubmit="true" />
+                      oncomplete="initCmsWarnings();" partialSubmit="true" onstart="destroyEditors()"/>
                   </h:panelGroup>
                 </h:panelGroup>
 

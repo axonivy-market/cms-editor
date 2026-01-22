@@ -52,6 +52,7 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
+import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
@@ -93,6 +94,7 @@ public class CmsEditorBean implements Serializable {
   public void writeCmsToApplication() {
     this.isEditableCms = false;
     cmsService.writeCmsToApplication(this.savedCmsMap);
+    selectedCms.getContents().forEach(s -> s.setEditing(false));
     onAppChange();
     PF.current().ajax().update(CONTENT_FORM);
     PrimeFaces.current().executeScript(OPEN_SUCCESS_DIALOG_SCRIPT);
@@ -153,6 +155,7 @@ public class CmsEditorBean implements Serializable {
     var languageIndexAndContentJsonString =
         FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
     List<CmsValueDto> cmsValues = mapper.readValue(languageIndexAndContentJsonString, new TypeReference<>() {});
+    Ivy.log().warn("No co chay vao day");
     for (CmsValueDto currentCmsValue : cmsValues) {
       save(currentCmsValue.getLanguageIndex(), currentCmsValue.getContents());
     }
