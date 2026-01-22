@@ -63,13 +63,11 @@ function initSunEditor(isFormatButtonListVisible, languageIndex, editorId) {
 
 function saveAllEditors() {
   const values = [];
-  console.warn('TADA');
   for (const languageIndex of window.cmsDirtyEditors) {
     const editor = window.cmsEditors[languageIndex];
 
     const contents = editor.getContents();
     const text = removeNonPrintableChars(editor.getText()).trim();
-	console.warn(contents);
     if (text.length === 0) {
       editor.noticeOpen("The content must not be empty.");
       return;
