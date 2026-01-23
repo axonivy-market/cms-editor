@@ -1,13 +1,14 @@
 package com.axonivy.utils.cmseditor.managedbean;
 
 import static ch.ivyteam.ivy.environment.Ivy.cms;
-import static java.lang.Integer.valueOf;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.*;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toList;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,97 +26,154 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import ch.ivyteam.ivy.application.*;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
 import org.primefaces.PF;
 import org.primefaces.PrimeFaces;
 import org.primefaces.model.StreamedContent;
 
+import com.axonivy.utils.cmseditor.dto.CmsValueDto;
 import com.axonivy.utils.cmseditor.model.Cms;
 import com.axonivy.utils.cmseditor.model.CmsContent;
 import com.axonivy.utils.cmseditor.model.PmvCms;
 import com.axonivy.utils.cmseditor.model.SavedCms;
-import com.axonivy.utils.cmseditor.repo.SavedCmsRepo;
+import com.axonivy.utils.cmseditor.service.CmsService;
 import com.axonivy.utils.cmseditor.utils.CmsFileUtils;
 import com.axonivy.utils.cmseditor.utils.FacesContexts;
 import com.axonivy.utils.cmseditor.utils.Utils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.ivyteam.ivy.application.ActivityState;
-import ch.ivyteam.ivy.application.IActivity;
-import ch.ivyteam.ivy.application.IProcessModel;
 import ch.ivyteam.ivy.application.app.IApplicationRepository;
 import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
-import ch.ivyteam.ivy.environment.Ivy;
+import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
 @ManagedBean
 public class CmsEditorBean implements Serializable {
+  @Serial
   private static final long serialVersionUID = 1L;
 
-  private static final String CONTENT_FORM_SELECTED_URL = "content-form:selected-url";
-  private static final String CONTENT_FORM_CMS_VALUES = "content-form:cms-values";
-  private static final String CONTENT_FORM_TABLE_CMS_KEYS = "content-form:table-cms-keys";
-  private static final String TODO = "TODO";
-  private static final String CMS_EDITOR_PMV_NAME = "cms-editor";
-  private static final String CMS_EDITOR_DEMO_PMV_NAME = "cms-editor-demo";
+  private static final String OPEN_SUCCESS_DIALOG_SCRIPT = "showDialog('SaveSuccessDlg');";
+  private static final ObjectMapper mapper = new ObjectMapper();
+  private final CmsService cmsService = CmsService.getInstance();
 
-  private Map<String, Map<String, PmvCms>> appPmvCmsMap;
   private Map<String, Map<String, SavedCms>> savedCmsMap;
   private List<Cms> cmsList;
   private List<Cms> filteredCMSList;
   private Cms lastSelectedCms;
   private Cms selectedCms;
-  private String selectedAppName;
+  private String selectedProjectName;
   private String searchKey;
-  private boolean isShowOnlyTodo;
   private StreamedContent fileDownload;
   private boolean isShowEditorCms;
+  private Map<String, PmvCms> pmvCmsMap;
+  private boolean isEditableCms;
 
   @PostConstruct
   private void init() {
     isShowEditorCms = FacesContexts.evaluateValueExpression("#{data.showEditorCms}", Boolean.class);
-    Ivy.log().info("isShowEditorCms " + isShowEditorCms);
-    savedCmsMap = SavedCmsRepo.findAll();
-    appPmvCmsMap = new HashMap<>();
-    for (var app : IApplicationRepository.instance().all()) {
-      app.getProcessModels().stream().filter(processModel -> isActive(processModel))
-          .map(IProcessModel::getReleasedProcessModelVersion).filter(pmv -> isActive(pmv))
-          .forEach(pmv -> getAllChildren(app.getName(), pmv.getName(), ContentManagement.cms(pmv).root(),
-              new ArrayList<>()));
+    savedCmsMap = new HashMap<>();
+    pmvCmsMap = new HashMap<>();
+    for (var app : IApplicationRepository.of(ISecurityContext.current()).all()) {
+      app.getProcessModels().stream().filter(CmsEditorBean::isActive)
+          .map(IProcessModel::getReleasedProcessModelVersion)
+          .filter(CmsEditorBean::isActive)
+          .forEach(pmv -> getAllChildren(pmv.getName(), ContentManagement.cms(pmv).root(), new ArrayList<>()));
     }
-    selectedAppName = appPmvCmsMap.keySet().stream().findFirst().orElse(null);
     onAppChange();
+  }
+
+  public void writeCmsToApplication() {
+    this.isEditableCms = false;
+    cmsService.writeCmsToApplication(this.savedCmsMap);
+    selectedCms.getContents().forEach(s -> s.setEditing(false));
+    onAppChange();
+    PF.current().ajax().update(CONTENT_FORM);
+    PrimeFaces.current().executeScript(OPEN_SUCCESS_DIALOG_SCRIPT);
+    lastSelectedCms = null;
+  }
+
+  public void onEditableButton() {
+    lastSelectedCms = selectedCms;
+    this.isEditableCms = true;
+  }
+
+  public void onCancelEditableButton() {
+    this.isEditableCms = false;
+    this.lastSelectedCms = null;
+    PF.current().ajax().update(CONTENT_FORM_LINK_COLUMN, CONTENT_FORM_EDITABLE_COLUMN);
+  }
+
+  public boolean isDisableEditableButton() {
+    return ObjectUtils.isEmpty(this.selectedCms);
   }
 
   public void search() {
     if (isEditing()) {
       return;
     }
-    filteredCMSList = cmsList.stream().filter(entry -> isCmsMatchSearchKey(entry, searchKey) && isTodoCms(entry))
-        .collect(Collectors.toList());
+    filteredCMSList = cmsList.stream().filter(entry -> isCmsMatchSearchKey(entry, searchKey))
+        .map(cmsService::compareWithCmsInApplication).collect(Collectors.toList());
+
     if (selectedCms != null) {
-      selectedCms = filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny()
-          .orElse(null);
+      selectedCms =
+          filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny().orElse(null);
     }
+    PF.current().ajax().update(CONTENT_FORM);
   }
 
   public void onAppChange() {
-    cmsList = Optional.ofNullable(selectedAppName).map(app -> appPmvCmsMap.get(selectedAppName).values().stream()
-        .map(PmvCms::getCmsList).flatMap(List::stream).toList()).orElse(new ArrayList<>());
+    if (isEditing()) {
+      isEditableCms = true;
+      selectedCms = lastSelectedCms; // Revert to last valid selection
+      return;
+    }
+
+    if (StringUtils.isBlank(this.selectedProjectName)) {
+      cmsList = this.pmvCmsMap.values().stream().map(PmvCms::getCmsList).flatMap(List::stream).toList();
+    } else {
+      cmsList = this.pmvCmsMap.values().stream().filter(pmvCms -> pmvCms.getPmvName().equals(this.selectedProjectName))
+          .map(PmvCms::getCmsList).flatMap(List::stream).toList();
+    }
     search();
   }
 
   public void rowSelect() {
+    isEditableCms = false;
     if (isEditing()) {
+      isEditableCms = true;
       selectedCms = lastSelectedCms; // Revert to last valid selection
     } else {
-      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL);
+      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE,
+          CONTENT_FORM_EDITABLE_COLUMN);
+    }
+    
+  }
+
+  public void saveAll() throws JsonProcessingException {
+    var languageIndexAndContentJsonString =
+        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
+    List<CmsValueDto> cmsValues = mapper.readValue(languageIndexAndContentJsonString, new TypeReference<>() {});
+    for (CmsValueDto currentCmsValue : cmsValues) {
+      save(currentCmsValue.getLanguageIndex(), currentCmsValue.getContents());
     }
   }
 
+  public void checkisEditingAndShowMessage() {
+    isEditing();
+  }
+
   private boolean isEditing() {
+    if (lastSelectedCms == null) {
+      return false;
+    }
     var isEditing = lastSelectedCms != null && lastSelectedCms.isEditing();
     if (isEditing) {
       showHaveNotBeenSavedDialog();
@@ -125,7 +183,7 @@ public class CmsEditorBean implements Serializable {
   }
 
   private void showHaveNotBeenSavedDialog() {
-    var editingCmsList = lastSelectedCms.getContents().stream().filter(CmsContent::isEditting)
+    var editingCmsList = lastSelectedCms.getContents().stream().filter(CmsContent::isEditing)
         .map(CmsContent::getLocale).map(Locale::getDisplayLanguage).collect(Collectors.toList());
     var detail = Utils.convertListToHTMLList(editingCmsList);
     showDialog(cms().co("/Labels/SomeFieldsHaveNotBeenSaved"), detail);
@@ -136,51 +194,47 @@ public class CmsEditorBean implements Serializable {
     PrimeFaces.current().dialog().showMessageDynamic(message, false);
   }
 
-  public void getAllChildren(String appName, String pmvName, ContentObject contentObject, List<Locale> locales) {
-    // Exclude the CMS of it self
-    if (!isShowEditorCms 
-        && StringUtils.contains(pmvName, CMS_EDITOR_PMV_NAME)
-        && !StringUtils.contains(pmvName, CMS_EDITOR_DEMO_PMV_NAME)) {
+  public void getAllChildren(String pmvName, ContentObject contentObject, List<Locale> locales) {
+    // Exclude the CMS of itself
+    if (!isShowEditorCms && Strings.CS.contains(pmvName, CMS_EDITOR_PMV_NAME)
+        && !Strings.CS.contains(pmvName, CMS_EDITOR_DEMO_PMV_NAME)) {
       return;
     }
+
     if (contentObject.isRoot()) {
-      locales = contentObject.cms().locales().stream().filter(locale -> isNotBlank(locale.getLanguage()))
-          .collect(toList());
+      locales =
+          contentObject.cms().locales().stream().filter(locale -> isNotBlank(locale.getLanguage())).collect(toList());
     }
-    var pmvCmsMap = appPmvCmsMap.getOrDefault(appName, new HashMap<>());
+
     for (ContentObject child : contentObject.children()) {
-      if (child.children().size() == 0) {
+      if (child.children().isEmpty()) {
         // just allow string cms. not file
         if (StringUtils.isBlank(child.meta().fileExtension())) {
-          var cms = convertToCms(child, locales);
+          var cms = convertToCms(child, locales, pmvName);
           if (cms.getContents() != null) {
-            var contents = pmvCmsMap.getOrDefault(pmvName, new PmvCms(pmvName, locales));
+            var contents = this.pmvCmsMap.getOrDefault(pmvName, new PmvCms(pmvName, locales));
             contents.addCms(cms);
-            pmvCmsMap.putIfAbsent(pmvName, contents);
+            this.pmvCmsMap.putIfAbsent(pmvName, contents);
           }
         }
       }
-      appPmvCmsMap.putIfAbsent(appName, pmvCmsMap);
-      getAllChildren(appName, pmvName, child, locales);
+      getAllChildren(pmvName, child, locales);
     }
   }
 
-  private Cms convertToCms(ContentObject contentObject, List<Locale> locales) {
+  private Cms convertToCms(ContentObject contentObject, List<Locale> locales, String pmvName) {
     var cms = new Cms();
     cms.setUri(contentObject.uri());
+    cms.setPmvName(pmvName);
     for (var i = 0; i < locales.size(); i++) {
-      var locale = locales.get(i);
-      var value = contentObject.value().get(locale);
-      var valueString = ofNullable(value).map(ContentObjectValue::read).map(ContentObjectReader::string).orElse(EMPTY);
-      var savedCms = findSavedCms(contentObject.uri(), locale);
-      if (savedCms != null) {
-        if (valueString.equals(savedCms.getOriginalContent())) {
-          valueString = savedCms.getNewContent();
-        } else {
-          SavedCmsRepo.delete(savedCms);
-        }
+      Locale locale = locales.get(i);
+      ContentObjectValue value = contentObject.value().get(locale);
+      String projectCmsvalueString = ofNullable(value).map(ContentObjectValue::read).map(ContentObjectReader::string).orElse(EMPTY);
+      String cmsApplicationValue = cmsService.getCmsFromApplication(cms.getUri(), locale);
+      if (StringUtils.isBlank(cmsApplicationValue)) {
+        cmsApplicationValue = projectCmsvalueString;
       }
-      cms.addContent(new CmsContent(i, locale, valueString));
+      cms.addContent(new CmsContent(i, locale, projectCmsvalueString, cmsApplicationValue));
     }
     return cms;
   }
@@ -191,59 +245,45 @@ public class CmsEditorBean implements Serializable {
 
   private boolean isCmsMatchSearchKey(Cms entry, String searchKey) {
     if (StringUtils.isNotBlank(searchKey)) {
-      return StringUtils.containsIgnoreCase(entry.getUri(), searchKey) || entry.getContents().stream()
-          .anyMatch(value -> StringUtils.containsIgnoreCase(value.getContent(), searchKey));
+      return Strings.CI.contains(entry.getUri(), searchKey)
+          || entry.getContents().stream().anyMatch(value -> Strings.CI.contains(value.getContent(), searchKey));
     }
     return true;
-  }
-
-  private boolean isTodoCms(Cms entry) {
-    if (isShowOnlyTodo) {
-      return entry.getContents().stream().anyMatch(value -> StringUtils.containsIgnoreCase(value.getContent(), TODO));
-    }
-    return true;
-  }
-
-  private SavedCms findSavedCms(String uri, Locale locale) {
-    return savedCmsMap.getOrDefault(uri, new HashMap<>()).getOrDefault(locale.toString(), null);
   }
 
   private void saveCms(SavedCms savedCms) {
-    SavedCms savedCmsResult = SavedCmsRepo.save(savedCms);
-    Map<String, SavedCms> cmsLocaleMap = savedCmsMap.computeIfAbsent(savedCmsResult.getUri(), key -> new HashMap<>());
-    cmsLocaleMap.put(savedCmsResult.getLocale(), savedCmsResult);
+    Map<String, SavedCms> cmsLocaleMap = savedCmsMap.computeIfAbsent(savedCms.getUri(), key -> new HashMap<>());
+    cmsLocaleMap.put(savedCms.getLocale(), savedCms);
   }
 
-  public void save() {
-    var context = FacesContext.getCurrentInstance();
-    var requestParamMap = context.getExternalContext().getRequestParameterMap();
-    var languageIndex = valueOf(requestParamMap.get("languageIndex"));
+  public void save(int languageIndex, String content) {
     selectedCms.getContents().stream().filter(value -> value.getIndex() == languageIndex).findAny()
-        .ifPresent(cmsContent -> handleCmsContentSave(requestParamMap, cmsContent));
+        .ifPresent(cmsContent -> handleCmsContentSave(content, cmsContent));
   }
 
-  private void handleCmsContentSave(Map<String, String> requestParamMap, CmsContent cmsContent) {
-    cmsContent.saveContent(requestParamMap.get("contents"));
+  private void handleCmsContentSave(String newContent, CmsContent cmsContent) {
+    cmsContent.saveContent(newContent);
     var locale = cmsContent.getLocale();
-    var savedCms = findSavedCms(selectedCms.getUri(), locale);
-    if (savedCms != null) {
-      savedCms.setNewContent(cmsContent.getContent());
-    } else {
-      savedCms = new SavedCms(selectedCms.getUri(), locale.toString(), cmsContent.getOriginalContent(),
-          cmsContent.getContent());
-    }
+    SavedCms savedCms = new SavedCms(
+            selectedCms.getUri(),
+            locale.toString(),
+            cmsContent.getOriginalContent(),
+            cmsContent.getContent());
     saveCms(savedCms);
   }
 
   public void setValueChanged() {
     var context = FacesContext.getCurrentInstance();
     var requestParamMap = context.getExternalContext().getRequestParameterMap();
-    var languageIndex = valueOf(requestParamMap.get("languageIndex"));
-    selectedCms.getContents().get(languageIndex).setEditting(true);
+    var languageIndex = Integer.parseInt(requestParamMap.get("languageIndex"));
+    selectedCms.getContents().get(languageIndex).setEditing(true);
+    if (lastSelectedCms != null) {
+      lastSelectedCms.getContents().get(languageIndex).setEditing(true);
+    }
   }
 
   public void handleBeforeDownloadFile() throws Exception {
-    this.fileDownload = CmsFileUtils.writeCmsToZipStreamedContent(selectedAppName, appPmvCmsMap.get(selectedAppName));
+    this.fileDownload = CmsFileUtils.writeCmsToZipStreamedContent(selectedProjectName, this.pmvCmsMap);
   }
 
   public void downloadFinished() {
@@ -269,16 +309,7 @@ public class CmsEditorBean implements Serializable {
   }
 
   public void setSelectedCms(Cms selectedCms) {
-    this.lastSelectedCms = this.selectedCms == null ? selectedCms : this.selectedCms;
     this.selectedCms = selectedCms;
-  }
-
-  public boolean isShowOnlyTodo() {
-    return isShowOnlyTodo;
-  }
-
-  public void setShowOnlyTodo(boolean isShowOnlyTodo) {
-    this.isShowOnlyTodo = isShowOnlyTodo;
   }
 
   public String getSearchKey() {
@@ -293,16 +324,37 @@ public class CmsEditorBean implements Serializable {
     return fileDownload;
   }
 
-  public String getSelectedAppName() {
-    return selectedAppName;
+  public String getSelectedProjectName() {
+    return selectedProjectName;
   }
 
-  public void setSelectedAppName(String selectedAppName) {
-    this.selectedAppName = selectedAppName;
+  public void setSelectedProjectName(String selectedProjectName) {
+    this.selectedProjectName = selectedProjectName;
   }
 
-  public Set<String> getAppNames() {
-    return appPmvCmsMap.keySet();
+  public boolean isEditableCms() {
+    return isEditableCms;
   }
 
+  public void setEditableCms(boolean isEditableCms) {
+    this.isEditableCms = isEditableCms;
+  }
+
+  public Map<String, PmvCms> getPmvCmsMap() {
+    return pmvCmsMap;
+  }
+
+  public void setPmvCmsMap(Map<String, PmvCms> pmvCmsMap) {
+    this.pmvCmsMap = pmvCmsMap;
+  }
+
+  public Set<String> getProjectCms() {
+    return IApplication.current().getProcessModels().stream()
+        .filter(CmsEditorBean::isActive)
+        .map(IProcessModel::getReleasedProcessModelVersion)
+        .filter(CmsEditorBean::isActive)
+        .map(IProcessModelVersion::getProjectName)
+        .filter(projectName -> this.pmvCmsMap.containsKey(projectName))
+        .collect(Collectors.toSet());
+  }
 }

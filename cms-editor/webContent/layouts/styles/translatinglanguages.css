@@ -1,25 +1,189 @@
 /*width for dropdown  */
 .ui-menu {
-    width: 300px; /* Adjust the width as needed */
+  width: 300px; /* Adjust the width as needed */
 }
 
 .panel {
-	float: left; /* Adjust based on desired layout (horizontal/vertical) */
-	border: 1px solid #ccc;
-	padding: 0;
-	height: 85vh;
-	display: block;
+  float: left;
+  /* Adjust based on desired layout (horizontal/vertical) */
+  border: 1px solid #ccc;
+  padding: 0;
+  height: 85vh;
+  display: block;
+  overflow: auto;
 }
 
 .right {
-	width: 50%;
-	overflow: scroll;
+  width: 50%;
+  overflow: scroll;
 }
 
 .left {
-	width: 50%
+  width: 50%
 }
 
 .ui-datatable table thead tr {
-	display: none;
+  display: none;
+}
+
+.ui-accordion .ui-accordion-content {
+  overflow: visible !important;
+  max-height: none !important;
+  border: none !important;
+}
+
+.cms-scroll-wrapper {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+}
+
+.orange-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #FF7300;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cms-uri {
+  word-break: break-all;
+  width: 100%;
+}
+
+.ui-datatable .ui-state-highlight {
+  background-color: var(--Primary-P300, #007095) !important;
+  color: #ffffff !important;
+}
+
+.column-header {
+  background: #FAFAFA;
+  border: 1px solid #E5E7EB;
+  padding: 6px 10px;
+  font-weight: 600;
+  font-size: 12px;
+  height: 36px;
+}
+
+body.dark .column-header {
+  background: #FAFAFA;
+  border: 1px solid #E5E7EB;
+  padding: 6px 10px;
+  font-weight: 600;
+  font-size: 12px;
+  height: 36px;
+  color: #1B1B1B;
+}
+
+.ui-accordion-header {
+  border-top-right-radius: unset !important;
+  border-top-left-radius: unset !important;
+}
+
+.ui-accordion .ui-accordion-header {
+  border-top: 1px solid #D4D6D9 !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+#column-container {
+  padding: 0 0.4rem 0 0.4rem;
+}
+
+.columns {
+  padding: 1rem 0 0 0;
+}
+
+.cms-info-icon {
+  font-size: 12px;
+  color: #007095;
+  cursor: pointer;
+}
+
+.cms-warning, body.dark .cms-warning {
+  border: 1px solid #FFC696;
+  background: #fff7ed;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+body.dark .cms-warning {
+  color: #1B1B1B;
+}
+
+.cms-warning-title {
+  font-weight: 600;
+  color: #f57c00;
+  margin-bottom: 4px;
+}
+
+.cms-warning-link {
+  margin-left: 4px;
+  color: #B35100;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.cms-warning-link:hover {
+  text-decoration: underline;
+}
+
+.cms-warning {
+  display: none;
+}
+
+.ui-accordion .ui-accordion-content {
+  word-break: break-all;
+}
+
+.button-group {
+  padding: 8px;
+}
+
+/* Background colors */
+.cms-download-btn, .cms-save-button {
+  background-color: #007095 !important;
+}
+
+.cms-edit-button, .cms-cancel-button {
+  background-color: #F3F3F3 !important;
+}
+
+/* Common button layout */
+.cms-download-btn, .cms-edit-button, .cms-cancel-button,
+  .cms-save-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Common icon styling */
+.cms-download-btn span.ui-icon, .cms-edit-button span.ui-icon,
+  .cms-cancel-button span.ui-icon, .cms-save-button span.ui-icon {
+  position: relative !important;
+  top: 0 !important;
+  margin-top: -2px !important;
+}
+
+/* Common text styling */
+.cms-download-btn span.ui-button-text, .cms-edit-button span.ui-button-text,
+  .cms-cancel-button span.ui-button-text, .cms-save-button span.ui-button-text
+  {
+  padding: 0.5rem 1rem !important;
+}
+
+.icon-checked {
+  font-size: 48px !important;
+}
+
+.ui-dialog-content {
+  padding: unset !important;
 }

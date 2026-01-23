@@ -1,5 +1,6 @@
 package com.axonivy.utils.cmseditor.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -7,6 +8,7 @@ import com.axonivy.utils.cmseditor.utils.Utils;
 
 public class CmsContent implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 1830742314488808118L;
 
   private int index;
@@ -17,17 +19,17 @@ public class CmsContent implements Serializable {
 
   private String content;
 
-  private boolean isEditting;
+  private boolean isEditing;
 
-  private boolean isHtml;
+  private final boolean isHtml;
 
-  public CmsContent(int index, Locale locale, String content) {
+  public CmsContent(int index, Locale locale, String originalContent, String content) {
     super();
     this.index = index;
     this.locale = locale;
-    this.originalContent = content;
+    this.originalContent = originalContent;
     this.content = content;
-    this.isEditting = false;
+    this.isEditing = false;
     this.isHtml = Utils.containsHtmlTag(originalContent);
   }
 
@@ -57,15 +59,15 @@ public class CmsContent implements Serializable {
 
   public void saveContent(String contents) {
     this.content = Utils.sanitizeContent(originalContent, contents);
-    this.isEditting = false;
+    this.isEditing = false;
   }
 
-  public boolean isEditting() {
-    return isEditting;
+  public boolean isEditing() {
+    return isEditing;
   }
 
-  public void setEditting(boolean isEditting) {
-    this.isEditting = isEditting;
+  public void setEditing(boolean isEditting) {
+    this.isEditing = isEditting;
   }
 
   public String getOriginalContent() {

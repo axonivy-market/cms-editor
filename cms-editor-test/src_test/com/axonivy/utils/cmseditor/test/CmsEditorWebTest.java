@@ -10,13 +10,21 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.open;
 import static com.codeborne.selenide.Condition.matchText;
 
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.EDIT_BUTTON_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.SAVE_BUTTON_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.DOWNLOAD_BUTTON_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.SEARCH_INPUT_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.CMS_WARNING_CONTAINER_ID;
+import static com.axonivy.utils.cmseditor.constants.CmsConstants.CMS_WARNING_SAVE_CONTAINER_ID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-
 import com.axonivy.ivy.webtest.IvyWebTest;
 import com.axonivy.ivy.webtest.engine.EngineUrl;
 import com.codeborne.selenide.Selenide;
+import org.openqa.selenium.WebElement;
+import java.util.Objects;
 
 @IvyWebTest
 public class CmsEditorWebTest {
@@ -24,22 +32,23 @@ public class CmsEditorWebTest {
   private String testCmsUri = "/TestContent";
   private String testCmsValue = "Test Content";
 
+  private static final String CMS_LINK_URI = "[id^='content-form:table-cms-keys:'][id$=':cms-uri']";
+  private static final String CMS_VALUE_TAB_SELECTOR = "[id^='content-form:cms-values:'][id$=':cms-values-tab']";
+  private static final String CMS_EDIT_VALUE_DISPLAY_SELECTOR = "[id^='content-form:cms-edit-value:'][id$='_display']";
+
+  /**
+   * Dear Bug Hunter,
+   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+   * Please do not submit it as part of our bug bounty program.
+   */
   @BeforeEach
- /**
-  * Dear Bug Hunter,
-  * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
-  * Please do not submit it as part of our bug bounty program.
-  */
   void startProcess() {
-    open(EngineUrl
- .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=cmsAdmin"));
-    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    loginAndStartProcess("cmsAdmin", "123456");
   }
 
   @Test
-  public void testDownloadAndCancelButtonShouldBeVisible() {
-    $(By.id("content-form:downloadButton")).shouldBe(visible);
-    $(By.id("content-form:cancel-button")).shouldBe(visible);
+  public void testDownloadButtonShouldBeVisible() {
+    $(By.id(DOWNLOAD_BUTTON_ID)).shouldBe(visible);
   }
 
   @Test
@@ -55,48 +64,36 @@ public class CmsEditorWebTest {
   }
 
   private void assertCmsTableRowCountGte(int size) {
-    $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']").shouldHave(sizeGreaterThanOrEqual(size));
+    $$(CMS_LINK_URI).shouldHave(sizeGreaterThanOrEqual(size));
   }
 
   private void sendKeysToSearchInput(String keysToSend) {
-    $(By.id("content-form:search-input")).sendKeys(keysToSend);
-  }
-
-  private void clickOptionShowOnlyTodo() {
-    $(By.id("content-form:option-button_button")).click();
-    $(By.id("content-form:show-todo-checkbox")).$(".ui-chkbox-box").click();
-  }
-
-  @Test
-  public void testCheckShowTodoOptionShouldDisplayTwoRows() {
-    clickOptionShowOnlyTodo();
-    assertCmsTableRowCountGte(1);
+    $(By.id(SEARCH_INPUT_ID)).sendKeys(keysToSend);
   }
 
   @Test
   public void testEditedButNotSaveShouldShowError() {
-    var cmsList = $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']");
+    var cmsList = $$(CMS_LINK_URI);
     var selectedCms = cmsList.get(0);
     var otherCms = cmsList.get(1);
     selectedCms.click();
-
-    $$("[id^='content-form:cms-values:'][id$=':cms-values-tab']").shouldHave(sizeGreaterThanOrEqual(1));
+    $$(CMS_VALUE_TAB_SELECTOR).shouldHave(sizeGreaterThanOrEqual(1));
     // assert all content items is preview mode
-    var displayItems = $$("[id^='content-form:cms-values:'][id$='_display']");
-    displayItems.shouldBe(allMatch("All elements should be visible", element -> element.isDisplayed()));
-    var displayItem = displayItems.first();
-    // click one content
+    var displayItems = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR);
+    displayItems.shouldBe(allMatch("All elements should be visible", WebElement::isDisplayed));
+    var displayItem = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR).first();
+    $(By.id(EDIT_BUTTON_ID)).shouldBe(enabled).click();
     displayItem.click();
-    var contentItem = $(By.id(displayItem.getAttribute("id").replaceAll("_display", "_content")));
-    displayItem.shouldBe(hidden);
-    contentItem.shouldBe(visible);
 
-    contentItem.$(By.className("sun-editor-editable")).setValue("Content is updated at " + System.currentTimeMillis());
+    var contentItem =
+        $(By.id(Objects.requireNonNull(displayItem.getAttribute("id")).replaceAll("_display", "_content")));
+    contentItem.$(By.className("sun-editor-editable"))
+        .setValue("Content is updated at 2 " + System.currentTimeMillis());
     contentItem.$(".se-btn.se-resizing-enabled.se-tooltip").should(enabled);
     Selenide.sleep(1000);
+
     otherCms.click();
 
-    // assert check save before change to other item
     var errorDialog = $(By.id("primefacesmessagedlg"));
     errorDialog.should(visible);
     errorDialog.$(".ui-dialog-titlebar-close").click();
@@ -106,59 +103,76 @@ public class CmsEditorWebTest {
     sendKeysToSearchInput("Lorem ifsum");
     errorDialog.should(visible);
     errorDialog.$(".ui-dialog-titlebar-close").click();
-    Selenide.sleep(1000);
+  }
 
-    // assert check save before change option
-    clickOptionShowOnlyTodo();
-    errorDialog.should(visible);
-    errorDialog.$(".ui-dialog-titlebar-close").click();
+  @Test
+  public void testHoverDownloadButtonToShowWarningMessage() {
+    $(By.id(DOWNLOAD_BUTTON_ID)).shouldBe(enabled).hover();
+    $(By.id(CMS_WARNING_CONTAINER_ID)).shouldBe(visible);
+    $("body").hover();
     Selenide.sleep(1000);
+    $(By.id(CMS_WARNING_CONTAINER_ID)).shouldNotBe(visible);
+  }
 
+  @Test
+  public void testHoverEditButtonToShowWarningMessage() {
+    var cmsList = $$(CMS_LINK_URI);
+    var displayItems = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR);
+    var selectedCms = cmsList.get(0);
+    selectedCms.click();
+    displayItems.shouldBe(allMatch("All elements should be visible", WebElement::isDisplayed));
+    $(By.id(EDIT_BUTTON_ID)).shouldBe(enabled).click();
+    var displayItem = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR).first();
+    displayItem.click();
+    $(By.id(SAVE_BUTTON_ID)).shouldBe(enabled).hover();
+    $(By.id(CMS_WARNING_SAVE_CONTAINER_ID)).shouldBe(visible);
   }
 
   @Test
   public void testEditedAndSavedShouldNotShowError() {
-    var cmsList = $$("[id^='content-form:table-cms-keys:'][id$=':cms-uri']");
+    var cmsList = $$(CMS_LINK_URI);
     var selectedCms = cmsList.get(0);
     var otherCms = cmsList.get(1);
     selectedCms.click();
-    var displayItem = $$("[id^='content-form:cms-values:'][id$='_display']").first();
+    $(By.id(EDIT_BUTTON_ID)).shouldBe(enabled).click();
+    var displayItem = $$(CMS_EDIT_VALUE_DISPLAY_SELECTOR).first();
     displayItem.click();
     var contentItem = $(By.id(displayItem.getAttribute("id").replaceAll("_display", "_content")));
     contentItem.$(By.className("sun-editor-editable")).setValue("Content is updated at " + System.currentTimeMillis());
-    contentItem.$(By.cssSelector("button[data-command='save']")).click();
     Selenide.sleep(1000);
+    $(By.id(SAVE_BUTTON_ID)).shouldBe(enabled).click();
+    $(By.id("SaveSuccessDlg")).shouldBe(visible);
     otherCms.click();
     $(By.id("primefacesmessagedlg")).should(hidden);
   }
 
   @Test
- /**
-  * Dear Bug Hunter,
-  * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
-  * Please do not submit it as part of our bug bounty program.
-  */
   public void testUserCorrectRole() {
-    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
-    open(EngineUrl
- .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=cmsAdmin"));
-    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
     var exception = $(By.cssSelector(".exception-content"));
     exception.shouldNotBe(visible);
   }
 
+  /**
+   * Dear Bug Hunter,
+   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+   * Please do not submit it as part of our bug bounty program.
+   */
   @Test
- /**
-  * Dear Bug Hunter,
-  * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
-  * Please do not submit it as part of our bug bounty program.
-  */
   public void testUserIncorrectRole() {
-    $(By.id("content-form:cancel-button")).shouldBe(visible).click();
-    open(EngineUrl
- .createProcessUrl("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?password=123456&username=normalUser"));
-    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
+    loginAndStartProcess("normalUser", "123456");
     var exception = $(By.cssSelector(".exception-content"));
     exception.shouldBe(visible).shouldHave(matchText("Access denied. Need role CMS_ADMIN"));
+  }
+
+  /**
+   * Dear Bug Hunter,
+   * This credential is intentionally included for educational purposes only and does not provide access to any production systems.
+   * Please do not submit it as part of our bug bounty program.
+   */
+  private void loginAndStartProcess(String username, String password) {
+    String loginProcessUrl =
+        String.format("/cms-editor-test/193BDA54C9726ADF/logInUser.ivp?username=%s&password=%s", username, password);
+    open(EngineUrl.createProcessUrl(loginProcessUrl));
+    open(EngineUrl.createProcessUrl("/cms-editor/18DE86A37D77D574/start.ivp?showEditorCms=true"));
   }
 }

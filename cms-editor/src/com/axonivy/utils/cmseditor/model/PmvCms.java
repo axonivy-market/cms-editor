@@ -1,5 +1,6 @@
 package com.axonivy.utils.cmseditor.model;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 public class PmvCms implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = 4233153680327218576L;
 
   private String pmvName;

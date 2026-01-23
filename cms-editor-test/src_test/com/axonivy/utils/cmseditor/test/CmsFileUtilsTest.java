@@ -21,6 +21,9 @@ import com.axonivy.utils.cmseditor.model.CmsContent;
 import com.axonivy.utils.cmseditor.model.PmvCms;
 import com.axonivy.utils.cmseditor.utils.CmsFileUtils;
 
+import ch.ivyteam.ivy.environment.IvyTest;
+
+@IvyTest
 public class CmsFileUtilsTest {
 
   private Map<String, PmvCms> cmsPmvMap;
@@ -36,7 +39,7 @@ public class CmsFileUtilsTest {
   private Cms createMockCms() {
     Cms cms = new Cms();
     cms.setUri("testUri");
-    CmsContent content = new CmsContent(0, Locale.ENGLISH, "testContent");
+    CmsContent content = new CmsContent(0, Locale.ENGLISH, "testOriginalContent", "testContent");
     cms.setContents(Collections.singletonList(content));
     return cms;
   }
