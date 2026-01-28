@@ -46,10 +46,10 @@ public class CmsFileUtilsTest {
 
   @Test
   public void testWriteCmsToZipStreamedContent() throws Exception {
-    StreamedContent result = CmsFileUtils.writeCmsToZipStreamedContent("testApp", cmsPmvMap);
+    StreamedContent result = CmsFileUtils.writeCmsToZipStreamedContent("testProject", "testApp", cmsPmvMap);
     assertNotNull(result);
     assertEquals("application/zip", result.getContentType());
-    assertTrue(result.getName().startsWith("testApp"));
+    assertTrue(result.getName().startsWith("CMSDownload_testProject_testApp"));
     assertTrue(result.getName().endsWith(".zip"));
 
     // Further checks to ensure the content is as expected
@@ -67,10 +67,10 @@ public class CmsFileUtilsTest {
     Workbook workbook = new XSSFWorkbook();
     workbooks.put("testKey", workbook);
 
-    StreamedContent result = CmsFileUtils.convertToZip("testApp", workbooks);
+    StreamedContent result = CmsFileUtils.convertToZip("testProject", "testApp", workbooks);
     assertNotNull(result);
     assertEquals("application/zip", result.getContentType());
-    assertTrue(result.getName().startsWith("testApp"));
+    assertTrue(result.getName().startsWith("CMSDownload_testProject_testApp"));
     assertTrue(result.getName().endsWith(".zip"));
 
     // Further checks to ensure the content is as expected
