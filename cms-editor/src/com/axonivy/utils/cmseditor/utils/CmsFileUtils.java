@@ -120,22 +120,26 @@ public class CmsFileUtils {
     }
   }
 
-  private static void closeWorkbooks(Map<String, Workbook> workbooks) {
-    workbooks.forEach((pmv, workbook) -> {
-      if (workbook != null) {
-        try {
-          workbook.close();
-        } catch (IOException e) {
-          Ivy.log().error("Error when close workbook", e);
-        }
-      }
-    });
-  }
-
   private static byte[] convertWorkbookToByteArray(Workbook workbook) throws Exception {
     try (var outputStream = new ByteArrayOutputStream()) {
       workbook.write(outputStream);
       return outputStream.toByteArray();
+    }
+  }
+
+  private static void closeWorkbooks(Map<String, Workbook> workbooks) {
+    workbooks.forEach((pmv, workbook) -> {
+      if (workbook != null) {
+        closeWorkbook(workbook);
+      }
+    });
+  }
+
+  private static void closeWorkbook(Workbook workbook) {
+    try {
+      workbook.close();
+    } catch (IOException e) {
+      Ivy.log().error("Error when close workbook", e);
     }
   }
 }
