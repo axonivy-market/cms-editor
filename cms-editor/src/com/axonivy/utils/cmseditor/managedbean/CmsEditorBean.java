@@ -152,7 +152,7 @@ public class CmsEditorBean implements Serializable {
       selectedCms = lastSelectedCms; // Revert to last valid selection
     } else {
       PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE,
-          CONTENT_FORM_EDITABLE_COLUMN);
+          CONTENT_FORM_EDITABLE_COLUMN, "content-form:current-cms-column");
     }
   }
 

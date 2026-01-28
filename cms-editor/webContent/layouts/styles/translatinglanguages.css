@@ -145,6 +145,7 @@ body.dark .cms-warning {
 }
 
 .button-group {
+    display: flex;
   padding: 8px;
 }
 
