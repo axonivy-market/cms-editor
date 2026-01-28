@@ -18,16 +18,16 @@
           <div class="mb-2">
             <span class="text-xl font-small">#{ivy.cms.co("/Labels/ProjectCmsTitle")}</span>
           </div>
-          <div class="grid align-items-center">
-            <div class="col-4 project-column">
+
+          <div class="flex flex-column gap-3">
+            <div class="project-column w-full">
               <p:selectOneMenu id="app" value="#{cmsEditorBean.selectedProjectName}" class="w-full">
                 <f:selectItem itemLabel="All" itemValue="#{null}" />
                 <f:selectItems value="#{cmsEditorBean.projectCms}" />
                 <p:ajax process="@this" listener="#{cmsEditorBean.onAppChange}" />
               </p:selectOneMenu>
             </div>
-
-            <div class="col-8 search-column">
+            <div class="search-column w-full">
               <span class="ui-input-icon-left w-full"> <i class="pi pi-search" /> <p:inputText id="search-input"
                   value="#{cmsEditorBean.searchKey}" placeholder="#{ivy.cms.co('/Labels/Search')}"
                   styleClass="w-full p-inputtext">
@@ -39,8 +39,9 @@
             </div>
           </div>
 
-          <div class="grid h-full" id="column-container">
-            <h:panelGroup layout="block" id="link-column" styleClass="col-4 columns">
+          <h:panelGroup layout="block" class="grid h-full" id="column-container">
+            <h:panelGroup layout="block" id="link-column"
+              styleClass="#{cmsEditorBean.editableCms ? 'col-4' : 'col-6'} columns">
               <div class="column-header link-label font-semibold text-lg">#{ivy.cms.co('/Labels/Links')}</div>
               <h:panelGroup styleClass="panel left w-full">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
@@ -62,7 +63,8 @@
               </h:panelGroup>
             </h:panelGroup>
 
-            <h:panelGroup layout="block" id="current-cms-column" styleClass="col-4 flex flex-column columns">
+            <h:panelGroup layout="block" id="current-cms-column"
+              styleClass="#{cmsEditorBean.editableCms ? 'col-4' : 'col-6'} flex flex-column columns">
               <div class="column-header font-semibold text-lg cms-title">
                 <span>#{ivy.cms.co('/Labels/CMS')}</span> <i class="pi pi-info-circle cms-info-icon"
                   title="CMS information" />
@@ -84,6 +86,7 @@
                 </h:panelGroup>
 
                 <h:panelGroup layout="block" styleClass="button-group">
+
                   <h:panelGroup layout="block" styleClass="cms-warning" id="cms-warning-container">
                     <div class="cms-warning-title">
                       <i class="pi pi-exclamation-triangle cms-warning-icon" /> <span>
@@ -94,23 +97,26 @@
                           value="#{ivy.cms.co('/Labels/UndoChanges')}" styleClass="cms-warning-link" /></span>
                     </div>
                   </h:panelGroup>
-                  <p:commandButton id="download-button" value="#{ivy.cms.co('/Labels/Download')}" icon="pi pi-download"
-                    ajax="false" actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
-                    styleClass="w-full mt-3 cms-download-btn"
-                    onclick="PrimeFaces.monitorDownload(function() {}, showDialog('downloadSuccessDlg'));">
-                    <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
-                  </p:commandButton>
-                  <p:commandButton id="edit-button" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil"
-                    process="@this" update="editable-column" oncomplete="initCmsWarnings();"
-                    styleClass="w-full mt-3 ui-button-outlined ui-button-secondary cms-edit-button"
-                    actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}"
-                    disabled="#{cmsEditorBean.disableEditableButton}" partialSubmit="true" />
+
+                  <h:panelGroup layout="block" id="download-edit-button-container" styleClass="flex">
+                    <p:commandButton id="download-button" value="#{ivy.cms.co('/Labels/Download')}"
+                      icon="pi pi-download" ajax="false" actionListener="#{cmsEditorBean.handleBeforeDownloadFile}"
+                      styleClass="w-full mt-3 cms-download-btn"
+                      onclick="PrimeFaces.monitorDownload(function() {}, showDialog('downloadSuccessDlg'));">
+                      <p:fileDownload value="#{cmsEditorBean.fileDownload}" />
+                    </p:commandButton>
+                    <p:commandButton id="edit-button" value="#{ivy.cms.co('/Labels/Edit')}" icon="pi pi-pencil"
+                      process="@this" update="column-container" oncomplete="initCmsWarnings();"
+                      styleClass="w-full mt-3 ui-button-outlined ui-button-secondary cms-edit-button"
+                      actionListener="#{cmsEditorBean.onEditableButton()}" rendered="#{!cmsEditorBean.editableCms}"
+                      disabled="#{cmsEditorBean.disableEditableButton}" partialSubmit="true" />
+                  </h:panelGroup>
                 </h:panelGroup>
 
               </h:panelGroup>
             </h:panelGroup>
 
-            <h:panelGroup layout="block" id="editable-column"
+            <h:panelGroup layout="block" id="editable-column" rendered="#{cmsEditorBean.editableCms}"
               styleClass="col-4 flex flex-column editable-column columns">
               <div class="column-header font-semibold text-lg cms-title">
                 <span>#{ivy.cms.co('/Labels/Edit')}</span> <i class="pi pi-info-circle cms-info-icon"
@@ -141,20 +147,23 @@
                       <span> #{ivy.cms.co('/Labels/CMSWarningTextForSave')}</span>
                     </div>
                   </h:panelGroup>
+
+                  <h:panelGroup layout="block" id="cancel-save-button-container" styleClass="flex">
                     <p:commandButton id="cancel-edit-button" value="#{ivy.cms.co('/Labels/Cancel')}" icon="pi pi-times"
-                      process="@this"
-                      styleClass="flex-1 ui-button-outlined ui-button-secondary cms-cancel-button"
-                      actionListener="#{cmsEditorBean.onCancelEditableButton()}" />
+                      process="@this" styleClass="flex-1  mt-3 ui-button-outlined ui-button-secondary cms-cancel-button"
+                      update="column-container" actionListener="#{cmsEditorBean.onCancelEditableButton()}" />
                     <p:commandButton id="save-button" value="#{ivy.cms.co('/Labels/Save')}" icon="pi pi-save"
-                      process="@this table-cms-keys"
-                      actionListener="#{cmsEditorBean.writeCmsToApplication()}"
+                      process="@this table-cms-keys" actionListener="#{cmsEditorBean.writeCmsToApplication()}"
                       update="table-cms-keys cms-values cms-edit-value editable-column"
-                      styleClass="flex-1 ui-button-raised ui-button-primary cms-save-button" onclick="saveAllEditors()"
-                      oncomplete="initCmsWarnings();" partialSubmit="true" onstart="destroyEditors()" />
+                      styleClass="flex-1  mt-3 ui-button-raised ui-button-primary cms-save-button"
+                      onclick="saveAllEditors()" oncomplete="initCmsWarnings();" partialSubmit="true"
+                      onstart="destroyEditors()" />
+                  </h:panelGroup>
+
                 </h:panelGroup>
               </h:panelGroup>
             </h:panelGroup>
-          </div>
+          </h:panelGroup>
         </h:panelGroup>
         <div class="command-btns pt-2">
           <p:remoteCommand name="stop" global="false" partialSubmit="true" process="@this" update="content-form"
