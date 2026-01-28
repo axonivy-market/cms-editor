@@ -154,7 +154,6 @@ public class CmsEditorBean implements Serializable {
       PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE,
           CONTENT_FORM_EDITABLE_COLUMN);
     }
-    
   }
 
   public void saveAll() throws JsonProcessingException {
@@ -166,7 +165,7 @@ public class CmsEditorBean implements Serializable {
     }
   }
 
-  public void checkisEditingAndShowMessage() {
+  public void checkIsEditingAndShowMessage() {
     isEditing();
   }
 
@@ -174,7 +173,7 @@ public class CmsEditorBean implements Serializable {
     if (lastSelectedCms == null) {
       return false;
     }
-    var isEditing = lastSelectedCms != null && lastSelectedCms.isEditing();
+    var isEditing = lastSelectedCms.isEditing();
     if (isEditing) {
       showHaveNotBeenSavedDialog();
       PF.current().ajax().update(CONTENT_FORM_TABLE_CMS_KEYS);
@@ -291,9 +290,11 @@ public class CmsEditorBean implements Serializable {
   }
 
   public String getActiveIndex() {
-    return Optional.ofNullable(selectedCms).map(Cms::getContents).map(
-        values -> IntStream.rangeClosed(0, values.size()).mapToObj(Integer::toString).collect(Collectors.joining(",")))
-        .orElse(StringUtils.EMPTY);
+    return Optional.ofNullable(selectedCms).map(Cms::getContents)
+        .map(values -> IntStream.rangeClosed(0, values.size())
+            .mapToObj(Integer::toString)
+            .collect(Collectors.joining(","))
+        ).orElse(StringUtils.EMPTY);
   }
 
   public List<Cms> getFilteredCMSKeys() {
@@ -338,14 +339,6 @@ public class CmsEditorBean implements Serializable {
 
   public void setEditableCms(boolean isEditableCms) {
     this.isEditableCms = isEditableCms;
-  }
-
-  public Map<String, PmvCms> getPmvCmsMap() {
-    return pmvCmsMap;
-  }
-
-  public void setPmvCmsMap(Map<String, PmvCms> pmvCmsMap) {
-    this.pmvCmsMap = pmvCmsMap;
   }
 
   public Set<String> getProjectCms() {
