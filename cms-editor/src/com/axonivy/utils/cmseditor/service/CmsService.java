@@ -24,8 +24,18 @@ public class CmsService {
 
   private ContentObject createOrGetCmsByUri(String uri) {
     IApplication currentApplication = IApplication.current();
-    var portalCMSEntity = ContentManagement.cms(currentApplication).get(uri);
-    return portalCMSEntity.orElseGet(() -> ContentManagement.cms(currentApplication).root().child().string(uri));
+    var cmsEntity = ContentManagement.cms(currentApplication).get(uri);
+    return cmsEntity.orElseGet(() -> ContentManagement.cms(currentApplication).root().child().string(uri));
+  }
+
+  private boolean isCmsDifferentWithApplication(Cms cms) {
+    for (CmsContent cmsContent : cms.getContents()) {
+      String valueFromApp = getCmsFromApplication(cms.getUri(), cmsContent.getLocale());
+      if (valueFromApp != null && !valueFromApp.equals(cmsContent.getOriginalContent())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void writeCmsToApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
@@ -33,6 +43,15 @@ public class CmsService {
       ContentObject currentContentObject = createOrGetCmsByUri(uri);
       localeAndContent.forEach((locale, savedCms) -> {
         currentContentObject.value().get(Locale.forLanguageTag(locale)).write().string(savedCms.getNewContent());
+      });
+    }));
+  }
+
+  public void removeSavedCmsFromApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
+    Sudo.run(() -> savedCmsMap.forEach((uri, localeAndContent) -> {
+      ContentObject currentContentObject = createOrGetCmsByUri(uri);
+      localeAndContent.forEach((locale, savedCms) -> {
+        currentContentObject.value().get(Locale.forLanguageTag(locale)).delete();
       });
     }));
   }
@@ -50,13 +69,4 @@ public class CmsService {
     return cms;
   }
 
-  private boolean isCmsDifferentWithApplication(Cms cms) {
-    for (CmsContent cmsContent : cms.getContents()) {
-      String valueFromApp = getCmsFromApplication(cms.getUri(), cmsContent.getLocale());
-      if (valueFromApp != null && !valueFromApp.equals(cmsContent.getOriginalContent())) {
-        return true;
-      }
-    }
-    return false;
-  }
 }

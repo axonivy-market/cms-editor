@@ -43,6 +43,16 @@
             <h:panelGroup layout="block" id="link-column"
               styleClass="#{cmsEditorBean.editableCms ? 'col-4' : 'col-6'} columns">
               <div class="column-header link-label font-semibold text-lg">#{ivy.cms.co('/Labels/Links')}</div>
+
+              <div class="column-header flex align-items-center justify-content-between">
+                <span class="link-label font-semibold text-lg"> #{ivy.cms.co('/Labels/Links')} </span>
+
+                <div class="flex align-items-center gap-2 cursor-pointer" onclick="resetAllChanges();">
+                  <i class="pi pi-refresh text-red-500"></i> <span class="text-red-500 font-medium"> Reset all
+                    changes </span>
+                </div>
+              </div>
+
               <h:panelGroup styleClass="panel left w-full">
                 <p:dataTable id="table-cms-keys" value="#{cmsEditorBean.filteredCMSKeys}" var="entry"
                   selection="#{cmsEditorBean.selectedCms}" selectionMode="single" rowKey="#{entry.uri}"
