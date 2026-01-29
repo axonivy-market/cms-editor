@@ -31,12 +31,13 @@ public class CmsFileUtils {
   private static final String ZIP_CONTENT_TYPE = "application/zip";
   private static final String EXCEL_FILE_NAME = "%s.xlsx";
   private static final String ZIP_FILE_NAME = "CMSDownload_%s_%s.zip";
+  private static final String ALL_PROJECTS = "All";
 
   public static StreamedContent writeCmsToZipStreamedContent(String projectName, String applicationName,
       Map<String, PmvCms> cmsPmvMap) throws Exception {
     var workbooks = new HashMap<String, Workbook>();
     if (StringUtils.isEmpty(projectName)) {
-      projectName = Ivy.cms().co("/Labels/AllProjectName");
+      projectName = ALL_PROJECTS;
       for (var entry : cmsPmvMap.entrySet()) {
         addPmvCmsToWorkbooks(entry.getKey(), entry.getValue(), workbooks);
       }
