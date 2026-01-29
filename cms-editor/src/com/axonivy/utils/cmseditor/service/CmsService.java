@@ -1,5 +1,6 @@
 package com.axonivy.utils.cmseditor.service;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -38,6 +39,20 @@ public class CmsService {
     return false;
   }
 
+  public String getCmsFromApplication(String uri, Locale locale) {
+    IApplication currentApplication = IApplication.current();
+    var cmsEntity = ContentManagement.cms(currentApplication).get(uri);
+    return cmsEntity.map(contentObject -> contentObject.value().get(locale).read().string()).orElse(null);
+  }
+
+
+  public Cms compareWithCmsInApplication(Cms cms) {
+    boolean isDifferent = isCmsDifferentWithApplication(cms);
+    cms.getContents().forEach(content -> content.setEditing(false));
+    cms.setDifferentWithApplication(isDifferent);
+    return cms;
+  }
+
   public void writeCmsToApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
     Sudo.run(() -> savedCmsMap.forEach((uri, localeAndContent) -> {
       ContentObject currentContentObject = createOrGetCmsByUri(uri);
@@ -47,26 +62,11 @@ public class CmsService {
     }));
   }
 
-  public void removeSavedCmsFromApplication(Map<String, Map<String, SavedCms>> savedCmsMap) {
-    Sudo.run(() -> savedCmsMap.forEach((uri, localeAndContent) -> {
-      ContentObject currentContentObject = createOrGetCmsByUri(uri);
-      localeAndContent.forEach((locale, savedCms) -> {
-        currentContentObject.value().get(Locale.forLanguageTag(locale)).delete();
-      });
-    }));
-  }
-
-  public String getCmsFromApplication(String uri, Locale locale) {
-    IApplication currentApplication = IApplication.current();
-    var cmsEntity = ContentManagement.cms(currentApplication).get(uri);
-    return cmsEntity.map(contentObject -> contentObject.value().get(locale).read().string()).orElse(null);
-  }
-
-  public Cms compareWithCmsInApplication(Cms cms) {
-    boolean isDifferent = isCmsDifferentWithApplication(cms);
-    cms.getContents().forEach(content -> content.setEditing(false));
-    cms.setDifferentWithApplication(isDifferent);
-    return cms;
+  public void removeSavedCmsFromApplication(List<Cms> filteredCMSList) {
+    Sudo.run(() -> {
+      filteredCMSList.stream().filter(Cms::isDifferentWithApplication).map(Cms::getUri)
+          .forEach(uri -> createOrGetCmsByUri(uri).delete());
+    });
   }
 
 }

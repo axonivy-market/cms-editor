@@ -52,7 +52,6 @@ import ch.ivyteam.ivy.cm.ContentObject;
 import ch.ivyteam.ivy.cm.ContentObjectReader;
 import ch.ivyteam.ivy.cm.ContentObjectValue;
 import ch.ivyteam.ivy.cm.exec.ContentManagement;
-import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
@@ -78,33 +77,6 @@ public class CmsEditorBean implements Serializable {
   private boolean isEditableCms;
   private String resetConfirmText;
 
-  public String getResetConfirmText() {
-    return resetConfirmText;
-  }
-
-  public void setResetConfirmText(String resetConfirmText) {
-    this.resetConfirmText = resetConfirmText;
-  }
-
-  public void confirmResetAll() {
-    if (!"reset".equalsIgnoreCase(resetConfirmText)) {
-      FacesContext context = FacesContext.getCurrentInstance();
-      context.validationFailed();
-
-      context.addMessage("content-form:resetConfirmInput",
-          new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid confirmation", "Please enter 'reset' to confirm"));
-      return;
-    }
-
-    // ✅ success
-    resetConfirmText = null;
-  }
-
-  public void resetAllChanges() {
-    // TODO logic reset
-    Ivy.log().warn("No co chay vao day");
-  }
-
   @PostConstruct
   private void init() {
     isShowEditorCms = FacesContexts.evaluateValueExpression("#{data.showEditorCms}", Boolean.class);
@@ -112,7 +84,8 @@ public class CmsEditorBean implements Serializable {
     pmvCmsMap = new HashMap<>();
     for (var app : IApplicationRepository.of(ISecurityContext.current()).all()) {
       app.getProcessModels().stream().filter(CmsEditorBean::isActive).map(IProcessModel::getReleasedProcessModelVersion)
-          .filter(CmsEditorBean::isActive).forEach(pmv -> getAllChildren(pmv.getName(), ContentManagement.cms(pmv).root(), new ArrayList<>()));
+          .filter(CmsEditorBean::isActive)
+          .forEach(pmv -> getAllChildren(pmv.getName(), ContentManagement.cms(pmv).root(), new ArrayList<>()));
     }
     onAppChange();
   }
@@ -125,6 +98,17 @@ public class CmsEditorBean implements Serializable {
     PF.current().ajax().update(CONTENT_FORM);
     PrimeFaces.current().executeScript(OPEN_SUCCESS_DIALOG_SCRIPT);
     lastSelectedCms = null;
+  }
+
+  public boolean isRenderResetAllChange() {
+    return this.filteredCMSList.stream().anyMatch(Cms::isDifferentWithApplication);
+  }
+
+  public void resetAllChanges() {
+    cmsService.removeSavedCmsFromApplication(this.filteredCMSList);
+    onAppChange();
+    this.isEditableCms = false;
+    PF.current().ajax().update(CONTENT_FORM);
   }
 
   public void onEditableButton() {
@@ -146,11 +130,12 @@ public class CmsEditorBean implements Serializable {
     if (isEditing()) {
       return;
     }
-    filteredCMSList = cmsList.stream().filter(entry -> isCmsMatchSearchKey(entry, searchKey)).map(cmsService::compareWithCmsInApplication)
-        .collect(Collectors.toList());
+    filteredCMSList = cmsList.stream().filter(entry -> isCmsMatchSearchKey(entry, searchKey))
+        .map(cmsService::compareWithCmsInApplication).collect(Collectors.toList());
 
     if (selectedCms != null) {
-      selectedCms = filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny().orElse(null);
+      selectedCms =
+          filteredCMSList.stream().filter(entry -> entry.getUri().equals(selectedCms.getUri())).findAny().orElse(null);
     }
     PF.current().ajax().update(CONTENT_FORM);
   }
@@ -165,8 +150,8 @@ public class CmsEditorBean implements Serializable {
     if (StringUtils.isBlank(this.selectedProjectName)) {
       cmsList = this.pmvCmsMap.values().stream().map(PmvCms::getCmsList).flatMap(List::stream).toList();
     } else {
-      cmsList = this.pmvCmsMap.values().stream().filter(pmvCms -> pmvCms.getPmvName().equals(this.selectedProjectName)).map(PmvCms::getCmsList)
-          .flatMap(List::stream).toList();
+      cmsList = this.pmvCmsMap.values().stream().filter(pmvCms -> pmvCms.getPmvName().equals(this.selectedProjectName))
+          .map(PmvCms::getCmsList).flatMap(List::stream).toList();
     }
     search();
   }
@@ -177,15 +162,15 @@ public class CmsEditorBean implements Serializable {
       isEditableCms = true;
       selectedCms = lastSelectedCms; // Revert to last valid selection
     } else {
-      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE, CONTENT_FORM_EDITABLE_COLUMN,
-          "content-form:current-cms-column", "content-form:column-container");
+      PF.current().ajax().update(CONTENT_FORM_CMS_VALUES, CONTENT_FORM_SELECTED_URL, CONTENT_FORM_CMS_EDIT_VALUE,
+          CONTENT_FORM_EDITABLE_COLUMN, "content-form:current-cms-column", "content-form:column-container");
     }
   }
 
   public void saveAll() throws JsonProcessingException {
-    var languageIndexAndContentJsonString = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
-    List<CmsValueDto> cmsValues = mapper.readValue(languageIndexAndContentJsonString, new TypeReference<>() {
-    });
+    var languageIndexAndContentJsonString =
+        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("values");
+    List<CmsValueDto> cmsValues = mapper.readValue(languageIndexAndContentJsonString, new TypeReference<>() {});
     for (CmsValueDto currentCmsValue : cmsValues) {
       save(currentCmsValue.getLanguageIndex(), currentCmsValue.getContents());
     }
@@ -221,12 +206,14 @@ public class CmsEditorBean implements Serializable {
 
   public void getAllChildren(String pmvName, ContentObject contentObject, List<Locale> locales) {
     // Exclude the CMS of itself
-    if (!isShowEditorCms && Strings.CS.contains(pmvName, CMS_EDITOR_PMV_NAME) && !Strings.CS.contains(pmvName, CMS_EDITOR_DEMO_PMV_NAME)) {
+    if (!isShowEditorCms && Strings.CS.contains(pmvName, CMS_EDITOR_PMV_NAME)
+        && !Strings.CS.contains(pmvName, CMS_EDITOR_DEMO_PMV_NAME)) {
       return;
     }
 
     if (contentObject.isRoot()) {
-      locales = contentObject.cms().locales().stream().filter(locale -> isNotBlank(locale.getLanguage())).collect(toList());
+      locales =
+          contentObject.cms().locales().stream().filter(locale -> isNotBlank(locale.getLanguage())).collect(toList());
     }
 
     for (ContentObject child : contentObject.children()) {
@@ -252,7 +239,8 @@ public class CmsEditorBean implements Serializable {
     for (var i = 0; i < locales.size(); i++) {
       Locale locale = locales.get(i);
       ContentObjectValue value = contentObject.value().get(locale);
-      String projectCmsvalueString = ofNullable(value).map(ContentObjectValue::read).map(ContentObjectReader::string).orElse(EMPTY);
+      String projectCmsvalueString =
+          ofNullable(value).map(ContentObjectValue::read).map(ContentObjectReader::string).orElse(EMPTY);
       String cmsApplicationValue = cmsService.getCmsFromApplication(cms.getUri(), locale);
       if (StringUtils.isBlank(cmsApplicationValue)) {
         cmsApplicationValue = projectCmsvalueString;
@@ -287,7 +275,8 @@ public class CmsEditorBean implements Serializable {
   private void handleCmsContentSave(String newContent, CmsContent cmsContent) {
     cmsContent.saveContent(newContent);
     var locale = cmsContent.getLocale();
-    SavedCms savedCms = new SavedCms(selectedCms.getUri(), locale.toString(), cmsContent.getOriginalContent(), cmsContent.getContent());
+    SavedCms savedCms =
+        new SavedCms(selectedCms.getUri(), locale.toString(), cmsContent.getOriginalContent(), cmsContent.getContent());
     saveCms(savedCms);
   }
 
@@ -310,8 +299,8 @@ public class CmsEditorBean implements Serializable {
   }
 
   public String getActiveIndex() {
-    return Optional.ofNullable(selectedCms).map(Cms::getContents)
-        .map(values -> IntStream.rangeClosed(0, values.size()).mapToObj(Integer::toString).collect(Collectors.joining(",")))
+    return Optional.ofNullable(selectedCms).map(Cms::getContents).map(
+        values -> IntStream.rangeClosed(0, values.size()).mapToObj(Integer::toString).collect(Collectors.joining(",")))
         .orElse(StringUtils.EMPTY);
   }
 
@@ -359,9 +348,18 @@ public class CmsEditorBean implements Serializable {
     this.isEditableCms = isEditableCms;
   }
 
+  public String getResetConfirmText() {
+    return resetConfirmText;
+  }
+
+  public void setResetConfirmText(String resetConfirmText) {
+    this.resetConfirmText = resetConfirmText;
+  }
+
   public Set<String> getProjectCms() {
-    return IApplication.current().getProcessModels().stream().filter(CmsEditorBean::isActive).map(IProcessModel::getReleasedProcessModelVersion)
-        .filter(CmsEditorBean::isActive).map(IProcessModelVersion::getProjectName)
-        .filter(projectName -> this.pmvCmsMap.containsKey(projectName)).collect(Collectors.toSet());
+    return IApplication.current().getProcessModels().stream().filter(CmsEditorBean::isActive)
+        .map(IProcessModel::getReleasedProcessModelVersion).filter(CmsEditorBean::isActive)
+        .map(IProcessModelVersion::getProjectName).filter(projectName -> this.pmvCmsMap.containsKey(projectName))
+        .collect(Collectors.toSet());
   }
 }
