@@ -4,23 +4,30 @@
   "namespace" : "com.axonivy.utils.cmsliveeditor.CmsLiveEditor",
   "fields" : [ {
     "name" : "showEditorCms",
-    "type" : "Boolean"
+    "type" : "Boolean",
+    "modifiers" : [ ]
   }, {
     "name" : "fileContent",
-    "type" : "byte[]"
+    "type" : "byte[]",
+    "modifiers" : [ ]
   }, {
     "name" : "streamedContent",
-    "type" : "org.primefaces.model.StreamedContent"
+    "type" : "org.primefaces.model.StreamedContent",
+    "modifiers" : [ ]
   }, {
-    "name" : "fileName"
+    "name" : "fileName",
+    "modifiers" : [ ]
   }, {
     "name" : "isOnCmsEditColumn",
-    "type" : "Boolean"
+    "type" : "Boolean",
+    "modifiers" : [ ]
   }, {
     "name" : "cmsContent",
-    "type" : "com.axonivy.utils.cmsliveeditor.model.CmsContent"
+    "type" : "com.axonivy.utils.cmsliveeditor.model.CmsContent",
+    "modifiers" : [ ]
   }, {
     "name" : "isEditMode",
-    "type" : "Boolean"
+    "type" : "Boolean",
+    "modifiers" : [ ]
   } ]
 }
