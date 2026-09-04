@@ -14,7 +14,7 @@ import static com.axonivy.utils.cmsliveeditor.constants.CmsConstants.CONTENT_FOR
 import static com.axonivy.utils.cmsliveeditor.constants.CmsConstants.CONTENT_FORM_TABLE_CMS_KEYS;
 import static com.axonivy.utils.cmsliveeditor.constants.CmsConstants.ERROR_MESSAGE_FOR_CMS_FILE_UPLOAD;
 import static java.util.stream.Collectors.toList;
-import static javax.faces.application.FacesMessage.SEVERITY_INFO;
+import static jakarta.faces.application.FacesMessage.SEVERITY_INFO;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.io.Serial;
@@ -30,11 +30,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.inject.Named;
+import jakarta.faces.view.ViewScoped;
+import jakarta.faces.context.FacesContext;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -78,7 +78,7 @@ import ch.ivyteam.ivy.environment.Ivy;
 import ch.ivyteam.ivy.security.ISecurityContext;
 
 @ViewScoped
-@ManagedBean
+@Named
 public class CmsLiveEditorBean implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
